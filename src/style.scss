@@ -1,0 +1,40 @@
+// var
+$color-main: rgb(250, 60, 130);
+// extend
+.full-block{
+    background-color: $color-main;
+    color: #fff;
+}
+.border-block{
+    color: $color-main;
+    border: 1px solid;
+}
+// public
+*{padding: 0px; margin: 0px;box-sizing: border-box;}
+.flex{
+    display: flex;
+}
+.flex-space-x{
+    justify-content: space-between;
+}
+// start
+.div_layout{
+    .HandleColumn{
+        min-width: 200px;
+        height: 100vh;
+        background-color: #ccc;
+        .button{
+            display: inline-block;
+            line-height: 30px;
+            padding: 0 10px;
+            border-radius: 4px;
+            @extend .full-block;
+        }
+    }
+    .DebugLayout{
+        flex: auto;
+        height: 100vh;
+        background-color: #fff;
+        border: 1px solid #ccc;
+    }
+}
