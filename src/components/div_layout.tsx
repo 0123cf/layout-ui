@@ -1,7 +1,9 @@
 import * as React from 'react'
 const {Component, useState} = React
-import {Select} from './Select'
 import {createHtml} from './utils'
+
+import {Select} from './Select'
+import {Preview} from './preview'
 
 interface DivLayoutPro {
     name: string
@@ -16,7 +18,15 @@ interface selectListItem {
     name: string
 }
 
-const HandleColumn = () => {
+interface tsethtml {
+    (html: string): void
+}
+
+interface handleColumnPro {
+    sethtml: tsethtml
+}
+
+const HandleColumn = (props: handleColumnPro) => {
     let layoutTypeList: selectListItem[] = [
         {name: 'space'},
         {name: 'row'},
@@ -43,7 +53,6 @@ const HandleColumn = () => {
             css: [],
             style: []
         }
-        let html: string
         rowAst = []
         for (let i = 0; i <= columnNumber; i++) {
             rowAst.push(rowASTItemDefault)
@@ -53,18 +62,16 @@ const HandleColumn = () => {
             css: ['flex', layoutType],
             style: []
         }
-        html = createHtml(rowInfo, rowAst)
+        props.sethtml(createHtml(rowInfo, rowAst))
         // console.log(layoutType)
         // console.log(columnNumber)
-        console.log(html)
+        // console.log(html)
     }
     return <div className="HandleColumn">
-        <div>一个专注于布局的可视化布局平台</div>
-        <div>自定义布局</div>
         <div>
-            <div>列数： <input defaultValue={layoutColumn} onInput={layoutColumnChange} placeholder="请输入列数" /></div>
+            <div>column： <input defaultValue={layoutColumn} onInput={layoutColumnChange} placeholder="请输入列数" /></div>
             <div className="flex">
-                <p>布局方式：</p>
+                <p>layout type：</p>
                 <Select activeIndex={0} list={layoutTypeList} change={SelectChange} />
             </div>
             <div className="button" onClick={addRow}>add row</div>
@@ -79,10 +86,14 @@ const DebugLayout = () => {
 
 export class DivLayout extends Component<DivLayoutPro, {}>{
     render(){
+        let sethtml = (html: string): void => {
+            console.log(html)
+        }
         return (
             <div className="div_layout flex">
-                <HandleColumn />
+                <HandleColumn sethtml={sethtml} />
                 <DebugLayout />
+                <Preview />
             </div>
         )
     }
