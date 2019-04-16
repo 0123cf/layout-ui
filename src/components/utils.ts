@@ -14,12 +14,18 @@ let createTag = (item: TRowAST, inner?: string): string => {
 }
 
 export const createHtml = (rowInfo:TRowAST, rowAst: TRowAST[]) => {
-    let html: string
-    html = createTag(
+    let view: string, debugView: string
+    view = createTag(
         rowInfo,
         rowAst.map(item => {
             return createTag(item, item.innerText)
         }).join('')
     )
-    return html
+    debugView = createTag(
+        rowInfo,
+        rowAst.map(item => {
+            return createTag(item, '')
+        }).join('')
+    )
+    return {view, debugView}
 }

@@ -37,12 +37,6 @@ $color-main: rgb(250, 60, 130);
             @extend .full-block;
         }
     }
-    .DebugLayout{
-        flex: auto;
-        height: 100vh;
-        background-color: #fff;
-        border: 1px solid #ccc;
-    }
     .preview{
         padding: 20px;
         .title{
@@ -54,6 +48,26 @@ $color-main: rgb(250, 60, 130);
             border: 1px solid #ccc;
             border-radius: 6px;
             overflow: auto;
+        }
+    }
+    .DebugLayout{
+        flex: auto;
+        height: 100vh;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        .view-box{
+            .flex{
+                background-color: rgb(153, 93, 181);
+                padding: 20px;
+                >* {
+                    min-width: 70px;
+                    min-height: 70px;
+                    background-color: rgb(247, 148, 31);
+                    padding: 20px;
+                    border: 1px solid #1e1e1e;
+                    border-radius: 20px;
+                }
+            }
         }
     }
 }

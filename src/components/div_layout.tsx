@@ -10,13 +10,17 @@ interface DivLayoutPro {
 
 export const DivLayout = (props: DivLayoutPro) => {
     let [computedHtml, setcomputedHtml] = useState('')
+    let [debugHtml, setdebugHtml] = useState('')
     let sethtml = (html: string): void => {
         setcomputedHtml(html)
     }
+    let _setdebugHtml = (html: string): void => {
+        setdebugHtml(html)
+    }
     return (
         <div className="div_layout flex">
-            <HandleColumn sethtml={sethtml} />
-            <DebugLayout html={computedHtml} />
+            <HandleColumn sethtml={sethtml} setdebugHtml={_setdebugHtml} />
+            <DebugLayout html={debugHtml} />
             <Preview html={computedHtml} />
         </div>
     )

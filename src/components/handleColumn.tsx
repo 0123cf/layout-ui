@@ -21,7 +21,8 @@ interface tsethtml {
 }
 
 interface handleColumnPro {
-    sethtml: tsethtml
+    sethtml: tsethtml,
+    setdebugHtml: tsethtml,
 }
 
 export const HandleColumn = (props: handleColumnPro) => {
@@ -31,6 +32,7 @@ export const HandleColumn = (props: handleColumnPro) => {
     // 储存row布局AST
     let rowAst: TRowAST[] = []
     let rowInfo: TRowAST
+    let htmlObject
     let layoutColumnChange = (e: any) => {
         let value = e.target.value.replace(/[^\d]/, '')
         e.target.value = value
@@ -61,7 +63,9 @@ export const HandleColumn = (props: handleColumnPro) => {
             css: ['flex', layoutType, className],
             style: [],
         }
-        props.sethtml(createHtml(rowInfo, rowAst))
+        htmlObject = createHtml(rowInfo, rowAst)
+        props.sethtml(htmlObject.view)
+        props.setdebugHtml(htmlObject.debugView)
     }
     return <div className="HandleColumn">
         <div>
