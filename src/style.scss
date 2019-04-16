@@ -17,6 +17,12 @@ $color-main: rgb(250, 60, 130);
 .flex-space-x{
     justify-content: space-between;
 }
+
+// export css inner
+.al-flex-spce-x{
+    justify-content: space-between;
+}
+
 // start
 .div_layout{
     .HandleColumn{
@@ -36,5 +42,18 @@ $color-main: rgb(250, 60, 130);
         height: 100vh;
         background-color: #fff;
         border: 1px solid #ccc;
+    }
+    .preview{
+        padding: 20px;
+        .title{
+            margin-bottom: 10px;
+        }
+        .preview-box{
+            width: 350px;
+            height: 500px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            overflow: auto;
+        }
     }
 }

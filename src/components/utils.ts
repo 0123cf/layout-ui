@@ -1,7 +1,8 @@
 interface TRowAST {
     tag: string,
     css: string[],
-    style: any []
+    style: any [],
+    innerText?: string
 }
 
 let createTag = (item: TRowAST, inner?: string): string => {
@@ -17,7 +18,7 @@ export const createHtml = (rowInfo:TRowAST, rowAst: TRowAST[]) => {
     html = createTag(
         rowInfo,
         rowAst.map(item => {
-            return createTag(item)
+            return createTag(item, item.innerText)
         }).join('')
     )
     return html

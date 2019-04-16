@@ -1,9 +1,10 @@
 import * as React from 'react'
 interface PreviewPro {
-    // html: string
+    html: string
 }
 export const Preview = (props: PreviewPro) => {
     return <div className="preview">
-        {/* {props.html} */}
+        <div className="title">preview</div>
+        <div className="preview-box" dangerouslySetInnerHTML={{__html: props.html}}></div>
     </div>
 }
