@@ -1,9 +1,10 @@
 interface selectListItem {
-    name: string,
-    className: string
+    name?: string,
+    className: string,
+    src: string
 }
 export const layoutTypeList: selectListItem[] = [
-    { name: 'space', className: 'al-flex-spce-x' },
-    { name: 'row', className: 'al-flex-row' },
-    { name: 'column', className: 'al-flex-col' },
+    { src: '1', className: 'al-flex-spce-start' },
+    { src: '2', className: 'al-flex-end-x' },
+    { src: '3', className: 'al-flex-center-x' },
 ]

@@ -12,7 +12,7 @@ interface TRowAST {
     innerText?: string
 }
 interface selectListItem {
-    name: string,
+    name?: string,
     className: string
 }
 

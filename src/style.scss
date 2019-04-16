@@ -22,6 +22,12 @@ $color-main: rgb(250, 60, 130);
 .al-flex-spce-x{
     justify-content: space-between;
 }
+.al-flex-end-x{
+    justify-content: flex-end;
+}
+.al-flex-center-x{
+    justify-content: center;
+}
 
 // start
 .div_layout{
@@ -48,6 +54,10 @@ $color-main: rgb(250, 60, 130);
             border: 1px solid #ccc;
             border-radius: 6px;
             overflow: auto;
+        }
+        textarea{
+            width: 400px;
+            height: 400px;
         }
     }
     .DebugLayout{
