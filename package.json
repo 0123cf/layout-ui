@@ -11,8 +11,11 @@
   "author": "XieXiuYue",
   "license": "MIT-996",
   "dependencies": {
+    "@types/react-redux": "^7.0.6",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.0.2",
+    "redux": "^4.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.47",

@@ -1,8 +1,10 @@
 import * as React from 'react'
-interface PreviewPro {
+import {connect} from 'react-redux'
+interface Tprops{
     html: string
 }
-export const Preview = (props: PreviewPro) => {
+
+const _Preview = (props: Tprops) => {
     return <div className="preview">
         <div className="title">preview</div>
         <div className="preview-box" dangerouslySetInnerHTML={{__html: props.html}}></div>
@@ -12,3 +14,9 @@ export const Preview = (props: PreviewPro) => {
         </div>
     </div>
 }
+const stateMap = (state: any):Tprops => {
+    return {
+        html: state.previewHTML
+    }
+}
+export const Preview = connect(stateMap)(_Preview)

@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
 const { useState } = React
 
 import { createHtml } from './utils'
@@ -9,23 +11,20 @@ interface TRowAST {
     tag: string,
     css: string[],
     style: any[],
-    innerText?: string
+    innerText?: string,
+    children: TRowAST[]
 }
 interface selectListItem {
     name?: string,
     className: string
 }
-
-interface tsethtml {
-    (html: string): void
+interface Tstate {
+    previewAST: TRowAST[]
 }
-
-interface handleColumnPro {
-    sethtml: tsethtml,
-    setdebugHtml: tsethtml,
+interface Tprops extends Tstate {
+    dispatch: Dispatch
 }
-
-export const HandleColumn = (props: handleColumnPro) => {
+const _HandleColumn = (props: Tprops) => {
     let layoutTypeSelected: selectListItem = layoutTypeList[0]
     let layoutColumn = '2'
     let className = ''
@@ -52,8 +51,11 @@ export const HandleColumn = (props: handleColumnPro) => {
             tag: 'div',
             css: [],
             style: [],
-            innerText: 'test'
+            innerText: '',
+            children: []
         }
+        let ast: TRowAST[]
+
         rowAst = []
         for (let i = 0; i < columnNumber; i++) {
             rowAst.push(rowASTItemDefault)
@@ -62,15 +64,20 @@ export const HandleColumn = (props: handleColumnPro) => {
             tag: 'div',
             css: ['flex', layoutType, className],
             style: [],
+            children: rowAst
         }
-        htmlObject = createHtml(rowInfo, rowAst)
-        props.sethtml(htmlObject.view)
-        props.setdebugHtml(htmlObject.debugView)
+        ast = [...props.previewAST, rowInfo]
+        htmlObject = createHtml(ast)
+        props.dispatch({
+            type: 'previewHTML',
+            html: htmlObject.view,
+            ast
+        })
     }
     return <div className="HandleColumn">
         <div>
             <div>class： <input defaultValue={className} onInput={classNameChange} placeholder="请输入class" /></div>
-            <div>column： <input defaultValue={layoutColumn} onInput={layoutColumnChange} placeholder="请输入列数" /></div>
+            <div>column： <input defaultValue={layoutColumn} type="number" onInput={layoutColumnChange} placeholder="请输入列数" /></div>
             <div className="flex">
                 <p>layout type：</p>
                 <Select activeIndex={0} list={layoutTypeList} change={SelectChange} />
@@ -79,3 +86,9 @@ export const HandleColumn = (props: handleColumnPro) => {
         </div>
     </div>
 }
+const stateMapToProps = (state: Tstate) => {
+    return {
+        previewAST: state.previewAST
+    }
+}
+export const HandleColumn = connect(stateMapToProps)(_HandleColumn)
