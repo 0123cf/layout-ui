@@ -1,37 +1,48 @@
 import * as React from 'react'
 import {connect} from 'react-redux'
+import {Dispatch} from  'redux'
 const { useState } = React
-interface TRowAST {
-    tag: string,
-    css: string[],
-    style: any[],
-    innerText?: string,
-    children: TRowAST[]
-}
+import {TRowAST, Tstore} from '../types/index'
 
 interface Tprops{
     html: string,
-    tree: TRowAST[]
-}
-
-let randerTree = (tree: TRowAST[]) => {
-    return tree.map(e => <div className={e.css.join(' ')}>{
-            e.children.length > 0 ? randerTree(e.children) : 
-            (e.innerText || '')
-        }</div>
-    )
+    tree: TRowAST[],
+    dispatch: Dispatch,
+    selectRowPath: number[],
 }
 
 const _DebugLayout = (props: Tprops) => {
+
+    let selectRowDiv = (event: any, path: number[]) => {
+        event.stopPropagation()
+        props.dispatch({
+            type: 'selectRowPath',
+            path
+        })
+    }
+
+    let randerTree = (tree: TRowAST[], path: number[]) => {
+        return tree.map((e, index) => {
+            let itemPath = [...path, index]
+            return <div
+                    className={`${ e.css.join(' ') }${ props.selectRowPath.join(',') === itemPath.join(',') && 'item-selected-status'}`} 
+                    onClick={ (e: any) => selectRowDiv(e, itemPath) }
+                >{
+                    e.children.length > 0 ? randerTree(e.children, itemPath) : 
+                    (e.innerText || '')
+                }</div>
+        })
+    }
     return <div className="DebugLayout">
         <span>DebugLayout</span>
-        <div className="view-box">{randerTree(props.tree)}</div>
+        <div className="view-box">{randerTree(props.tree, [])}</div>
     </div>
 }
-const stateMap = (state: any):Tprops => {
+const stateMap = (state: Tstore) => {
     return {
         html: state.previewHTML,
-        tree: state.previewAST
+        tree: state.previewAST,
+        selectRowPath: state.selectRowPath
     }
 }
 export const DebugLayout = connect(stateMap)(_DebugLayout)

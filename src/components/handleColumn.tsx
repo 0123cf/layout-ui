@@ -2,18 +2,12 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 const { useState } = React
+import {TRowAST} from '../types/index'
 
 import { createHtml } from './utils'
 import {layoutTypeList} from '../model/constant' 
 import { Select } from './Select'
 
-interface TRowAST {
-    tag: string,
-    css: string[],
-    style: any[],
-    innerText?: string,
-    children: TRowAST[]
-}
 interface selectListItem {
     name?: string,
     className: string

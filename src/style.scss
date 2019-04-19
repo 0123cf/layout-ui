@@ -67,6 +67,7 @@ $color-main: rgb(250, 60, 130);
         border: 1px solid #ccc;
         .view-box{
             .flex{
+                position: relative;
                 background-color: rgb(153, 93, 181);
                 padding: 20px;
                 >* {
@@ -77,6 +78,20 @@ $color-main: rgb(250, 60, 130);
                     border: 1px solid #1e1e1e;
                     border-radius: 20px;
                 }
+            }
+            // .item-selected-status:after{
+            //     content: "";
+            //     display: block;
+            //     position: absolute;
+            //     top: 0px;
+            //     left: 0px;
+            //     width: 100%;
+            //     height: 100%;
+            //     background: rgba(0, 210, 255, .4);
+            // }
+            .item-selected-status{
+                border: 5px solid  rgba(0, 210, 255, .4);
+                box-sizing: border-box;
             }
         }
     }

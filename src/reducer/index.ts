@@ -1,26 +1,24 @@
-interface TRowAST {
-    tag: string,
-    css: string[],
-    style: any[],
-    innerText?: string,
-    children: TRowAST[]
-}
-
-interface Tstore {
-    previewHTML: string,
-    previewAST: TRowAST[],
-}
+import {TRowAST, Tstore} from '../types/index'
 
 interface TpreviewActive {
     type: string,
     html: string,
     ast: TRowAST[]
 }
-type Tactive = TpreviewActive
+interface TbaseActive {
+    type: string,
+    value: string,
+}
+interface TselectRowPath {
+    type: string,
+    path: number[],
+}
+interface Tactive extends TbaseActive, TselectRowPath, TpreviewActive{}
 
 const defaultState: Tstore = {
     previewHTML: '',
-    previewAST: []
+    previewAST: [],
+    selectRowPath: []
 }
 
 export const rootReducer = (state = defaultState, action: Tactive): Tstore  =>{
@@ -29,6 +27,11 @@ export const rootReducer = (state = defaultState, action: Tactive): Tstore  =>{
             return {...state,
                 previewHTML: action.html,
                 previewAST: action.ast
+            }
+        }
+        case 'selectRowPath': {
+            return {...state,
+                selectRowPath: action.path,
             }
         }
         default :{
