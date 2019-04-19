@@ -4,7 +4,7 @@ import { Dispatch } from 'redux'
 const { useState } = React
 import {TRowAST, Tstore} from '../types/index'
 
-import { createHtml, getTreeVal } from './utils'
+import { createHtml, getTreeVal, setTreeData } from './utils'
 import {layoutTypeList} from '../model/constant' 
 import { Select } from './Select'
 
@@ -38,7 +38,7 @@ const _HandleColumn = (props: Tprops) => {
     let SelectChange = (selectIndex: number) => {
         layoutTypeSelected = layoutTypeList[selectIndex]
     }
-    let selectItem: TRowAST | void = props.selectRowPath.length > 0 
+    let selectItem: any = props.selectRowPath.length > 0 
         ? getTreeVal(props.previewAST, props.selectRowPath.join('.children.'))
         : void 0
     let addRow = () => {
@@ -72,29 +72,47 @@ const _HandleColumn = (props: Tprops) => {
             ast
         })
     }
-    let editRow = () => {
-        console.log('edit')
-    }
     interface Tdone extends Function{
         (event: MouseEvent): void
     }
     interface LayoutWritePro{
-        done: Tdone;
+        done?: Tdone;
         type: string;
     }
-    console.log('开发中...')
-    console.log(selectItem)
     let LayoutWrite = (params: LayoutWritePro) => {
         switch(params.type){
             case 'edit': {
+                let className: string = selectItem.css[2]
+                let layoutTypeSelected: selectListItem = layoutTypeList[0]
+                let editRow = () => {
+                    let data: TRowAST[] = setTreeData(props.previewAST, {
+                        path: props.selectRowPath,
+                        childrenName: 'children',
+                        value: {
+                            ...selectItem,
+                            css: [selectItem.css[0], layoutTypeSelected.className, className],
+                        }
+                    })
+                    props.dispatch({
+                        type: 'previewHTML',
+                        html: createHtml(data).view,
+                        ast: data
+                    })
+                }
                 return <div className="inner">
-                    <div>class： <input defaultValue={className} onInput={classNameChange} placeholder="请输入class" /></div>
-                    <div>column： <input defaultValue={layoutColumn} type="number" onInput={layoutColumnChange} placeholder="请输入列数" /></div>
+                    <div>class： <input defaultValue={className} onInput={(e: any) => {
+                        className = e.target.value
+                    }} placeholder="请输入class" /></div>
                     <div className="flex">
                         <p>layout type：</p>
-                        <Select activeIndex={0} list={layoutTypeList} change={SelectChange} />
+                        <Select
+                         activeIndex={layoutTypeList.findIndex(e => e.className === selectItem.css[1])}
+                         list={layoutTypeList} change={(index: number) => {
+                            layoutTypeSelected = layoutTypeList[index]
+                         }} 
+                        />
                     </div>
-                    <div className="button" onClick={params.done}>success edit</div>
+                    <div className="button" onClick={editRow}>success edit</div>
                 </div>
             }
             case 'add': {
@@ -105,7 +123,7 @@ const _HandleColumn = (props: Tprops) => {
                         <p>layout type：</p>
                         <Select activeIndex={0} list={layoutTypeList} change={SelectChange} />
                     </div>
-                    <div className="button" onClick={params.done}>add</div>
+                    <div className="button" onClick={addRow}>add</div>
                 </div>
             }
             default: {
@@ -117,11 +135,11 @@ const _HandleColumn = (props: Tprops) => {
         <div>
             {selectItem ? <div>
                     <div className="title-name">Edit Element Layout</div>
-                    <LayoutWrite done={editRow} type="edit" />
+                    <LayoutWrite type="edit" />
                 </div>:
                 <div>
                     <div className="title-name">ADD Element Layout</div>
-                    <LayoutWrite done={addRow} type="add" />
+                    <LayoutWrite type="add" />
                 </div>
             }
             
@@ -135,4 +153,3 @@ const stateMapToProps = (state: Tstore) => {
     }
 }
 export const HandleColumn = connect(stateMapToProps)(_HandleColumn)
-// export const HandleColumn = () => <div></div>

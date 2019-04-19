@@ -8,6 +8,11 @@ interface TRowAST {
 interface TcreaterHtml {
     view: string
 }
+interface TsetTreeData {
+    path: number[],
+    value: string,
+    childrenName: string
+}
 
 let createTag = (item: TRowAST, inner?: string): string => {
     let cssStr: string = item.css.length > 0 ? ` class="${item.css.join(' ')}"`
@@ -41,4 +46,16 @@ export const getTreeVal = <T>(_object: T, key: string): any => {
         objecChildren = copy(objecChildren || _object)[e]
     }
     return objecChildren
+}
+export const setTreeData = <T>(_data: any, { path, childrenName, value }: TsetTreeData): T => {
+    let copy = (e: any) => JSON.parse(JSON.stringify(e))
+    let data: any = copy(_data)
+    let deepSearch = (tree: any, path: any) => {
+        tree[childrenName][path[0]] && path.length > 1
+            ? tree[childrenName][path[0]] = deepSearch(tree[childrenName][path[0]], path.clice(1))
+            : tree[childrenName][path[0]] = value
+        return tree
+    }
+    data[path[0]] = path.length > 1 ? deepSearch(data[path[0]], path.slice(1)) : value
+    return data
 }

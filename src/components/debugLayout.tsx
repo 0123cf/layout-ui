@@ -25,8 +25,9 @@ const _DebugLayout = (props: Tprops) => {
         return tree.map((e, index) => {
             let itemPath = [...path, index]
             return <div
-                className={`${e.css.join(' ')}${props.selectRowPath.join(',') === itemPath.join(',') && 'item-selected-status'}`}
+                className={`${e.css.join(' ')}${props.selectRowPath.join(',') === itemPath.join(',') && ' item-selected-status'}`}
                 onClick={(e: MouseEvent) => selectRowDiv(e, itemPath)}
+                key={index}
             >{
                     e.children.length > 0 ? randerTree(e.children, itemPath) :
                         (e.innerText || '')
