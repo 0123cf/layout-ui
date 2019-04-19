@@ -42,6 +42,14 @@ $color-main: rgb(250, 60, 130);
             border-radius: 4px;
             @extend .full-block;
         }
+        .title-name{
+            border-bottom: 1px solid rgba(0, 0, 0, .4);
+            padding: 10px 20px;
+            margin-bottom: 10px;
+        }
+        .inner{
+            padding: 0px 20px;
+        }
     }
     .preview{
         padding: 20px;
@@ -79,16 +87,6 @@ $color-main: rgb(250, 60, 130);
                     border-radius: 20px;
                 }
             }
-            // .item-selected-status:after{
-            //     content: "";
-            //     display: block;
-            //     position: absolute;
-            //     top: 0px;
-            //     left: 0px;
-            //     width: 100%;
-            //     height: 100%;
-            //     background: rgba(0, 210, 255, .4);
-            // }
             .item-selected-status{
                 border: 5px solid  rgba(0, 210, 255, .4);
                 box-sizing: border-box;

@@ -1,10 +1,10 @@
-import * as React from 'react'
-import {connect} from 'react-redux'
-import {Dispatch} from  'redux'
+import React, { MouseEvent } from 'react'
+import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
 const { useState } = React
-import {TRowAST, Tstore} from '../types/index'
+import { TRowAST, Tstore } from '../types/index'
 
-interface Tprops{
+interface Tprops {
     html: string,
     tree: TRowAST[],
     dispatch: Dispatch,
@@ -13,7 +13,7 @@ interface Tprops{
 
 const _DebugLayout = (props: Tprops) => {
 
-    let selectRowDiv = (event: any, path: number[]) => {
+    let selectRowDiv = (event: MouseEvent, path: number[]) => {
         event.stopPropagation()
         props.dispatch({
             type: 'selectRowPath',
@@ -25,11 +25,11 @@ const _DebugLayout = (props: Tprops) => {
         return tree.map((e, index) => {
             let itemPath = [...path, index]
             return <div
-                    className={`${ e.css.join(' ') }${ props.selectRowPath.join(',') === itemPath.join(',') && 'item-selected-status'}`} 
-                    onClick={ (e: any) => selectRowDiv(e, itemPath) }
-                >{
-                    e.children.length > 0 ? randerTree(e.children, itemPath) : 
-                    (e.innerText || '')
+                className={`${e.css.join(' ')}${props.selectRowPath.join(',') === itemPath.join(',') && 'item-selected-status'}`}
+                onClick={(e: MouseEvent) => selectRowDiv(e, itemPath)}
+            >{
+                    e.children.length > 0 ? randerTree(e.children, itemPath) :
+                        (e.innerText || '')
                 }</div>
         })
     }
