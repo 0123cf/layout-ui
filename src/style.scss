@@ -19,14 +19,14 @@ $color-main: #A83030;
 }
 
 // export css inner
-.al-flex-spce-x{
-    justify-content: space-between;
-}
 .al-flex-end-x{
     justify-content: flex-end;
 }
 .al-flex-center-x{
     justify-content: center;
+}
+.al-flex-space-between-x{
+    justify-content: space-between;
 }
 
 // start
