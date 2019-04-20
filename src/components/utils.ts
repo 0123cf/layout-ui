@@ -10,7 +10,11 @@ interface TcreaterHtml {
 }
 interface TsetTreeData {
     path: number[],
-    value: string,
+    value: string | null,
+    childrenName: string
+}
+interface TdelectTreeData {
+    path: number[],
     childrenName: string
 }
 
@@ -47,15 +51,34 @@ export const getTreeVal = <T>(_object: T, key: string): any => {
     }
     return objecChildren
 }
+const id = <T>(_: T): T => _
+export const filterTree = (data: any[], childrenName: string, id: any): any => {
+    var loop = (e: any): any => {
+        return e.children ? {...e, [childrenName]: loop(e[childrenName].filter(id)) } : e
+    }
+    return data.filter(id).map(loop)
+}
 export const setTreeData = <T>(_data: any, { path, childrenName, value }: TsetTreeData): T => {
     let copy = (e: any) => JSON.parse(JSON.stringify(e))
     let data: any = copy(_data)
     let deepSearch = (tree: any, path: any) => {
-        tree[childrenName][path[0]] && path.length > 1
-            ? tree[childrenName][path[0]] = deepSearch(tree[childrenName][path[0]], path.clice(1))
-            : tree[childrenName][path[0]] = value
+        let item = tree[childrenName][path[0]]
+        item && path.length > 1
+        item ? item = deepSearch(item, path.clice(1))
+            : item = value
         return tree
     }
     data[path[0]] = path.length > 1 ? deepSearch(data[path[0]], path.slice(1)) : value
     return data
+}
+export const delectTreeData = <T>(data: any, { path, childrenName }: TdelectTreeData): T => {
+    return filterTree(
+        setTreeData(data, {
+            path,
+            childrenName,
+            value: null
+        }),
+        childrenName,
+        id
+    )
 }

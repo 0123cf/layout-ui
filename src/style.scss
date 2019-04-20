@@ -1,5 +1,5 @@
 // var
-$color-main: rgb(250, 60, 130);
+$color-main: #A83030;
 // extend
 .full-block{
     background-color: $color-main;
@@ -34,13 +34,17 @@ $color-main: rgb(250, 60, 130);
     .HandleColumn{
         min-width: 200px;
         height: 100vh;
-        background-color: #ccc;
+        background-color: #F0D8C0;
         .button{
             display: inline-block;
             line-height: 30px;
             padding: 0 10px;
             border-radius: 4px;
-            @extend .full-block;
+            @extend .full-block;    
+            cursor: pointer;
+        }
+        .button-delect{
+            margin-left: 20px;
         }
         .title-name{
             border-bottom: 1px solid rgba(0, 0, 0, .4);

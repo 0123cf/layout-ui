@@ -31,7 +31,6 @@ export const Select = (props: SelectPro) => {
     const styles: any = {
         lists: {
             position: 'absolute',
-            top: '1.5em',
             left: '0px',
             backgoundColor: '#fff',
             border: '1px solid #999'

@@ -4,7 +4,7 @@ import { Dispatch } from 'redux'
 const { useState } = React
 import {TRowAST, Tstore} from '../types/index'
 
-import { createHtml, getTreeVal, setTreeData } from './utils'
+import { createHtml, getTreeVal, setTreeData, delectTreeData } from './utils'
 import {layoutTypeList} from '../model/constant' 
 import { Select } from './Select'
 
@@ -99,6 +99,15 @@ const _HandleColumn = (props: Tprops) => {
                         ast: data
                     })
                 }
+                let delectRow = () => {
+                    let data: TRowAST[] = delectTreeData(props.previewAST, {path: props.selectRowPath, childrenName: 'children'})
+                    props.dispatch({
+                        type: 'previewHTML',
+                        html: createHtml(data).view,
+                        ast: data
+                    })
+                    props.dispatch({type: 'selectRowPath', path: []})
+                }
                 return <div className="inner">
                     <div>class： <input defaultValue={className} onInput={(e: any) => {
                         className = e.target.value
@@ -112,7 +121,8 @@ const _HandleColumn = (props: Tprops) => {
                          }} 
                         />
                     </div>
-                    <div className="button" onClick={editRow}>success edit</div>
+                    <div className="button" onClick={editRow}>确认修改</div>
+                    <div className="button button-delect" onClick={delectRow}>删除</div>
                 </div>
             }
             case 'add': {
@@ -123,7 +133,7 @@ const _HandleColumn = (props: Tprops) => {
                         <p>layout type：</p>
                         <Select activeIndex={0} list={layoutTypeList} change={SelectChange} />
                     </div>
-                    <div className="button" onClick={addRow}>add</div>
+                    <div className="button" onClick={addRow}>~添加~</div>
                 </div>
             }
             default: {
