@@ -104,10 +104,7 @@ const _HandleColumn = (props: Tprops) => {
                                 html: createHtml(astData).view,
                                 ast: astData
                             })
-                            console.log('---------')
-                            console.log(astData)
-                            console.log(itemAst)
-                        }}>~添加~</div>
+                        }}>~插入~</div>
                     </div>
                 }else{
                     let className: string = selectItem.css[2]
