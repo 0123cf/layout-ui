@@ -51,6 +51,11 @@ $color-main: #A83030;
             padding: 10px 20px;
             margin-bottom: 10px;
         }
+        .group-title-name{
+            line-height: 50px;
+            font-size: 16px;
+            font-weight: bold;
+        }
         .inner{
             padding: 0px 20px;
         }
@@ -80,7 +85,7 @@ $color-main: #A83030;
         .view-box{
             .flex{
                 position: relative;
-                background-color: rgb(153, 93, 181);
+                background-color: rgb(153, 93, 181)!important;
                 padding: 20px;
                 >* {
                     min-width: 70px;

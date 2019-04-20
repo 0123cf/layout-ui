@@ -1,4 +1,4 @@
-import React, {MouseEvent} from 'react'
+import React, {MouseEvent, Component} from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 const { useState } = React
@@ -19,6 +19,7 @@ interface Tstate {
 interface Tprops extends Tstate {
     dispatch: Dispatch
 }
+let inputOldTime: number = 0
 const _HandleColumn = (props: Tprops) => {
     let layoutTypeSelected: selectListItem = layoutTypeList[0]
     let layoutColumn = '2'
@@ -84,8 +85,57 @@ const _HandleColumn = (props: Tprops) => {
     let LayoutWrite = (params: LayoutWritePro) => {
         switch(params.type){
             case 'edit': {
+                let setTreeItemDataValue = (value: any) => {
+                    let dataAst: TRowAST[] = setTreeData(props.previewAST, {
+                        path: props.selectRowPath,
+                        childrenName: 'children',
+                        value
+                    })
+                    props.dispatch({
+                        type: 'previewHTML',
+                        html: createHtml(dataAst).view,
+                        ast: dataAst
+                    })
+                }
+                class EditAttribute extends Component {
+                    inputRef: any;
+                    constructor(props: any){
+                        super(props)
+                        this.inputRef = React.createRef()
+                    }
+                    // shouldComponentUpdate(): boolean {
+                    //     return (inputOldTime && +new Date() < inputOldTime + 1000)
+                    //         ? false
+                    //         : true
+                    // }
+                    componentDidMount () {
+                        (inputOldTime && +new Date() < inputOldTime + 1000) && this.inputRef.current.focus()
+                    }                   
+                    render(){
+                        return <div>
+                            <div className="group-title-name">编辑属性</div>
+                            <div>height: <input onChange={(e: any) => {
+                                let v = e.target.value
+                                console.log(v)
+                            }} /></div>
+                            <div>width: <input defaultValue="" /></div>
+                            <div>text: <input ref={this.inputRef} defaultValue={selectItem.innerText} onChange={(e: any) => {
+                                let textValue = e.target.value
+                                inputOldTime = +new Date()
+                                setTreeItemDataValue({
+                                    ...selectItem,
+                                    innerText: textValue
+                                })
+                                e.target.focus()
+                                // e.onfocus()
+                            }} /></div>
+                        </div>
+                    }
+                }
                 if(selectItem.children.length === 0){
                     return <div className="inner">
+                        <EditAttribute />
+                        <div className="group-title-name">插入新布局</div>
                         <div>class： <input defaultValue={className} onInput={classNameChange} placeholder="请输入class" /></div>
                         <div>column： <input defaultValue={layoutColumn} type="number" onInput={layoutColumnChange} placeholder="请输入列数" /></div>
                         <div className="flex">
@@ -94,16 +144,7 @@ const _HandleColumn = (props: Tprops) => {
                         </div>
                         <div className="button" onClick={() => {
                             let itemAst: TRowAST = getRowInfo()
-                            let astData: TRowAST[] = setTreeData(props.previewAST, {
-                                path: props.selectRowPath,
-                                childrenName: 'children',
-                                value: itemAst
-                            })
-                            props.dispatch({
-                                type: 'previewHTML',
-                                html: createHtml(astData).view,
-                                ast: astData
-                            })
+                            setTreeItemDataValue(itemAst)
                         }}>~插入~</div>
                     </div>
                 }else{
@@ -134,6 +175,8 @@ const _HandleColumn = (props: Tprops) => {
                         props.dispatch({type: 'selectRowPath', path: []})
                     }
                     return <div className="inner">
+                        <EditAttribute />
+                        <div className="group-title-name">修改布局</div>
                         <div>class： <input defaultValue={className} onInput={(e: any) => {
                             className = e.target.value
                         }} placeholder="请输入class" /></div>
