@@ -10,7 +10,7 @@ interface TcreaterHtml {
 }
 interface TsetTreeData {
     path: number[],
-    value: string | null,
+    value: any,
     childrenName: string
 }
 interface TdelectTreeData {
@@ -62,10 +62,9 @@ export const setTreeData = <T>(_data: any, { path, childrenName, value }: TsetTr
     let copy = (e: any) => JSON.parse(JSON.stringify(e))
     let data: any = copy(_data)
     let deepSearch = (tree: any, path: any) => {
-        let item = tree[childrenName][path[0]]
-        item && path.length > 1
-        item ? item = deepSearch(item, path.clice(1))
-            : item = value
+        tree[childrenName][path[0]] && path.length > 1
+            ? tree[childrenName][path[0]] = deepSearch(tree[childrenName][path[0]], path.slice(1))
+            : tree[childrenName][path[0]] = value
         return tree
     }
     data[path[0]] = path.length > 1 ? deepSearch(data[path[0]], path.slice(1)) : value

@@ -41,7 +41,7 @@ const _HandleColumn = (props: Tprops) => {
     let selectItem: any = props.selectRowPath.length > 0 
         ? getTreeVal(props.previewAST, props.selectRowPath.join('.children.'))
         : void 0
-    let addRow = () => {
+    let getRowInfo = (): TRowAST => {
         // TODO className 不能是内置的class
         let columnNumber = +layoutColumn
         let layoutType = layoutTypeSelected.className
@@ -58,14 +58,16 @@ const _HandleColumn = (props: Tprops) => {
         for (let i = 0; i < columnNumber; i++) {
             rowAst.push(rowASTItemDefault)
         }
-        rowInfo = {
+        return {
             tag: 'div',
             css: ['flex', layoutType, className],
             style: [],
             children: rowAst
         }
-        ast = [...props.previewAST, rowInfo]
-        htmlObject = createHtml(ast)
+    }
+    let addRow = () => {
+        let ast: TRowAST[] = [...props.previewAST, getRowInfo()]
+        let htmlObject = createHtml(ast)
         props.dispatch({
             type: 'previewHTML',
             html: htmlObject.view,
@@ -82,48 +84,75 @@ const _HandleColumn = (props: Tprops) => {
     let LayoutWrite = (params: LayoutWritePro) => {
         switch(params.type){
             case 'edit': {
-                let className: string = selectItem.css[2]
-                let layoutTypeSelected: selectListItem = layoutTypeList[0]
-                let editRow = () => {
-                    let data: TRowAST[] = setTreeData(props.previewAST, {
-                        path: props.selectRowPath,
-                        childrenName: 'children',
-                        value: {
-                            ...selectItem,
-                            css: [selectItem.css[0], layoutTypeSelected.className, className],
-                        }
-                    })
-                    props.dispatch({
-                        type: 'previewHTML',
-                        html: createHtml(data).view,
-                        ast: data
-                    })
-                }
-                let delectRow = () => {
-                    let data: TRowAST[] = delectTreeData(props.previewAST, {path: props.selectRowPath, childrenName: 'children'})
-                    props.dispatch({
-                        type: 'previewHTML',
-                        html: createHtml(data).view,
-                        ast: data
-                    })
-                    props.dispatch({type: 'selectRowPath', path: []})
-                }
-                return <div className="inner">
-                    <div>class： <input defaultValue={className} onInput={(e: any) => {
-                        className = e.target.value
-                    }} placeholder="请输入class" /></div>
-                    <div className="flex">
-                        <p>layout type：</p>
-                        <Select
-                         activeIndex={layoutTypeList.findIndex(e => e.className === selectItem.css[1])}
-                         list={layoutTypeList} change={(index: number) => {
-                            layoutTypeSelected = layoutTypeList[index]
-                         }} 
-                        />
+                if(selectItem.children.length === 0){
+                    return <div className="inner">
+                        <div>class： <input defaultValue={className} onInput={classNameChange} placeholder="请输入class" /></div>
+                        <div>column： <input defaultValue={layoutColumn} type="number" onInput={layoutColumnChange} placeholder="请输入列数" /></div>
+                        <div className="flex">
+                            <p>layout type：</p>
+                            <Select activeIndex={0} list={layoutTypeList} change={SelectChange} />
+                        </div>
+                        <div className="button" onClick={() => {
+                            let itemAst: TRowAST = getRowInfo()
+                            let astData: TRowAST[] = setTreeData(props.previewAST, {
+                                path: props.selectRowPath,
+                                childrenName: 'children',
+                                value: itemAst
+                            })
+                            props.dispatch({
+                                type: 'previewHTML',
+                                html: createHtml(astData).view,
+                                ast: astData
+                            })
+                            console.log('---------')
+                            console.log(astData)
+                            console.log(itemAst)
+                        }}>~添加~</div>
                     </div>
-                    <div className="button" onClick={editRow}>确认修改</div>
-                    <div className="button button-delect" onClick={delectRow}>删除</div>
-                </div>
+                }else{
+                    let className: string = selectItem.css[2]
+                    let layoutTypeSelected: selectListItem = layoutTypeList[0]
+                    let editRow = () => {
+                        let data: TRowAST[] = setTreeData(props.previewAST, {
+                            path: props.selectRowPath,
+                            childrenName: 'children',
+                            value: {
+                                ...selectItem,
+                                css: [selectItem.css[0], layoutTypeSelected.className, className],
+                            }
+                        })
+                        props.dispatch({
+                            type: 'previewHTML',
+                            html: createHtml(data).view,
+                            ast: data
+                        })
+                    }
+                    let delectRow = () => {
+                        let data: TRowAST[] = delectTreeData(props.previewAST, {path: props.selectRowPath, childrenName: 'children'})
+                        props.dispatch({
+                            type: 'previewHTML',
+                            html: createHtml(data).view,
+                            ast: data
+                        })
+                        props.dispatch({type: 'selectRowPath', path: []})
+                    }
+                    return <div className="inner">
+                        <div>class： <input defaultValue={className} onInput={(e: any) => {
+                            className = e.target.value
+                        }} placeholder="请输入class" /></div>
+                        <div className="flex">
+                            <p>layout type：</p>
+                            <Select
+                            activeIndex={layoutTypeList.findIndex(e => e.className === selectItem.css[1])}
+                            list={layoutTypeList} change={(index: number) => {
+                                layoutTypeSelected = layoutTypeList[index]
+                            }} 
+                            />
+                        </div>
+                        <div className="button" onClick={editRow}>确认修改</div>
+                        <div className="button button-delect" onClick={delectRow}>删除</div>
+                    </div>
+                }
             }
             case 'add': {
                 return <div className="inner">
