@@ -28,9 +28,9 @@ const _DebugLayout = (props: Tprops) => {
                 className={`${e.css.join(' ')}${props.selectRowPath.join(',') === itemPath.join(',') && ' item-selected-status'}`}
                 onClick={(e: MouseEvent) => selectRowDiv(e, itemPath)}
                 key={index}
+                style={e.style}
             >{
-                    e.children.length > 0 ? randerTree(e.children, itemPath) :
-                        (e.innerText || '')
+                    e.children.length > 0 ? randerTree(e.children, itemPath) : ''
                 }</div>
         })
     }

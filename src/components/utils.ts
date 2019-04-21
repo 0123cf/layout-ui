@@ -1,10 +1,5 @@
-interface TRowAST {
-    tag: string,
-    css: string[],
-    style: any[],
-    innerText?: string,
-    children: TRowAST[]
-}
+import {TRowAST} from '../types/index'
+
 interface TcreaterHtml {
     view: string
 }
@@ -17,10 +12,20 @@ interface TdelectTreeData {
     path: number[],
     childrenName: string
 }
+var getSTyleStr = (o: any): string => {
+	var str = ""
+	for(let e of Object.keys(o)){
+        let key = e
+        key = key.replace(/([A-Z])/g,"-$1").toLowerCase()
+		str += `${key}: ${o[e]};`
+	}
+	return str
+}
 
 let createTag = (item: TRowAST, inner?: string): string => {
     let cssStr: string = item.css.length > 0 ? ` class="${item.css.join(' ')}"`
         : ''
+    let styleStr: string = getSTyleStr(item.style)
     let childrenHtml: string
     if (item.children.length > 0) {
         childrenHtml = item.children.map(item => {
@@ -29,7 +34,7 @@ let createTag = (item: TRowAST, inner?: string): string => {
     } else {
         childrenHtml = inner || ''
     }
-    return `<${item.tag}${cssStr}>${childrenHtml}</${item.tag}>`
+    return `<${item.tag}${cssStr} style="${styleStr}">${childrenHtml}</${item.tag}>`
 }
 
 export const createHtml = (rowInfo: TRowAST[]): TcreaterHtml => {

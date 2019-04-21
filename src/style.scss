@@ -59,6 +59,22 @@ $color-main: #A83030;
         .inner{
             padding: 0px 20px;
         }
+        .select-button{
+            .item{
+                display: inline-block;
+                line-height: 30px;
+                padding: 0 10px;
+                border-radius: 4px;
+                cursor: pointer;
+                color: $color-main;
+                border: 1px solid;
+                margin: 10px 20px;
+            }
+        }
+        .otherInfo{
+            padding-left: 20px;
+            color: #666
+        }
     }
     .preview{
         padding: 20px;

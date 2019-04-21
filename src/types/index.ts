@@ -1,7 +1,7 @@
 export interface TRowAST {
     tag: string,
     css: string[],
-    style: any[],
+    style: any,
     innerText?: string,
     children: TRowAST[]
 }
