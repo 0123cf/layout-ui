@@ -8,7 +8,6 @@
 可视化、自动化css布局</br>
 布局共享, 提高生产力</br>
 
-
 ![image.png](https://github.com/0123cf/auto-layout/blob/master/imgs/demo_preview.jpg?raw=true)
 
 
@@ -20,3 +19,7 @@
 |CSS下载|
 |完善布局方式|
 |搜索布局|
+|国际化（readme；text）|
+
+
+[在线体验](http://www.mysy.vip:8082/)
