@@ -12,13 +12,43 @@ interface Tprops {
 }
 
 const _DebugLayout = (props: Tprops) => {
-
+    let [visible, setvisible] = useState(false)
+    let [itemLastChild, setitemLastChild] = useState(false)
+    let [contextMenuStyle, setcontextMenuStyle] = useState({})
     let selectRowDiv = (event: MouseEvent, path: number[]) => {
         event.stopPropagation()
         props.dispatch({
             type: 'selectRowPath',
             path
         })
+    }
+    let handleContextMenu = (path: number[], item: TRowAST, event: MouseEvent) => {
+        event.preventDefault()
+        event.stopPropagation()
+    
+        setvisible(true)
+        // clientX/Y 获取到的是触发点相对于浏览器可视区域左上角距离
+        const clickX: number = event.clientX
+        const clickY: number = event.clientY
+        // window.innerWidth/innerHeight 获取的是当前浏览器窗口的视口宽度/高度
+        const screenW: number = window.innerWidth
+        const screenH: number = window.innerHeight
+        // 自定义菜单的宽度/高度
+        const rootW: number = 100
+        const rootH: number = 200
+    
+        // right为true，说明鼠标点击的位置到浏览器的右边界的宽度可以放下菜单。否则，菜单放到左边。
+        // bottom为true，说明鼠标点击位置到浏览器的下边界的高度可以放下菜单。否则，菜单放到上边。
+        const right: boolean = (screenW - clickX) > rootW
+        const bottom: boolean = (screenH - clickY) > rootH
+        let styles = {
+            ...contextMenuStyle,
+            left: right ? `${clickX}px` : `${clickX - rootW}px`,
+            top: bottom ? `${clickY}px` : `${clickY - rootH}px`
+        }
+        setcontextMenuStyle(styles)
+        setitemLastChild(item.children.length === 0)
+        // console.log(path, item)
     }
 
     let randerTree = (tree: TRowAST[], path: number[]) => {
@@ -29,6 +59,7 @@ const _DebugLayout = (props: Tprops) => {
                 onClick={(e: MouseEvent) => selectRowDiv(e, itemPath)}
                 key={index}
                 style={e.style}
+                onContextMenu={handleContextMenu.bind(null, itemPath, e)}
             >{
                     e.children.length > 0 ? randerTree(e.children, itemPath) : ''
                 }</div>
@@ -37,6 +68,20 @@ const _DebugLayout = (props: Tprops) => {
     return <div className="DebugLayout">
         <span>DebugLayout</span>
         <div className="view-box">{randerTree(props.tree, [])}</div>
+        {
+            visible && 
+            <div style={contextMenuStyle} className="contextMenu-wrap">
+                {itemLastChild ? <div>
+                    <div className="contextMenu-option">删除布局</div>
+                    <div className="contextMenu-option">前面添加一个元素</div>
+                    <div className="contextMenu-option">后面添加一个元素</div>
+                </div>:
+                <div>
+                    <div className="contextMenu-option">删除布局</div>
+                </div>
+                }
+            </div>
+        }
     </div>
 }
 const stateMap = (state: Tstore) => {
