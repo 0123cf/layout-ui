@@ -21,6 +21,7 @@ const _DebugLayout = (props: Tprops) => {
             type: 'selectRowPath',
             path
         })
+        setvisible(false)
     }
     let handleContextMenu = (path: number[], item: TRowAST, event: MouseEvent) => {
         event.preventDefault()
@@ -65,7 +66,9 @@ const _DebugLayout = (props: Tprops) => {
                 }</div>
         })
     }
-    return <div className="DebugLayout">
+    return <div className="DebugLayout" onClick={() => {
+        setvisible(false)
+    }}>
         <span>DebugLayout</span>
         <div className="view-box">{randerTree(props.tree, [])}</div>
         {
