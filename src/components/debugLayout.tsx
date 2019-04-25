@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 const { useState } = React
 import { TRowAST, Tstore } from '../types/index'
+import { createHtml, delectTreeData } from './utils'
 
 interface Tprops {
     html: string,
@@ -15,6 +16,7 @@ const _DebugLayout = (props: Tprops) => {
     let [visible, setvisible] = useState(false)
     let [itemLastChild, setitemLastChild] = useState(false)
     let [contextMenuStyle, setcontextMenuStyle] = useState({})
+    let [currentSelectedPath, setcurrentSelectedPath]: any = useState([])
     let selectRowDiv = (event: MouseEvent, path: number[]) => {
         event.stopPropagation()
         props.dispatch({
@@ -22,8 +24,22 @@ const _DebugLayout = (props: Tprops) => {
             path
         })
         setvisible(false)
+    }    
+    let delectRow = (event: MouseEvent) => {
+        
+        console.log('---currentSelectedPath---')
+        console.log(currentSelectedPath)
+        let data: TRowAST[] = delectTreeData(props.tree, {path: currentSelectedPath, childrenName: 'children'})
+        props.dispatch({
+            type: 'previewHTML',
+            html: createHtml(data).view,
+            ast: data
+        })
+        props.dispatch({type: 'selectRowPath', path: []})
     }
     let handleContextMenu = (path: number[], item: TRowAST, event: MouseEvent) => {
+        console.log('---path---')
+        console.log(path)
         event.preventDefault()
         event.stopPropagation()
     
@@ -50,6 +66,7 @@ const _DebugLayout = (props: Tprops) => {
         setcontextMenuStyle(styles)
         setitemLastChild(item.children.length === 0)
         // console.log(path, item)
+        setcurrentSelectedPath(path)
     }
 
     let randerTree = (tree: TRowAST[], path: number[]) => {
@@ -75,12 +92,12 @@ const _DebugLayout = (props: Tprops) => {
             visible && 
             <div style={contextMenuStyle} className="contextMenu-wrap">
                 {itemLastChild ? <div>
-                    <div className="contextMenu-option">删除布局</div>
+                    <div className="contextMenu-option" onClick={delectRow}>删除布局</div>
                     <div className="contextMenu-option">前面添加一个元素</div>
                     <div className="contextMenu-option">后面添加一个元素</div>
                 </div>:
                 <div>
-                    <div className="contextMenu-option">删除布局</div>
+                    <div className="contextMenu-option" onClick={delectRow}>删除布局</div>
                 </div>
                 }
             </div>
