@@ -1,3 +1,4 @@
+import { TRowAST } from '../types/index'
 interface selectListItem {
     name?: string,
     className: string,
@@ -9,3 +10,10 @@ export const layoutTypeList: selectListItem[] = [
     { src: '3', className: 'al-flex-center-x' },
     { src: '4', className: 'al-flex-space-between-x' },
 ]
+export const rowASTItemDefault: TRowAST = {
+    tag: 'div',
+    css: [],
+    style: {},
+    innerText: '',
+    children: []
+}

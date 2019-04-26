@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 const { useState } = React
 import { TRowAST, Tstore } from '../types/index'
-import { createHtml, delectTreeData } from './utils'
+import { createHtml, delectTreeData, addTreeData, Copy } from './utils'
+import { layoutTypeList, rowASTItemDefault } from '../model/constant'
 
 interface Tprops {
     html: string,
@@ -26,9 +27,6 @@ const _DebugLayout = (props: Tprops) => {
         setvisible(false)
     }    
     let delectRow = (event: MouseEvent) => {
-        
-        console.log('---currentSelectedPath---')
-        console.log(currentSelectedPath)
         let data: TRowAST[] = delectTreeData(props.tree, {path: currentSelectedPath, childrenName: 'children'})
         props.dispatch({
             type: 'previewHTML',
@@ -37,9 +35,28 @@ const _DebugLayout = (props: Tprops) => {
         })
         props.dispatch({type: 'selectRowPath', path: []})
     }
+    let addbrotherRow = (site: string): void => {
+        let path = Copy(currentSelectedPath)
+        if(site === 'back'){
+            path[path.length - 1] = path[path.length - 1] + 1
+        }
+        let data: TRowAST[] = addTreeData(
+            props.tree,
+            {
+                path,
+                childrenName: 'children',
+                value: Copy(rowASTItemDefault)
+            }
+        )
+        props.dispatch({
+            type: 'previewHTML',
+            html: createHtml(data).view,
+            ast: data
+        })
+        // TODO 位置需要确认放哪里合适，先清空
+        props.dispatch({type: 'selectRowPath', path: []})
+    }
     let handleContextMenu = (path: number[], item: TRowAST, event: MouseEvent) => {
-        console.log('---path---')
-        console.log(path)
         event.preventDefault()
         event.stopPropagation()
     
@@ -79,7 +96,7 @@ const _DebugLayout = (props: Tprops) => {
                 style={e.style}
                 onContextMenu={handleContextMenu.bind(null, itemPath, e)}
             >{
-                    e.children.length > 0 ? randerTree(e.children, itemPath) : ''
+                    e.children.length > 0 ? randerTree(e.children, itemPath) : (e.innerText || '')
                 }</div>
         })
     }
@@ -93,8 +110,8 @@ const _DebugLayout = (props: Tprops) => {
             <div style={contextMenuStyle} className="contextMenu-wrap">
                 {itemLastChild ? <div>
                     <div className="contextMenu-option" onClick={delectRow}>删除布局</div>
-                    <div className="contextMenu-option">前面添加一个元素</div>
-                    <div className="contextMenu-option">后面添加一个元素</div>
+                    <div className="contextMenu-option" onClick={addbrotherRow.bind(null, 'front')}>前面添加一个元素</div>
+                    <div className="contextMenu-option" onClick={addbrotherRow.bind(null, 'back')}>后面添加一个元素</div>
                 </div>:
                 <div>
                     <div className="contextMenu-option" onClick={delectRow}>删除布局</div>

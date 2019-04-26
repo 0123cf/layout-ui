@@ -1,11 +1,11 @@
-import React, {MouseEvent, Component} from 'react'
+import React, { MouseEvent, Component } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 const { useState } = React
-import {TRowAST, Tstore} from '../types/index'
+import { TRowAST, Tstore } from '../types/index'
 
 import { createHtml, getTreeVal, setTreeData, delectTreeData } from './utils'
-import {layoutTypeList} from '../model/constant' 
+import { layoutTypeList, rowASTItemDefault } from '../model/constant'
 import { Select } from './Select'
 
 interface selectListItem {
@@ -40,20 +40,13 @@ const _HandleColumn = (props: Tprops) => {
     let SelectChange = (selectIndex: number) => {
         layoutTypeSelected = layoutTypeList[selectIndex]
     }
-    let selectItem: any = props.selectRowPath.length > 0 
+    let selectItem: any = props.selectRowPath.length > 0
         ? getTreeVal(props.previewAST, props.selectRowPath.join('.children.'))
         : void 0
     let getRowInfo = (): TRowAST => {
         // TODO className 不能是内置的class
         let columnNumber = +layoutColumn
         let layoutType = layoutTypeSelected.className
-        let rowASTItemDefault: TRowAST = {
-            tag: 'div',
-            css: [],
-            style: {},
-            innerText: '',
-            children: []
-        }
 
         rowAst = []
         for (let i = 0; i < columnNumber; i++) {
@@ -75,15 +68,15 @@ const _HandleColumn = (props: Tprops) => {
             ast
         })
     }
-    interface Tdone extends Function{
+    interface Tdone extends Function {
         (event: MouseEvent): void
     }
-    interface LayoutWritePro{
+    interface LayoutWritePro {
         done?: Tdone;
         type: string;
     }
     let LayoutWrite = (params: LayoutWritePro) => {
-        switch(params.type){
+        switch (params.type) {
             case 'edit': {
                 let setTreeItemDataValue = (value: any) => {
                     let dataAst: TRowAST[] = setTreeData(props.previewAST, {
@@ -117,7 +110,7 @@ const _HandleColumn = (props: Tprops) => {
                     inputBackRadius: any;
                     inputPadding: any;
                     inputMargin: any;
-                    constructor(props: any){
+                    constructor(props: any) {
                         super(props)
                         this.inputText = React.createRef()
                         this.inputHeight = React.createRef()
@@ -130,9 +123,9 @@ const _HandleColumn = (props: Tprops) => {
                         this.inputPadding = React.createRef()
                         this.inputMargin = React.createRef()
                     }
-                    componentDidMount () {
-                        if(inputOldTime && +new Date() < inputOldTime + 1000){
-                            switch(inputKey){
+                    componentDidMount() {
+                        if (inputOldTime && +new Date() < inputOldTime + 1000) {
+                            switch (inputKey) {
                                 case 'inputText': {
                                     this.inputText.current.focus()
                                     break
@@ -176,7 +169,7 @@ const _HandleColumn = (props: Tprops) => {
                             }
                         }
                     }
-                    render(){
+                    render() {
                         return <div>
                             <div className="group-title-name">编辑属性</div>
                             <div>宽度: <input ref={this.inputWidth} defaultValue={selectItem.style.width ? selectItem.style.width.replace('px', '') : ''} onChange={(e: any) => {
@@ -290,15 +283,15 @@ const _HandleColumn = (props: Tprops) => {
                                     }
                                 })
                             }} />
-                            <div className="otherInfo">
-                                <p>上 右 下 左</p>
-                                <p>如： 4px 2px 3px 4px</p>
-                            </div>
+                                <div className="otherInfo">
+                                    <p>上 右 下 左</p>
+                                    <p>如： 4px 2px 3px 4px</p>
+                                </div>
                             </div>
                         </div>
                     }
                 }
-                if(selectItem.children.length === 0){
+                if (selectItem.children.length === 0) {
                     return <div className="inner">
                         <EditAttribute />
                         <div className="group-title-name">插入新布局</div>
@@ -313,7 +306,7 @@ const _HandleColumn = (props: Tprops) => {
                             setTreeItemDataValue(itemAst)
                         }}>~插入~</div>
                     </div>
-                }else{
+                } else {
                     let className: string = selectItem.css[2]
                     let layoutTypeSelected: selectListItem = layoutTypeList[0]
                     let editRow = () => {
@@ -332,13 +325,13 @@ const _HandleColumn = (props: Tprops) => {
                         })
                     }
                     let delectRow = () => {
-                        let data: TRowAST[] = delectTreeData(props.previewAST, {path: props.selectRowPath, childrenName: 'children'})
+                        let data: TRowAST[] = delectTreeData(props.previewAST, { path: props.selectRowPath, childrenName: 'children' })
                         props.dispatch({
                             type: 'previewHTML',
                             html: createHtml(data).view,
                             ast: data
                         })
-                        props.dispatch({type: 'selectRowPath', path: []})
+                        props.dispatch({ type: 'selectRowPath', path: [] })
                     }
                     return <div className="inner">
                         <EditAttribute />
@@ -349,10 +342,10 @@ const _HandleColumn = (props: Tprops) => {
                         <div className="flex">
                             <p>layout type：</p>
                             <Select
-                            activeIndex={layoutTypeList.findIndex(e => e.className === selectItem.css[1])}
-                            list={layoutTypeList} change={(index: number) => {
-                                layoutTypeSelected = layoutTypeList[index]
-                            }} 
+                                activeIndex={layoutTypeList.findIndex(e => e.className === selectItem.css[1])}
+                                list={layoutTypeList} change={(index: number) => {
+                                    layoutTypeSelected = layoutTypeList[index]
+                                }}
                             />
                         </div>
                         <div className="button" onClick={editRow}>确认修改</div>
@@ -374,20 +367,20 @@ const _HandleColumn = (props: Tprops) => {
             default: {
                 return <div></div>
             }
-        } 
+        }
     }
-    return <div className="HandleColumn">      
+    return <div className="HandleColumn">
         <div>
             {selectItem ? <div>
-                    <div className="title-name">Edit Element Layout</div>
-                    <LayoutWrite type="edit" />
-                </div>:
+                <div className="title-name">Edit Element Layout</div>
+                <LayoutWrite type="edit" />
+            </div> :
                 <div>
                     <div className="title-name">ADD Element Layout</div>
                     <LayoutWrite type="add" />
                 </div>
             }
-            
+
         </div>
     </div>
 }
