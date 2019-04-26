@@ -25,3 +25,10 @@
 
 
 [在线体验](http://www.mysy.vip:8082/)
+
+
+参与方式
+```
+npm install
+npm start
+```
