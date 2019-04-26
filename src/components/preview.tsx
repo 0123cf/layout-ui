@@ -9,10 +9,10 @@ const _Preview = (props: Tprops) => {
     return <div className="preview">
         <div className="title">preview</div>
         <div className="preview-box" dangerouslySetInnerHTML={{ __html: props.html }}></div>
-        <div>html</div>
+        {/* <div>html</div>
         <div>
             <textarea value={props.html}></textarea>
-        </div>
+        </div> */}
     </div>
 }
 const stateMap = (state: Tstore): Tprops => {
