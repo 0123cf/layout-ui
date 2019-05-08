@@ -24,7 +24,7 @@
 |国际化（readme；text）|
 
 
-[在线体验](http://www.mysy.vip:8082/)
+[在线体验](http://al.mysy.vip/)
 
 
 参与方式
