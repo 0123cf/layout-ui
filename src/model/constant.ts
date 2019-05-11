@@ -14,8 +14,8 @@ export const rowASTItemDefault: TRowAST = {
     tag: 'div',
     css: [],
     style: {
-        width: 30,
-        height: 30,
+        width: '30px',
+        height: '30px',
     },
     innerText: '',
     children: []

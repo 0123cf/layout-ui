@@ -37,6 +37,13 @@ $color-main: #A83030;
     .util_panel{
         background-color: #fbfbfb;
         padding: 20px 15px;
+        .add-layout{
+            .layout-svg{
+                width: 200px;
+                display: inline-block;
+                margin-top: 20px;
+            }
+        }
         .add{
             color: #999;
             >p{
@@ -51,8 +58,8 @@ $color-main: #A83030;
             }
         }
     }
-    .HandleColumn{
-        // min-width: 200px;
+    .HandleColumn{    
+        min-width: 450px;
         height: 100vh;
         background-color: #fff;
         .button{

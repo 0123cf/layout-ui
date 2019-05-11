@@ -372,7 +372,7 @@ const _HandleColumn = (props: Tprops) => {
     return <div className="HandleColumn">
         <div>
             {selectItem ? <div>
-                <div className="title-name">Edit Element Layout</div>
+                {/* <div className="title-name">Edit Element Layout</div> */}
                 <LayoutWrite type="edit" />
             </div> :
                 <div>
