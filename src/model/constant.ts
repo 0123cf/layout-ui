@@ -13,7 +13,10 @@ export const layoutTypeList: selectListItem[] = [
 export const rowASTItemDefault: TRowAST = {
     tag: 'div',
     css: [],
-    style: {},
+    style: {
+        width: 30,
+        height: 30,
+    },
     innerText: '',
     children: []
 }

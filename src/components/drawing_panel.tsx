@@ -25,7 +25,7 @@ const _DebugLayout = (props: Tprops) => {
             path
         })
         setvisible(false)
-    }    
+    }
     let delectRow = (event: MouseEvent) => {
         let data: TRowAST[] = delectTreeData(props.tree, {path: currentSelectedPath, childrenName: 'children'})
         props.dispatch({
@@ -103,8 +103,10 @@ const _DebugLayout = (props: Tprops) => {
     return <div className="DebugLayout" onClick={() => {
         setvisible(false)
     }}>
-        <span>DebugLayout</span>
-        <div className="view-box">{randerTree(props.tree, [])}</div>
+        <div className="view-box" style={{
+            width: '550px',
+            height: '90vh'
+        }}>{randerTree(props.tree, [])}</div>
         {
             visible && 
             <div style={contextMenuStyle} className="contextMenu-wrap">
@@ -128,4 +130,4 @@ const stateMap = (state: Tstore) => {
         selectRowPath: state.selectRowPath
     }
 }
-export const DebugLayout = connect(stateMap)(_DebugLayout)
+export default connect(stateMap)(_DebugLayout)

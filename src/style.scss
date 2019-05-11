@@ -1,5 +1,8 @@
 // var
 $color-main: #A83030;
+*{
+    box-sizing: border-box;
+}
 // extend
 .full-block{
     background-color: $color-main;
@@ -31,10 +34,27 @@ $color-main: #A83030;
 
 // start
 .div_layout{
+    .util_panel{
+        background-color: #fbfbfb;
+        padding: 20px 15px;
+        .add{
+            color: #999;
+            >p{
+                margin-bottom: 10px;
+                .iconfont{
+                    color: #555;
+                    font-weight: bold;
+                    font-size: 16px;
+                    display: inline-block;
+                    margin-right: 6px;
+                }
+            }
+        }
+    }
     .HandleColumn{
-        min-width: 200px;
+        // min-width: 200px;
         height: 100vh;
-        background-color: #F0D8C0;
+        background-color: #fff;
         .button{
             display: inline-block;
             line-height: 30px;
@@ -96,25 +116,27 @@ $color-main: #A83030;
     .DebugLayout{
         flex: auto;
         height: 100vh;
-        background-color: #fff;
-        border: 1px solid #ccc;
+        background-color: #eee;
+        padding-top: 50px;
         .view-box{
+            background: #fff;
+            margin: auto;
             .flex{
                 position: relative;
                 background-color: rgb(153, 93, 181)!important;
-                padding: 20px;
+                // padding: 20px;
                 >* {
-                    min-width: 70px;
-                    min-height: 70px;
+                    // min-width: 70px;
+                    // min-height: 70px;
                     background-color: rgb(247, 148, 31);
-                    padding: 20px;
-                    border: 1px solid #1e1e1e;
-                    border-radius: 20px;
+                    // padding: 20px;
+                    // border: 1px solid #1e1e1e;
+                    // border-radius: 20px;
                 }
             }
             .item-selected-status{
-                border: 5px solid  rgba(0, 210, 255, .4);
-                box-sizing: border-box;
+                // border: 5px solid  rgba(0, 210, 255, .4);
+                // box-sizing: border-box;
             }
         }
         .contextMenu-wrap{

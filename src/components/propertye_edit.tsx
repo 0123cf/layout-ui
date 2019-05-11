@@ -376,8 +376,8 @@ const _HandleColumn = (props: Tprops) => {
                 <LayoutWrite type="edit" />
             </div> :
                 <div>
-                    <div className="title-name">ADD Element Layout</div>
-                    <LayoutWrite type="add" />
+                    {/* <div className="title-name">ADD Element Layout</div>
+                    <LayoutWrite type="add" /> */}
                 </div>
             }
 
@@ -390,4 +390,4 @@ const stateMapToProps = (state: Tstore) => {
         selectRowPath: state.selectRowPath
     }
 }
-export const HandleColumn = connect(stateMapToProps)(_HandleColumn)
+export default connect(stateMapToProps)(_HandleColumn)

@@ -4,7 +4,7 @@ import {createStore} from 'redux'
 import {Provider} from 'react-redux'
 
 import  './style.scss'
-import {DivLayout} from './components/div_layout'
+import {DivLayout} from './components'
 import {rootReducer} from './reducer/index'
 
 const store = createStore(rootReducer)
