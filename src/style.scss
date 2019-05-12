@@ -92,7 +92,7 @@ input{
             z-index: 5;
             .ast-show{
                 width: 800px;
-                height: 90vh;
+                max-height: 90vh;
                 overflow: auto;
                 border: 1px solid rgba(0, 0, 0, .1);
                 margin-top: 20px;

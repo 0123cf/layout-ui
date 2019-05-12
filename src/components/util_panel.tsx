@@ -6,8 +6,10 @@ import { TRowAST, Tstore } from '../types/index'
 import { layoutTypeList, rowASTItemDefault } from '../model/constant'
 import { createHtml } from './utils'
 import { Preview } from './preview'
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import SyntaxHighlighter from 'react-syntax-highlighter'
+// import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import { docco } from '../model/constant'
+import jsbeautify from 'js-beautify'
 
 interface Tstate {
     previewAST: TRowAST[],
@@ -65,7 +67,9 @@ const View = (props: Tprops) => {
                             <i className="iconfont icon-daima"></i>
                         </p>
                         <div className="ast-show">
-                            <SyntaxHighlighter language='html' style={docco}>{props.html}</SyntaxHighlighter>
+                            <SyntaxHighlighter language='html' style={docco}>{
+                                jsbeautify.html_beautify(props.html)
+                            }</SyntaxHighlighter>
                         </div>
                     </div>
                     {/* <div className="ast-copy-box">

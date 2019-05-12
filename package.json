@@ -11,7 +11,11 @@
   "author": "XieXiuYue",
   "license": "MIT-996",
   "dependencies": {
+    "@types/js-beautify": "^1.8.0",
+    "@types/react-color": "^3.0.0",
     "@types/react-redux": "^7.0.6",
+    "@types/react-syntax-highlighter": "^10.1.0",
+    "js-beautify": "^1.10.0",
     "react": "^16.8.6",
     "react-color": "^2.17.3",
     "react-dom": "^16.8.6",
