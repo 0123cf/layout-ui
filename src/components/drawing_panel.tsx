@@ -89,11 +89,20 @@ const _DebugLayout = (props: Tprops) => {
     let randerTree = (tree: TRowAST[], path: number[]) => {
         return tree.map((e, index) => {
             let itemPath = [...path, index]
+            let getStyle = (style: any) => {
+                if(style.backgroundColor){
+                    return {
+                        ...style,
+                        backgroundImage: 'none'
+                    }
+                }
+                return style
+            }
             return <div
                 className={`${e.css.join(' ')}${props.selectRowPath.join(',') === itemPath.join(',') && ' item-selected-status'}`}
                 onClick={(e: MouseEvent) => selectRowDiv(e, itemPath)}
                 key={index}
-                style={e.style}
+                style={getStyle(e.style)}
                 onContextMenu={handleContextMenu.bind(null, itemPath, e)}
             >{
                     e.children.length > 0 ? randerTree(e.children, itemPath) : (e.innerText || '')

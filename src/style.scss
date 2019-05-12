@@ -1,7 +1,19 @@
+
+@keyframes ants{
+    to{
+        background-position: 100%;
+    }
+}
+
 // var
-$color-main: #A83030;
+$color-main: #388bfe;
 *{
     box-sizing: border-box;
+}
+input{
+    border-width: 0px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    outline: none;
 }
 // extend
 .full-block{
@@ -57,11 +69,94 @@ $color-main: #A83030;
                 }
             }
         }
+        .footer-bar{
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+            width: 100%;
+            background-color: #fff;
+            box-shadow: 1px 1px 1px rgb(0, 0, 0);
+            border-top: 1px solid rgba(0, 0, 0, .1);
+            z-index: 9;
+            .iconfont{
+                padding: 5px 20px;
+            }
+        }
+        .cat-ast{
+            position: fixed;
+            top: 0px;
+            left: 0xp;
+            height: 100vh;
+            width: 100vw;
+            background-color: #fff;
+            z-index: 5;
+            .ast-show{
+                width: 800px;
+                height: 90vh;
+                overflow: auto;
+                border: 1px solid rgba(0, 0, 0, .1);
+                margin-top: 20px;
+            }
+            .ast-copy-box{
+                margin-top: 20px;
+                margin-left: 20px;
+                .ast-copy{
+                    width: 100px;
+                    height: 100px;
+                    overflow: auto;
+                    border: 1px solid rgba(0, 0, 0, .1);
+                }
+            }
+        }
     }
     .HandleColumn{    
-        min-width: 450px;
+        width: 300px;
         height: 100vh;
+        overflow: auto;
         background-color: #fff;
+        transition: width 2s;
+        .edit-attribute{
+            .color-box{
+                position: absolute;
+            }
+            .sketch-color-price-box::after {
+                content: '';
+                display: block;
+                position: absolute;
+                width: 0px;
+                height: 0px;
+                top: 0px;
+                right: -14px;
+                border: 14px solid;
+                border-top-color: #fff;
+                border-bottom-width: 0px;
+                border-left-color: #fff;
+                border-right-color: transparent;
+                border-top-width: 14px;
+                border-left-width: 5px;
+                border-right-width: 16px;
+            }
+            .sketch-color-price-box::before {
+                content: '';
+                display: block;
+                position: absolute;
+                width: 0px;
+                height: 0px;
+                top: -1px;
+                right: -16px;
+                border: 0px solid;
+                border-top-color: #cacaca;
+                border-right-color: transparent;
+                border-top-width: 17px;
+                border-right-width: 17px;
+            }
+        }
+        .showCurrentBackground{
+            display: inline-block;
+            width: 20px;
+            height: 10px;
+            border: 1px solid;
+        }
         .button{
             display: inline-block;
             line-height: 30px;
@@ -93,9 +188,9 @@ $color-main: #A83030;
                 padding: 0 10px;
                 border-radius: 4px;
                 cursor: pointer;
-                color: $color-main;
-                border: 1px solid;
-                margin: 10px 20px;
+                color: #fff;
+                background: #388bfe;
+                margin: 10px 8px;
             }
         }
         .otherInfo{
@@ -130,20 +225,23 @@ $color-main: #A83030;
             margin: auto;
             .flex{
                 position: relative;
-                background-color: rgb(153, 93, 181)!important;
+                // background-color: rgb(153, 93, 181)!important;
+                // background-size: 16px 16px;
+                // background-image: linear-gradient(to top right,#ccc 25%,transparent 0,transparent 75%,#ccc 0,#ccc),linear-gradient(to top right,#ccc 25%,transparent 0,transparent 75%,#ccc 0,#ccc);
+                // background-position: 0 0,8px 8px;
                 // padding: 20px;
-                >* {
-                    // min-width: 70px;
-                    // min-height: 70px;
-                    background-color: rgb(247, 148, 31);
-                    // padding: 20px;
-                    // border: 1px solid #1e1e1e;
-                    // border-radius: 20px;
+                >* {     
+                    // border: 1px solid;
+                    // border-image: linear-gradient(to right, #fb3 25%, #58a 0, #58a 50%, yellowgreen 0, yellowgreen 75%, rgb(129, 189, 189) 0) 1 1;
+                    border: 1px solid transparent;
+                    background-image: 
+                    linear-gradient(white,white),
+                    repeating-linear-gradient(-0deg, rgba(0, 100, 250, .5) 0, rgba(0, 100, 250, .5) 25%, white 25%, white 50%);
+                    background-size: 20px 20px;
+                    background-clip: padding-box,border-box;
                 }
             }
             .item-selected-status{
-                // border: 5px solid  rgba(0, 210, 255, .4);
-                // box-sizing: border-box;
             }
         }
         .contextMenu-wrap{

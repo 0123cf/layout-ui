@@ -33,13 +33,17 @@ export const Select = (props: SelectPro) => {
             position: 'absolute',
             top: '0px',
             left: '0px',
-            backgoundColor: '#fff',
-            border: '1px solid #999'
+            backgroundColor: '#fff',
+            // border: '1px solid #999',
+            zIndex: 9,
+        },
+        img: {
+            width: '200px',
         }
     }
     return <div style={{ position: 'relative' }}>
         <div style={style.title} onClick={tapShow}>
-            <img src={require(`../imgs/${selectName}.png`)} />
+            <img style={styles.img} src={require(`../${selectName}`)} />
         </div>
         {isShow && <div style={styles.lists}>
             {props.list.map((e, index) =>
@@ -48,7 +52,7 @@ export const Select = (props: SelectPro) => {
                         <span>{e.name}</span>
                     }
                     {e.src &&
-                        <img src={require(`../imgs/${e.src}.png`)} />
+                        <img style={styles.img} src={require(`../${e.src}`)} />
                     }
                 </div>
             )}
@@ -62,6 +66,7 @@ const style = {
     title: {
         minWidth: '50px',
         borderRadius: '2px',
-        border: '1px solid rgba(0, 0, 0, .5)'
+        marginTop: '20px',
+        // border: '1px solid rgba(0, 0, 0, .5)'
     }
 }

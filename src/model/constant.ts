@@ -5,10 +5,10 @@ interface selectListItem {
     src: string
 }
 export const layoutTypeList: selectListItem[] = [
-    { src: '1', className: 'al-flex-spce-start' },
-    { src: '2', className: 'al-flex-end-x' },
-    { src: '3', className: 'al-flex-center-x' },
-    { src: '4', className: 'al-flex-space-between-x' },
+    { src: 'svg/flex-row-x.svg', className: 'al-flex-spce-start' },
+    { src: 'svg/flex-row-x-r.svg', className: 'al-flex-end-x' },
+    { src: 'svg/flex-center-x.svg', className: 'al-flex-center-x' },
+    { src: 'svg/flex-space-x.svg', className: 'al-flex-space-between-x' },
 ]
 export const rowASTItemDefault: TRowAST = {
     tag: 'div',

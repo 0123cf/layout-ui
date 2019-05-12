@@ -7,6 +7,7 @@ import { TRowAST, Tstore } from '../types/index'
 import { createHtml, getTreeVal, setTreeData, delectTreeData } from './utils'
 import { layoutTypeList, rowASTItemDefault } from '../model/constant'
 import { Select } from './Select'
+import { SketchPicker } from 'react-color'
 
 interface selectListItem {
     name?: string,
@@ -29,6 +30,17 @@ const _HandleColumn = (props: Tprops) => {
     let rowAst: TRowAST[] = []
     let rowInfo: TRowAST
     let htmlObject
+    // 颜色选择
+    let [isColorPick, setisColorPick] = useState(false)
+    // 颜色选择器位置
+    let [colorPickStyle, setcolorPickStyle] = useState({
+        top: '0px',
+        right: '300px',
+    })
+    let [colorPickProps, setcolorPickProps] = useState({
+        color: '',
+        onChange: (color: any) => void 0
+    })
     let layoutColumnChange = (e: any) => {
         let value = e.target.value.replace(/[^\d]/, '')
         e.target.value = value
@@ -169,8 +181,32 @@ const _HandleColumn = (props: Tprops) => {
                             }
                         }
                     }
-                    render() {
-                        return <div>
+                    render() {                        
+                        const setColor = (currentColor: string, key: string) => (e: MouseEvent) => {
+                            setisColorPick(!isColorPick)
+                            setcolorPickStyle({
+                                ...colorPickStyle,
+                                top: `${e.clientY}px`,
+                            })
+                            setcolorPickProps({
+                                color: currentColor,
+                                onChange: (color: any) => {
+                                    setTreeItemDataValue({
+                                        ...selectItem,
+                                        style: {
+                                            ...selectItem.style,
+                                            [key]: `rgba(${color.rgb.r},${color.rgb.g},${color.rgb.b},${color.rgb.a})`
+                                        }
+                                    })
+                                    return void 0
+                                }
+                            })
+                        }
+                        return <div className="edit-attribute">
+                            {isColorPick && <div className="color-box  sketch-color-price-box" style={colorPickStyle}>
+                                    <SketchPicker color={colorPickProps.color} onChange={colorPickProps.onChange} />
+                                </div>
+                            }
                             <div className="group-title-name">编辑属性</div>
                             <div>宽度: <input ref={this.inputWidth} defaultValue={selectItem.style.width ? selectItem.style.width.replace('px', '') : ''} onChange={(e: any) => {
                                 let v = e.target.value
@@ -232,31 +268,35 @@ const _HandleColumn = (props: Tprops) => {
                                     <p>如： 1px solid red</p>
                                 </div>
                             </div>
-                            <div>背景颜色: <input ref={this.inputBackground} defaultValue={selectItem.style.backgroundColor || ''} onChange={(e: any) => {
-                                let v = e.target.value
-                                inputOldTime = +new Date()
-                                inputKey = 'inputBackground'
-                                setTreeItemDataValue({
-                                    ...selectItem,
-                                    style: {
-                                        ...selectItem.style,
-                                        'backgroundColor': v
-                                    }
-                                })
-                            }} />
+                            <div>背景颜色:
+                                <span onClick={setColor(selectItem.style.backgroundColor || '', 'backgroundColor')} className="showCurrentBackground" style={{backgroundColor: selectItem.style.backgroundColor || ''}}></span>
+                                <input ref={this.inputBackground} defaultValue={selectItem.style.backgroundColor || ''} onChange={(e: any) => {
+                                    let v = e.target.value
+                                    inputOldTime = +new Date()
+                                    inputKey = 'inputBackground'
+                                    setTreeItemDataValue({
+                                        ...selectItem,
+                                        style: {
+                                            ...selectItem.style,
+                                            'backgroundColor': v
+                                        }
+                                    })
+                                }} />
                             </div>
-                            <div>字体颜色: <input ref={this.inputColor} defaultValue={selectItem.style.color || ''} onChange={(e: any) => {
-                                let v = e.target.value
-                                inputOldTime = +new Date()
-                                inputKey = 'inputColor'
-                                setTreeItemDataValue({
-                                    ...selectItem,
-                                    style: {
-                                        ...selectItem.style,
-                                        'color': v
-                                    }
-                                })
-                            }} />
+                            <div>字体颜色: 
+                                <span onClick={setColor(selectItem.style.color || '', 'color')} className="showCurrentBackground" style={{backgroundColor: selectItem.style.color || ''}}></span>
+                                <input ref={this.inputColor} defaultValue={selectItem.style.color || ''} onChange={(e: any) => {
+                                    let v = e.target.value
+                                    inputOldTime = +new Date()
+                                    inputKey = 'inputColor'
+                                    setTreeItemDataValue({
+                                        ...selectItem,
+                                        style: {
+                                            ...selectItem.style,
+                                            'color': v
+                                        }
+                                    })
+                                }} />
                             </div>
                             <div>字体间距: <input ref={this.inputLineHeight} defaultValue={selectItem.style.lineHeight ? selectItem.style.lineHeight.replace('px', '') : ''} onChange={(e: any) => {
                                 let v = e.target.value
@@ -324,15 +364,6 @@ const _HandleColumn = (props: Tprops) => {
                             ast: data
                         })
                     }
-                    let delectRow = () => {
-                        let data: TRowAST[] = delectTreeData(props.previewAST, { path: props.selectRowPath, childrenName: 'children' })
-                        props.dispatch({
-                            type: 'previewHTML',
-                            html: createHtml(data).view,
-                            ast: data
-                        })
-                        props.dispatch({ type: 'selectRowPath', path: [] })
-                    }
                     return <div className="inner">
                         <EditAttribute />
                         <div className="group-title-name">修改布局</div>
@@ -340,16 +371,14 @@ const _HandleColumn = (props: Tprops) => {
                             className = e.target.value
                         }} placeholder="请输入class" /></div>
                         <div className="flex">
-                            <p>layout type：</p>
                             <Select
                                 activeIndex={layoutTypeList.findIndex(e => e.className === selectItem.css[1])}
                                 list={layoutTypeList} change={(index: number) => {
                                     layoutTypeSelected = layoutTypeList[index]
+                                    editRow()
                                 }}
                             />
                         </div>
-                        <div className="button" onClick={editRow}>确认修改</div>
-                        <div className="button button-delect" onClick={delectRow}>删除</div>
                     </div>
                 }
             }
@@ -358,7 +387,6 @@ const _HandleColumn = (props: Tprops) => {
                     <div>class： <input defaultValue={className} onInput={classNameChange} placeholder="请输入class" /></div>
                     <div>column： <input defaultValue={layoutColumn} type="number" onInput={layoutColumnChange} placeholder="请输入列数" /></div>
                     <div className="flex">
-                        <p>layout type：</p>
                         <Select activeIndex={0} list={layoutTypeList} change={SelectChange} />
                     </div>
                     <div className="button" onClick={addRow}>~添加~</div>
