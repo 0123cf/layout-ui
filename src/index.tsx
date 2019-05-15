@@ -4,6 +4,7 @@ import {createStore} from 'redux'
 import {Provider} from 'react-redux'
 
 import  './style.scss'
+import 'antd/dist/antd.css'
 import {DivLayout} from './components'
 import {rootReducer} from './reducer/index'
 

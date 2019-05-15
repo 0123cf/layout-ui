@@ -32,6 +32,9 @@ input{
 .flex-space-x{
     justify-content: space-between;
 }
+.flex-center-y{
+    align-items: center;
+}
 
 // export css inner
 .al-flex-end-x{
@@ -116,6 +119,27 @@ input{
         background-color: #fff;
         transition: width 2s;
         .edit-attribute{
+            .slider-text-box{
+                .name{
+                    width: 5em;
+                }
+                .slider{
+                    width: 150px;
+                }
+                input{
+                    width: 40px;
+                    border: 1px solid rgba(0, 0, 0, 0.3);
+                    border-radius: 2px;
+                    text-align: center;
+                }
+            }
+            .input-textarea{
+                width: 100%;
+                border: 1px solid rgba(0, 0, 0, .4);
+                border-radius: 2px;
+                padding: 8px;
+                margin-top: 5px;
+            }
             .color-box{
                 position: absolute;
             }
