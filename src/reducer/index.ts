@@ -1,4 +1,5 @@
 import {TRowAST, Tstore} from '../types/index'
+import {TEST_ast} from '../test/model/ast'
 
 interface TpreviewActive {
     type: string,
@@ -17,6 +18,8 @@ interface Tactive extends TbaseActive, TselectRowPath, TpreviewActive{}
 
 const defaultState: Tstore = {
     previewHTML: '',
+    // previewAST: TEST_ast,
+    // selectRowPath: [2,0,0],
     previewAST: [],
     selectRowPath: []
 }

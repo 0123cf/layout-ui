@@ -4,7 +4,9 @@
         background-position: 100%;
     }
 }
-
+body{
+    user-select: none;
+}
 // var
 $color-main: #388bfe;
 *{
@@ -175,11 +177,23 @@ input{
                 border-right-width: 17px;
             }
         }
-        .showCurrentBackground{
-            display: inline-block;
-            width: 20px;
-            height: 10px;
-            border: 1px solid;
+        .color-set-box{
+            .name{
+                width: 50px;
+            }
+            .showCurrentColor{
+                display: inline-block;
+                width: 35px;
+                height: 15px;
+                border: 1px solid rgba(0, 0, 0, .1);
+                border-radius: 2px;
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+            input{
+                width: 147px;
+                border-width: 0px;
+            }
         }
         .button{
             display: inline-block;
@@ -188,6 +202,16 @@ input{
             border-radius: 4px;
             @extend .full-block;    
             cursor: pointer;
+        }
+        .inert-layout-button{
+            margin-top: 20px;
+        }
+        .cloumn{
+            margin-left: 20px;
+            width: 40px;
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            border-radius: 2px;
+            text-align: center;
         }
         .button-delect{
             margin-left: 20px;
@@ -215,6 +239,12 @@ input{
                 color: #fff;
                 background: #388bfe;
                 margin: 10px 8px;
+            }
+        }
+        .select-text-align{
+            margin: 14px 0px;
+            img{
+                width: 25%;
             }
         }
         .otherInfo{

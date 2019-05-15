@@ -134,21 +134,43 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
             done?: Tdone;
             type: string;
         }
+        let setTreeItemDataValue = (value: any) => {
+            let dataAst: TRowAST[] = setTreeData(props.previewAST, {
+                path: props.selectRowPath,
+                childrenName: 'children',
+                value
+            })
+            props.dispatch({
+                type: 'previewHTML',
+                html: createHtml(dataAst).view,
+                ast: dataAst
+            })
+        }
+        const setColor = (currentColor: string, key: string, val: boolean) => (e: MouseEvent) => {
+            this.setState({
+                isColorPick: val,
+                colorPickStyle: {
+                    ...this.state.colorPickStyle,
+                    top: `${e.clientY}px`,
+                },
+                colorPickProps: {
+                    color: currentColor,
+                    onChange: (color: any) => {
+                        setTreeItemDataValue({
+                            ...selectItem,
+                            style: {
+                                ...selectItem.style,
+                                [key]: `rgba(${color.rgb.r},${color.rgb.g},${color.rgb.b},${color.rgb.a})`
+                            }
+                        })
+                        return void 0
+                    }
+                }
+            })
+        }
         let LayoutWrite = (params: LayoutWritePro) => {
             switch (params.type) {
                 case 'edit': {
-                    let setTreeItemDataValue = (value: any) => {
-                        let dataAst: TRowAST[] = setTreeData(props.previewAST, {
-                            path: props.selectRowPath,
-                            childrenName: 'children',
-                            value
-                        })
-                        props.dispatch({
-                            type: 'previewHTML',
-                            html: createHtml(dataAst).view,
-                            ast: dataAst
-                        })
-                    }
                     let textAlignSelect = (align: string) => () => {
                         setTreeItemDataValue({
                             ...selectItem,
@@ -159,37 +181,22 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                         })
                     }
                     let EditAttribute = () => {
-                        const setColor = (currentColor: string, key: string) => (e: MouseEvent) => {
-                            this.setState({
-                                isColorPick: !this.state.isColorPick,
-                                colorPickStyle: {
-                                    ...this.state.colorPickStyle,
-                                    top: `${e.clientY}px`,
-                                },
-                                colorPickProps: {
-                                    color: currentColor,
-                                    onChange: (color: any) => {
-                                        setTreeItemDataValue({
-                                            ...selectItem,
-                                            style: {
-                                                ...selectItem.style,
-                                                [key]: `rgba(${color.rgb.r},${color.rgb.g},${color.rgb.b},${color.rgb.a})`
-                                            }
-                                        })
-                                        return void 0
-                                    }
-                                }
-                            })
-                        }
                         return <div className="edit-attribute">
                             {this.state.isColorPick && <div className="color-box  sketch-color-price-box" style={this.state.colorPickStyle}>
                                 <SketchPicker color={this.state.colorPickProps.color} onChange={this.state.colorPickProps.onChange} />
                             </div>
                             }
-                            <div className="group-title-name">编辑属性</div>
+                            <div className="group-title-name">Edit</div>
+                            <div>
+                                <div className="select-button select-text-align">
+                                    <img onClick={textAlignSelect('left')} src={require(`../svg/text-left.svg`)} />
+                                    <img onClick={textAlignSelect('center')} src={require(`../svg/text-center.svg`)} />
+                                    <img onClick={textAlignSelect('right')} src={require(`../svg/text-right.svg`)} />
+                                </div>
+                            </div>
                             <div className="flex flex-space-x flex-center-y slider-text-box">
                                 <span className="name">width</span>
-                                <Slider max={600} min={1}  className="slider" defaultValue={selectItem.style.width ? +(selectItem.style.width.replace('px', '')) : 0} disabled={false} onChange={(e) => {
+                                <Slider max={550} min={1}  className="slider" defaultValue={selectItem.style.width ? +(selectItem.style.width.replace('px', '')) : 0} disabled={false} onChange={(e) => {
                                     setTreeItemDataValue({
                                         ...selectItem,
                                         style: {
@@ -287,10 +294,8 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                                 }} />
                             </div>
                             <div>
-                                <textarea className="input-textarea" placeholder="文字输入区" defaultValue={selectItem.innerText} onChange={(e: any) => {
+                                <textarea className="input-textarea" placeholder="文字内容" defaultValue={selectItem.innerText} onChange={(e: any) => {
                                     let textValue = e.target.value
-                                    inputOldTime = +new Date()
-                                    inputKey = 'inputText'
                                     setTreeItemDataValue({
                                         ...selectItem,
                                         innerText: textValue
@@ -298,21 +303,10 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                                     e.target.focus()
                                 }} />
                             </div>
-                            <div>
-                                <span>水平对齐方式: </span>
-                                <span>{selectItem.style['textAlign'] || 'left'}</span>
-                                <div className="select-button">
-                                    <span className="item" onClick={textAlignSelect('left')}>left</span>
-                                    <span className="item" onClick={textAlignSelect('center')}>center</span>
-                                    <span className="item" onClick={textAlignSelect('right')}>right</span>
-                                </div>
-                            </div>
-                            <div>
+                            {/* <div>
                                 <div className="flex">边框:
                                         <input style={{ width: '100px' }} defaultValue={selectItem.style.border || ''} onChange={(e: any) => {
                                         let v = e.target.value
-                                        inputOldTime = +new Date()
-                                        inputKey = 'inputBorder'
                                         setTreeItemDataValue({
                                             ...selectItem,
                                             style: {
@@ -326,13 +320,12 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                                     <p>数值px 线条 #颜色</p>
                                     <p>如： 1px solid red</p>
                                 </div>
-                            </div>
-                            <div>背景颜色:
-                                <span onClick={setColor(selectItem.style.backgroundColor || '', 'backgroundColor')} className="showCurrentBackground" style={{ backgroundColor: selectItem.style.backgroundColor || '' }}></span>
+                            </div> */}
+                            <div className="color-set-box">
+                                <span>背景颜色</span>
+                                <span onClick={setColor(selectItem.style.backgroundColor || '', 'backgroundColor', !this.state.isColorPick)} className="showCurrentColor" style={{ backgroundColor: selectItem.style.backgroundColor || '' }}></span>
                                 <input defaultValue={selectItem.style.backgroundColor || ''} onChange={(e: any) => {
                                     let v = e.target.value
-                                    inputOldTime = +new Date()
-                                    inputKey = 'inputBackground'
                                     setTreeItemDataValue({
                                         ...selectItem,
                                         style: {
@@ -342,12 +335,11 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                                     })
                                 }} />
                             </div>
-                            <div>字体颜色:
-                                <span onClick={setColor(selectItem.style.color || '', 'color')} className="showCurrentBackground" style={{ backgroundColor: selectItem.style.color || '' }}></span>
+                            <div className="color-set-box">
+                                <span className="name">字体颜色</span>
+                                <span onClick={setColor(selectItem.style.color || '', 'color', !this.state.isColorPick)} className="showCurrentColor" style={{ backgroundColor: selectItem.style.color || '' }}></span>
                                 <input defaultValue={selectItem.style.color || ''} onChange={(e: any) => {
                                     let v = e.target.value
-                                    inputOldTime = +new Date()
-                                    inputKey = 'inputColor'
                                     setTreeItemDataValue({
                                         ...selectItem,
                                         style: {
@@ -362,14 +354,13 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                     if (selectItem.children.length === 0) {
                         return <div className="inner">
                             <EditAttribute />
-                            <div className="group-title-name">插入新布局</div>
-                            <div>class： <input defaultValue={className} onInput={classNameChange} placeholder="请输入class" /></div>
-                            <div>column： <input defaultValue={layoutColumn} type="number" onInput={layoutColumnChange} placeholder="请输入列数" /></div>
+                            <div className="group-title-name">插入布局</div>
+                            {/* <div>class <input defaultValue={className} onInput={classNameChange} placeholder="请输入class" /></div> */}
+                            <div>column number <input className="cloumn" defaultValue={layoutColumn} type="number" onInput={layoutColumnChange} placeholder="请输入列数" /></div>
                             <div className="flex">
-                                <p>layout type：</p>
                                 <Select activeIndex={0} list={layoutTypeList} change={SelectChange} />
                             </div>
-                            <div className="button" onClick={() => {
+                            <div className="button inert-layout-button" onClick={() => {
                                 let itemAst: TRowAST = getRowInfo()
                                 setTreeItemDataValue(itemAst)
                             }}>~插入~</div>
@@ -425,7 +416,13 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                 }
             }
         }
-        return <div className="HandleColumn">
+        return <div className="HandleColumn" onClick={() => {
+                if(this.state.isColorPick){
+                    this.setState({
+                        isColorPick: false,
+                    })
+                }
+            }}>
             <div>
                 {selectItem ? <div>
                     {/* <div className="title-name">Edit Element Layout</div> */}
