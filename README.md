@@ -16,6 +16,8 @@
 |TODO LIST:|
 |:--------:|
 |完善布局方式|
+|padding、margin、width-auto、height-auto、border|
+|转rem|
 |搜索布局|
 |国际化（readme；text）|
 
