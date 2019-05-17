@@ -8,7 +8,7 @@ import { layoutTypeList, rowASTItemDefault } from '../model/constant'
 import { Select } from './Select'
 import { SketchPicker } from 'react-color'
 import { Slider } from 'antd'
-import { string } from 'prop-types';
+import { string } from 'prop-types'
 
 interface selectListItem {
     name?: string,

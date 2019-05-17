@@ -48,7 +48,11 @@ input{
 .al-flex-space-between-x{
     justify-content: space-between;
 }
-
+.box{
+    position: fixed;
+    top: -100vw;
+    left: -100vh;
+}
 // start
 .div_layout{
     .util_panel{

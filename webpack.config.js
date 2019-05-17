@@ -1,11 +1,16 @@
-    const path = require('path')
+const path = require('path')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-
+const tsImportPluginFactory = require('ts-import-plugin')
+ 
 module.exports = {
-	entry: './src/index.tsx',
+	entry: {
+        style: './src/style.tsx',
+        app: './src/index.tsx',
+    },
 	output: {
-		filename: "app.js"
+        filename: "[name].bundle.js",
+        chunkFilename: '[name].lazy.js',
 	},
 	devtool: "sourec-map",
 	resolve: {
@@ -50,7 +55,18 @@ module.exports = {
             },
             {
                 test: /\.tsx?$/,
-                use: ['ts-loader']
+                // use: ['ts-loader'],
+                loader: 'ts-loader',
+                options: {
+                    transpileOnly: true,
+                    getCustomTransformers: () => ({
+                      before: [ tsImportPluginFactory( /** options */) ]
+                    }),
+                    compilerOptions: {
+                      module: 'es2015'
+                    }
+                },
+                exclude: /node_modules/
             }
         ]
     },

@@ -1,15 +1,14 @@
 import React from 'React'
-const {useState} = React
+const {useState, lazy, Suspense } = React
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { TRowAST, Tstore } from '../types/index'
 import { layoutTypeList, rowASTItemDefault } from '../model/constant'
 import { createHtml } from './utils'
 import { Preview } from './preview'
-import SyntaxHighlighter from 'react-syntax-highlighter'
+const SyntaxHighlighter = lazy(() => import('react-syntax-highlighter'))
 // import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import { docco } from '../model/constant'
-import jsbeautify from 'js-beautify'
 
 interface Tstate {
     previewAST: TRowAST[],
@@ -19,9 +18,10 @@ interface Tprops extends Tstate {
     previewAST: TRowAST[],
     html: string,
 }
-const View = (props: Tprops) => {  
+const View = (props: Tprops) => {
     let rowAst  
     let [isShowAst, setisShowAst] = useState(false)
+    let [html, sethtml] = useState('')
     let getRowInfo = (typeIndex: number): TRowAST => {
         let layoutType = layoutTypeList[typeIndex].className
 
@@ -54,8 +54,12 @@ const View = (props: Tprops) => {
             <p><img className="layout-svg" onClick={addRow(1)} src={require(`../svg/flex-row-x-r.svg`)} /></p>
         </div>
         <div className="footer-bar flex al-flex-end-x">
-            <i className="icon-icon-arrow-down iconfont" onClick={() => {
+            <i className="icon-icon-arrow-down iconfont" onClick={async () => {
                 setisShowAst(!isShowAst)
+                if(isShowAst === false){
+                    let jsbeautify = await import('js-beautify')
+                    sethtml(jsbeautify.html_beautify(props.html))
+                }
             }}></i>
         </div>
         {isShowAst && 
@@ -67,17 +71,11 @@ const View = (props: Tprops) => {
                             <i className="iconfont icon-daima"></i>
                         </p>
                         <div className="ast-show">
-                            <SyntaxHighlighter language='html' style={docco}>{
-                                jsbeautify.html_beautify(props.html)
-                            }</SyntaxHighlighter>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <SyntaxHighlighter language='html' style={docco}>{html}</SyntaxHighlighter>
+                            </Suspense>
                         </div>
                     </div>
-                    {/* <div className="ast-copy-box">
-                        <p>AST</p>
-                        <div className="ast-copy">
-                            {JSON.stringify(props.previewAST)}
-                        </div>
-                    </div> */}
                 </div>
             </div>
         }
