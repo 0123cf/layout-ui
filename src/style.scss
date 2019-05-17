@@ -52,6 +52,13 @@ input{
     position: fixed;
     top: -100vw;
     left: -100vh;
+    opacity: 0;
+}
+.loading{
+    position: fixed;
+    top: -100vw;
+    left: -100vh;
+    opacity: 0;
 }
 // start
 .div_layout{
@@ -254,6 +261,28 @@ input{
         .otherInfo{
             padding-left: 20px;
             color: #666
+        }
+        .no-tree{
+            .tip-text{
+                color: rgb(102, 102, 102);
+                font-weight: 600;
+                margin-top: 10px;
+                font-size: 14px;
+                padding: 10px;
+                box-sizing: border-box;
+                text-align: center;
+            }
+            .tip-button{              
+                color: rgb(153, 153, 153);
+                font-size: 13px;
+                margin: 15px 10px 0px;
+                padding: 20px;
+                border-width: 1px;
+                border-style: solid;
+                border-color: rgb(221, 221, 221);
+                border-image: initial;
+                border-radius: 3px;
+            }
         }
     }
     .preview{

@@ -424,16 +424,16 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                 }
             }}>
             <div>
-                {selectItem ? <div>
+                {selectItem && <div>
                     {/* <div className="title-name">Edit Element Layout</div> */}
                     <LayoutWrite type="edit" />
-                </div> :
+                </div>}
+                {!selectItem && <div className="no-tree">
                     <div>
-                        {/* <div className="title-name">ADD Element Layout</div>
-                    <LayoutWrite type="add" /> */}
+                        <div className="tip-text">QAQ</div>
+                        <div className="tip-button">未选择组件</div>
                     </div>
-                }
-
+                </div>}
             </div>
         </div>
     }
