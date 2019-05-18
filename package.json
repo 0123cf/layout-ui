@@ -11,10 +11,6 @@
   "author": "XieXiuYue",
   "license": "MIT-996",
   "dependencies": {
-    "@types/js-beautify": "^1.8.0",
-    "@types/react-color": "^3.0.0",
-    "@types/react-redux": "^7.0.6",
-    "@types/react-syntax-highlighter": "^10.1.0",
     "antd": "^3.18.1",
     "js-beautify": "^1.10.0",
     "react": "^16.8.6",
@@ -25,6 +21,10 @@
     "redux": "^4.0.1"
   },
   "devDependencies": {
+    "@types/js-beautify": "^1.8.0",
+    "@types/react-color": "^3.0.0",
+    "@types/react-redux": "^7.0.6",
+    "@types/react-syntax-highlighter": "^10.1.0",
     "@babel/core": "^7.0.0-beta.47",
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta.47",
     "@babel/preset-react": "^7.0.0-beta.47",

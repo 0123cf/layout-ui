@@ -38,7 +38,7 @@ export const showSaveConfirm = () => {
                 return
             }
             if(window.Store.getState().previewAST.length === 0){
-                message.error('未添加任何组件，空空如也，请骚后再试~')
+                message.error('未添加任何组件，空空如也，请稍后再试~')
                 reject()
                 return
             }
