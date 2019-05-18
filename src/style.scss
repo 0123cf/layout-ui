@@ -9,6 +9,8 @@ body{
 }
 // var
 $color-main: #388bfe;
+$utilsWidth: 300px;
+$headerHandleHeight: 45px;
 *{
     box-sizing: border-box;
 }
@@ -64,7 +66,7 @@ input{
 .div_layout{
     .util_panel{
         background-color: #fbfbfb;
-        padding: 20px 15px;
+        padding: calc(20px + #{$headerHandleHeight}) 15px;
         .add-layout{
             .layout-svg{
                 width: 200px;
@@ -126,7 +128,7 @@ input{
         }
     }
     .HandleColumn{    
-        width: 300px;
+        width: $utilsWidth;
         height: 100vh;
         overflow: auto;
         background-color: #fff;
@@ -307,6 +309,19 @@ input{
         height: 100vh;
         background-color: #eee;
         padding-top: 50px;
+        .header-handle{
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            width: calc(100vw - #{$utilsWidth});
+            height: $headerHandleHeight;
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            padding-right: 20px;
+            .save-button{}
+        }
         .view-box{
             background: #fff;
             margin: auto;

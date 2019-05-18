@@ -5,6 +5,8 @@ const { useState } = React
 import { TRowAST, Tstore } from '../types/index'
 import { createHtml, delectTreeData, addTreeData, Copy } from './utils'
 import { layoutTypeList, rowASTItemDefault } from '../model/constant'
+import {Button} from 'antd'
+import { showSaveConfirm } from '../utils/saveData'
 
 interface Tprops {
     html: string,
@@ -112,6 +114,9 @@ const _DebugLayout = (props: Tprops) => {
     return <div className="DebugLayout" onClick={() => {
         setvisible(false)
     }}>
+        <div className="header-handle flex flex-center-y al-flex-end-x">
+            <Button onClick={showSaveConfirm} className="save-button">保存</Button>
+        </div>
         <div className="view-box" style={{
             width: '550px',
             height: '90vh'

@@ -10,6 +10,9 @@ import {rootReducer} from './reducer/index'
 
 const store = createStore(rootReducer)
 
+declare var window: any
+window.Store = store
+
 ReactDOM.render(
    <Provider store={store}>
       <div className="div_layout flex">

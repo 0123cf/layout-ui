@@ -196,7 +196,7 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                             </div>
                             <div className="flex flex-space-x flex-center-y slider-text-box">
                                 <span className="name">width</span>
-                                <Slider max={550} min={1}  className="slider" defaultValue={selectItem.style.width ? +(selectItem.style.width.replace('px', '')) : 0} disabled={false} onChange={(e) => {
+                                <Slider max={550} min={1} className="slider" defaultValue={selectItem.style.width ? +(selectItem.style.width.replace('px', '')) : 0} disabled={false} onChange={(e) => {
                                     setTreeItemDataValue({
                                         ...selectItem,
                                         style: {
@@ -218,8 +218,8 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                                 }} />
                             </div>
                             <div className="flex flex-space-x flex-center-y slider-text-box">
-                                    <span className="name ">height</span>
-                                    <Slider max={600} min={1}  className="slider" defaultValue={selectItem.style.height ? +(selectItem.style.height.replace('px', '')) : 0} disabled={false} onChange={(e) => {
+                                <span className="name ">height</span>
+                                <Slider max={600} min={1} className="slider" defaultValue={selectItem.style.height ? +(selectItem.style.height.replace('px', '')) : 0} disabled={false} onChange={(e) => {
                                     setTreeItemDataValue({
                                         ...selectItem,
                                         style: {
@@ -244,7 +244,7 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                             </div>
                             <div className="flex flex-space-x flex-center-y slider-text-box">
                                 <span className="name">redius</span>
-                                <Slider max={300} min={0}  className="slider" defaultValue={parseFloat(selectItem.style.borderRadius) ? parseFloat(selectItem.style.borderRadius) : 0} disabled={false} onChange={(e) => {
+                                <Slider max={300} min={0} className="slider" defaultValue={parseFloat(selectItem.style.borderRadius) ? parseFloat(selectItem.style.borderRadius) : 0} disabled={false} onChange={(e) => {
                                     setTreeItemDataValue({
                                         ...selectItem,
                                         style: {
@@ -269,7 +269,7 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                                 }} />
                             </div>
                             <div className="flex flex-space-x flex-center-y slider-text-box">
-                                <span className="name">LH</span> 
+                                <span className="name">LH</span>
                                 <Slider max={300} min={0} className="slider" defaultValue={selectItem.style.lineHeight ? +(selectItem.style.lineHeight.replace('px', '')) : 0} disabled={false} onChange={(e) => {
                                     setTreeItemDataValue({
                                         ...selectItem,
@@ -417,12 +417,12 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
             }
         }
         return <div className="HandleColumn" onClick={() => {
-                if(this.state.isColorPick){
-                    this.setState({
-                        isColorPick: false,
-                    })
-                }
-            }}>
+            if (this.state.isColorPick) {
+                this.setState({
+                    isColorPick: false,
+                })
+            }
+        }}>
             <div>
                 {selectItem && <div>
                     {/* <div className="title-name">Edit Element Layout</div> */}
