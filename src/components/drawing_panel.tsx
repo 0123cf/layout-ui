@@ -5,8 +5,9 @@ const { useState } = React
 import { TRowAST, Tstore } from '../types/index'
 import { createHtml, delectTreeData, addTreeData, Copy } from './utils'
 import { layoutTypeList, rowASTItemDefault } from '../model/constant'
-import {Button} from 'antd'
+import { Button, Icon, Modal, message } from 'antd'
 import { showSaveConfirm } from '../utils/saveData'
+import { getUrlParams } from '../utils/url'
 
 interface Tprops {
     html: string,
@@ -15,11 +16,25 @@ interface Tprops {
     selectRowPath: number[],
 }
 
+let oneRun = true 
+
 const _DebugLayout = (props: Tprops) => {
     let [visible, setvisible] = useState(false)
     let [itemLastChild, setitemLastChild] = useState(false)
     let [contextMenuStyle, setcontextMenuStyle] = useState({})
     let [currentSelectedPath, setcurrentSelectedPath]: any = useState([])
+    let projectNameParam = getUrlParams('projectname')
+
+    if(projectNameParam && oneRun){
+        let ast = JSON.parse(localStorage[projectNameParam])
+        // TODO Verify ast
+        props.dispatch({
+            type: 'previewHTML',
+            html: createHtml(ast).view,
+            ast
+        })
+    }
+
     let selectRowDiv = (event: MouseEvent, path: number[]) => {
         event.stopPropagation()
         props.dispatch({
@@ -29,17 +44,17 @@ const _DebugLayout = (props: Tprops) => {
         setvisible(false)
     }
     let delectRow = (event: MouseEvent) => {
-        let data: TRowAST[] = delectTreeData(props.tree, {path: currentSelectedPath, childrenName: 'children'})
+        let data: TRowAST[] = delectTreeData(props.tree, { path: currentSelectedPath, childrenName: 'children' })
         props.dispatch({
             type: 'previewHTML',
             html: createHtml(data).view,
             ast: data
         })
-        props.dispatch({type: 'selectRowPath', path: []})
+        props.dispatch({ type: 'selectRowPath', path: [] })
     }
     let addbrotherRow = (site: string): void => {
         let path = Copy(currentSelectedPath)
-        if(site === 'back'){
+        if (site === 'back') {
             path[path.length - 1] = path[path.length - 1] + 1
         }
         let data: TRowAST[] = addTreeData(
@@ -56,12 +71,12 @@ const _DebugLayout = (props: Tprops) => {
             ast: data
         })
         // TODO 位置需要确认放哪里合适，先清空
-        props.dispatch({type: 'selectRowPath', path: []})
+        props.dispatch({ type: 'selectRowPath', path: [] })
     }
     let handleContextMenu = (path: number[], item: TRowAST, event: MouseEvent) => {
         event.preventDefault()
         event.stopPropagation()
-    
+
         setvisible(true)
         // clientX/Y 获取到的是触发点相对于浏览器可视区域左上角距离
         const clickX: number = event.clientX
@@ -72,7 +87,7 @@ const _DebugLayout = (props: Tprops) => {
         // 自定义菜单的宽度/高度
         const rootW: number = 100
         const rootH: number = 200
-    
+
         // right为true，说明鼠标点击的位置到浏览器的右边界的宽度可以放下菜单。否则，菜单放到左边。
         // bottom为true，说明鼠标点击位置到浏览器的下边界的高度可以放下菜单。否则，菜单放到上边。
         const right: boolean = (screenW - clickX) > rootW
@@ -92,7 +107,7 @@ const _DebugLayout = (props: Tprops) => {
         return tree.map((e, index) => {
             let itemPath = [...path, index]
             let getStyle = (style: any) => {
-                if(style.backgroundColor){
+                if (style.backgroundColor) {
                     return {
                         ...style,
                         backgroundImage: 'none'
@@ -111,27 +126,80 @@ const _DebugLayout = (props: Tprops) => {
                 }</div>
         })
     }
+    let gotoProjectList = () => {
+        location.href = '/#/'
+        location.reload()
+    }
+    let goProjectList = () => {
+        // new project
+        if(!projectNameParam){
+            if(JSON.stringify(props.tree).length > 2){
+                // save project
+                showSaveConfirm()
+                return
+            }
+            // no modify project
+            gotoProjectList()
+            return
+        }
+        // edit project no modify
+        if(localStorage[projectNameParam] === JSON.stringify(props.tree)){
+            gotoProjectList()
+            return
+        }
+        // edit AND modify
+        Modal.confirm({
+            icon: <div></div>,
+            title: '是否离开前保存？',
+            okText: '保存并返回',
+            cancelText: '取消保存并离开',
+            content: <div>
+                <p>是否离开前保存？</p>
+            </div>,
+            onOk() {
+                return new Promise((resolve, reject) => {
+                    localStorage.setItem(projectNameParam || '', JSON.stringify(props.tree))
+                    resolve()
+                }).catch(() => {
+                    gotoProjectList()
+                })
+            },
+            onCancel() {
+                gotoProjectList()
+            },
+        })
+    }
+    let onSave = () => {
+        if(projectNameParam){
+            localStorage.setItem(projectNameParam || '', JSON.stringify(props.tree))
+            message.success('保存成功')
+            return
+        }
+        showSaveConfirm()
+    }
+    oneRun = false
     return <div className="DebugLayout" onClick={() => {
         setvisible(false)
     }}>
-        <div className="header-handle flex flex-center-y al-flex-end-x">
-            <Button onClick={showSaveConfirm} className="save-button">保存</Button>
+        <div className="header-handle flex flex-center-y flex-space-x">
+            <Icon type="arrow-left" onClick={goProjectList} />
+            <Button onClick={onSave} className="save-button">保存</Button>
         </div>
         <div className="view-box" style={{
             width: '550px',
             height: '90vh'
         }}>{randerTree(props.tree, [])}</div>
         {
-            visible && 
+            visible &&
             <div style={contextMenuStyle} className="contextMenu-wrap">
                 {itemLastChild ? <div>
                     <div className="contextMenu-option" onClick={delectRow}>删除布局</div>
                     <div className="contextMenu-option" onClick={addbrotherRow.bind(null, 'front')}>前面添加一个元素</div>
                     <div className="contextMenu-option" onClick={addbrotherRow.bind(null, 'back')}>后面添加一个元素</div>
-                </div>:
-                <div>
-                    <div className="contextMenu-option" onClick={delectRow}>删除布局</div>
-                </div>
+                </div> :
+                    <div>
+                        <div className="contextMenu-option" onClick={delectRow}>删除布局</div>
+                    </div>
                 }
             </div>
         }

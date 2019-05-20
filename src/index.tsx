@@ -1,25 +1,8 @@
-import * as React from 'react'
+import React from 'react'
 import * as ReactDOM from 'react-dom'
-import {createStore} from 'redux'
-import {Provider} from 'react-redux'
-
-import UtilPanel from './components/util_panel'
-import DrawingPanel from './components/drawing_panel'
-import PropertyeEdit from './components/propertye_edit'
-import {rootReducer} from './reducer/index'
-
-const store = createStore(rootReducer)
-
-declare var window: any
-window.Store = store
+import {route} from './router'
 
 ReactDOM.render(
-   <Provider store={store}>
-      <div className="div_layout flex">
-         <UtilPanel />
-         <DrawingPanel />
-         <PropertyeEdit />
-      </div>
-   </Provider>,
+   route(),
    document.getElementById('root')
 )

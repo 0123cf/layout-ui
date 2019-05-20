@@ -1,3 +1,5 @@
+import {ReactElement} from 'react'
+
 export interface TRowAST {
     tag: string,
     css: string[],
@@ -11,3 +13,10 @@ export interface Tstore {
     previewAST: TRowAST[],
     selectRowPath: number[],
 }
+
+export interface Troute {
+    path: string,
+    page: ReactElement
+}
+
+export type Troutes = Troute[]
