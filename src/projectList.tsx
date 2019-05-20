@@ -61,7 +61,7 @@ export default (): ReactElement => {
         .filter((key) => 
             key.substr(0, projectAstListData.length) === projectAstListData
         )
-        .map(e => ({name: e}))
+        .map(e => ({name: e.substr(projectAstListData.length + 1, e.length)}))
     let [projectList, setprojectList] = useState(defaultProjectList)
     return <div style={styles.box}>
         <h1>project list</h1>
