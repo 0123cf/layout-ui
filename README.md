@@ -37,7 +37,7 @@ width height 如何自适应(设置的容器如何根据内容进行自适应) <
 |TODO LIST:|
 |:--------:|
 |完善布局方式|
-|padding、margin、width-auto、height-auto、border|
+|border|
 |转rem|
 |搜索布局|
 |国际化（readme；text）|

@@ -197,14 +197,14 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                             </div>
                             <BoxEditor
                                 onStart={() => 0}
-                                marginLeft={selectItem.style.marginLeft ? +selectItem.style.marginLeft.replace('px', '') : 0}
-                                marginTop={selectItem.style.marginLeft ? +selectItem.style.marginTop.replace('px', '') : 0}
-                                marginRight={selectItem.style.marginLeft ? +selectItem.style.marginRight.replace('px', '') : 0}
-                                marginBottom={selectItem.style.marginLeft ? +selectItem.style.marginBottom.replace('px', '') : 0}
-                                paddingLeft={selectItem.style.marginLeft ? +selectItem.style.paddingLeft.replace('px', '') : 0}
-                                paddingTop={selectItem.style.marginLeft ? +selectItem.style.paddingTop.replace('px', '') : 0}
-                                paddingRight={selectItem.style.marginLeft ? +selectItem.style.paddingRight.replace('px', '') : 0}
-                                paddingBottom={selectItem.style.marginLeft ? +selectItem.style.paddingBottom.replace('px', '') : 0}
+                                marginLeft={selectItem.style.marginLeft ? selectItem.style.marginLeft.replace('px', '') : 0}
+                                marginTop={selectItem.style.marginTop ? selectItem.style.marginTop.replace('px', '') : 0}
+                                marginRight={selectItem.style.marginRight ? selectItem.style.marginRight.replace('px', '') : 0}
+                                marginBottom={selectItem.style.marginBottom ? selectItem.style.marginBottom.replace('px', '') : 0}
+                                paddingLeft={selectItem.style.paddingLeft ? selectItem.style.paddingLeft.replace('px', '') : 0}
+                                paddingTop={selectItem.style.paddingTop ? selectItem.style.paddingTop.replace('px', '') : 0}
+                                paddingRight={selectItem.style.paddingRight ? selectItem.style.paddingRight.replace('px', '') : 0}
+                                paddingBottom={selectItem.style.paddingBottom ? selectItem.style.paddingBottom.replace('px', '') : 0}
                                 onChange={(site, val) => {
                                     setTreeItemDataValue({
                                         ...selectItem,
