@@ -14,6 +14,7 @@
 -----
 
 ### USE
+
 ![image.png](https://github.com/0123cf/auto-layout/blob/master/imgs/f68h2j9k2z8b4m24k3l.png?raw=true)
 
 * 第一个是在插入布局。
@@ -21,6 +22,16 @@
 * 第三个是编辑属性，可以修改长度、添加文字、修改颜色、添加图片
 * 第四个是源码预览，代码下载等功能，点击右下角
 
+### Q&A
+问：
+width height 如何自适应(设置的容器如何根据内容进行自适应) <br />
+答：
+双击 **width** 、 **height**
+<hr />
+问：如何查看代码 <br />
+答：点击下边栏右侧的箭头即可预览和代码复制
+
+<br />
 -----
 
 |TODO LIST:|

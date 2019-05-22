@@ -9,6 +9,7 @@ import { Select } from './Select'
 import { SketchPicker } from 'react-color'
 import { Slider } from 'antd'
 import { string } from 'prop-types'
+import { BoxEditor } from './box-editor/src/index'
 
 interface selectListItem {
     name?: string,
@@ -194,8 +195,38 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                                     <img onClick={textAlignSelect('right')} src={require(`../svg/text-right.svg`)} />
                                 </div>
                             </div>
+                            <BoxEditor
+                                onStart={() => 0}
+                                marginLeft={selectItem.style.marginLeft ? +selectItem.style.marginLeft.replace('px', '') : 0}
+                                marginTop={selectItem.style.marginLeft ? +selectItem.style.marginTop.replace('px', '') : 0}
+                                marginRight={selectItem.style.marginLeft ? +selectItem.style.marginRight.replace('px', '') : 0}
+                                marginBottom={selectItem.style.marginLeft ? +selectItem.style.marginBottom.replace('px', '') : 0}
+                                paddingLeft={selectItem.style.marginLeft ? +selectItem.style.paddingLeft.replace('px', '') : 0}
+                                paddingTop={selectItem.style.marginLeft ? +selectItem.style.paddingTop.replace('px', '') : 0}
+                                paddingRight={selectItem.style.marginLeft ? +selectItem.style.paddingRight.replace('px', '') : 0}
+                                paddingBottom={selectItem.style.marginLeft ? +selectItem.style.paddingBottom.replace('px', '') : 0}
+                                onChange={(site, val) => {
+                                    setTreeItemDataValue({
+                                        ...selectItem,
+                                        style: {
+                                            ...selectItem.style,
+                                            [site]: `${val}px`
+                                        }
+                                    })
+                                }}
+                                onFinalChange={() => 0}
+                            />
                             <div className="flex flex-space-x flex-center-y slider-text-box">
-                                <span className="name">width</span>
+                                <span onDoubleClick={() => {
+                                    setTreeItemDataValue({
+                                        ...selectItem,
+                                        style: {
+                                            ...selectItem.style,
+                                            'width': `auto`
+                                        }
+                                    })
+                                    this.inputWidth.current.value = 'auto'
+                                }} className="name">width</span>
                                 <Slider max={550} min={1} className="slider" defaultValue={selectItem.style.width ? +(selectItem.style.width.replace('px', '')) : 0} disabled={false} onChange={(e) => {
                                     setTreeItemDataValue({
                                         ...selectItem,
@@ -218,7 +249,16 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                                 }} />
                             </div>
                             <div className="flex flex-space-x flex-center-y slider-text-box">
-                                <span className="name ">height</span>
+                                <span onDoubleClick={() => {
+                                    setTreeItemDataValue({
+                                        ...selectItem,
+                                        style: {
+                                            ...selectItem.style,
+                                            'height': `auto`
+                                        }
+                                    })
+                                    this.inputHeight.current.value = 'auto'
+                                }} className="name ">height</span>
                                 <Slider max={600} min={1} className="slider" defaultValue={selectItem.style.height ? +(selectItem.style.height.replace('px', '')) : 0} disabled={false} onChange={(e) => {
                                     setTreeItemDataValue({
                                         ...selectItem,

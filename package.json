@@ -18,7 +18,8 @@
     "react-dom": "^16.8.6",
     "react-redux": "^7.0.2",
     "react-syntax-highlighter": "^10.2.1",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "styled-components": "^4.2.0"
   },
   "devDependencies": {
     "@types/js-beautify": "^1.8.0",
