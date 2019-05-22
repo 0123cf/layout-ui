@@ -5,7 +5,7 @@ import { projectAstListData } from '../model/constant'
 const confirm = Modal.confirm
 declare var window: any
 
-export const showSaveConfirm = () => {
+export const showSaveConfirm = (cb?: any) => {
     let projectName = ''
     let tipStyle = {
         color: '#959595',
@@ -45,6 +45,7 @@ export const showSaveConfirm = () => {
                 astStr = JSON.stringify(window.Store.getState().previewAST)
                 localStorage.setItem(saveName, astStr)
                 message.success('保存成功')
+                cb && cb()
                 resolve()
             }).catch(() => 0)
         },

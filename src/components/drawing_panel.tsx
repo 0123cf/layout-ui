@@ -4,7 +4,7 @@ import { Dispatch } from 'redux'
 const { useState } = React
 import { TRowAST, Tstore } from '../types/index'
 import { createHtml, delectTreeData, addTreeData, Copy } from './utils'
-import { layoutTypeList, rowASTItemDefault } from '../model/constant'
+import { layoutTypeList, rowASTItemDefault, projectAstListData } from '../model/constant'
 import { Button, Icon, Modal, message } from 'antd'
 import { showSaveConfirm } from '../utils/saveData'
 import { getUrlParams } from '../utils/url'
@@ -24,9 +24,10 @@ const _DebugLayout = (props: Tprops) => {
     let [contextMenuStyle, setcontextMenuStyle] = useState({})
     let [currentSelectedPath, setcurrentSelectedPath]: any = useState([])
     let projectNameParam = getUrlParams('projectname')
+    let projectName = `${projectAstListData}_${projectNameParam}`
 
     if(projectNameParam && oneRun){
-        let ast = JSON.parse(localStorage[projectNameParam])
+        let ast = JSON.parse(localStorage[projectName])
         // TODO Verify ast
         props.dispatch({
             type: 'previewHTML',
@@ -143,7 +144,7 @@ const _DebugLayout = (props: Tprops) => {
             return
         }
         // edit project no modify
-        if(localStorage[projectNameParam] === JSON.stringify(props.tree)){
+        if(localStorage[projectName] === JSON.stringify(props.tree)){
             gotoProjectList()
             return
         }
@@ -158,7 +159,7 @@ const _DebugLayout = (props: Tprops) => {
             </div>,
             onOk() {
                 return new Promise((resolve, reject) => {
-                    localStorage.setItem(projectNameParam || '', JSON.stringify(props.tree))
+                    localStorage.setItem(projectName || '', JSON.stringify(props.tree))
                     resolve()
                 }).catch(() => {
                     gotoProjectList()
@@ -171,11 +172,14 @@ const _DebugLayout = (props: Tprops) => {
     }
     let onSave = () => {
         if(projectNameParam){
-            localStorage.setItem(projectNameParam || '', JSON.stringify(props.tree))
+            localStorage.setItem(projectName || '', JSON.stringify(props.tree))
             message.success('保存成功')
             return
         }
-        showSaveConfirm()
+        // 第一次保存  并退出
+        showSaveConfirm(() => {
+            gotoProjectList()
+        })
     }
     oneRun = false
     return <div className="DebugLayout" onClick={() => {
