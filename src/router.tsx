@@ -8,6 +8,7 @@ import DrawingPanel from './components/drawing_panel'
 import PropertyeEdit from './components/propertye_edit'
 import { rootReducer } from './reducer/index'
 import ProjectList from './projectList'
+import Index from './homeIndex'
 import { Troutes, Troute } from './types/index'
 
 const store = createStore(rootReducer)
@@ -29,6 +30,7 @@ const router = (routes: Troutes): ReactElement => {
 export const route = () => {
     return router(
         [
+            { path: '/index', page: <Index /> },
             { path: '/', page: <ProjectList /> },
             {
             path: '/al', page: <Provider store={store}>

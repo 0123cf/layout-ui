@@ -43,7 +43,7 @@ width height 如何自适应(设置的容器如何根据内容进行自适应) <
 |国际化（readme；text）|
 
 
-[在线体验](http://al.mysy.vip/)
+[在线体验](http://al.mysy.vip/#/index)
 
 
 参与方式
