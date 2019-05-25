@@ -1,5 +1,5 @@
-# auto-layout
-![](https://github.com/0123cf/auto-layout/blob/master/logo.png?raw=true)
+# layout-ui
+![](https://github.com/0123cf/layout-ui/blob/master/logo.png?raw=true)
 <p align="center">
     <a href="https://github.com/996icu/996.ICU/blob/master/LICENSE">
         <img alt="996icu" src="https://img.shields.io/badge/license-NPL%20(The%20996%20Prohibited%20License)-blue.svg">
@@ -8,14 +8,14 @@
 可视化、自动化css布局</br>
 布局共享, 提高生产力</br>
 
-![image.png](https://github.com/0123cf/auto-layout/blob/master/imgs/demo_preview.png?raw=true)
+![image.png](https://github.com/0123cf/layout-ui/blob/master/imgs/demo_preview.png?raw=true)
 
 
 -----
 
 ### USE
 
-![image.png](https://github.com/0123cf/auto-layout/blob/master/imgs/f68h2j9k2z8b4m24k3l.png?raw=true)
+![image.png](https://github.com/0123cf/layout-ui/blob/master/imgs/f68h2j9k2z8b4m24k3l.png?raw=true)
 
 * 第一个是在插入布局。
 * 第二个是控制区，可以选中要修改的位置、删除当前位置的布局、新增兄弟节点等
