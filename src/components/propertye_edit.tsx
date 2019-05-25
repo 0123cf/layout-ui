@@ -119,22 +119,6 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                 children: rowAst
             }
         }
-        let addRow = () => {
-            let ast: TRowAST[] = [...props.previewAST, getRowInfo()]
-            let htmlObject = createHtml(ast)
-            props.dispatch({
-                type: 'previewHTML',
-                html: htmlObject.view,
-                ast
-            })
-        }
-        interface Tdone extends Function {
-            (event: MouseEvent): void
-        }
-        interface LayoutWritePro {
-            done?: Tdone;
-            type: string;
-        }
         let setTreeItemDataValue = (value: any) => {
             let dataAst: TRowAST[] = setTreeData(props.previewAST, {
                 path: props.selectRowPath,
@@ -169,295 +153,265 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                 }
             })
         }
-        let LayoutWrite = (params: LayoutWritePro) => {
-            switch (params.type) {
-                case 'edit': {
-                    let textAlignSelect = (align: string) => () => {
-                        setTreeItemDataValue({
-                            ...selectItem,
-                            style: {
-                                ...selectItem.style,
-                                ['textAlign']: align
-                            }
-                        })
+        let LayoutWrite = () => {
+            let textAlignSelect = (align: string) => () => {
+                setTreeItemDataValue({
+                    ...selectItem,
+                    style: {
+                        ...selectItem.style,
+                        ['textAlign']: align
                     }
-                    let EditAttribute = () => {
-                        return <div className="edit-attribute">
-                            {this.state.isColorPick && <div className="color-box  sketch-color-price-box" style={this.state.colorPickStyle}>
-                                <SketchPicker color={this.state.colorPickProps.color} onChange={this.state.colorPickProps.onChange} />
-                            </div>
-                            }
-                            <div className="group-title-name">Edit</div>
-                            <div>
-                                <div className="select-button select-text-align">
-                                    <img onClick={textAlignSelect('left')} src={require(`../svg/text-left.svg`)} />
-                                    <img onClick={textAlignSelect('center')} src={require(`../svg/text-center.svg`)} />
-                                    <img onClick={textAlignSelect('right')} src={require(`../svg/text-right.svg`)} />
-                                </div>
-                            </div>
-                            <BoxEditor
-                                onStart={() => 0}
-                                marginLeft={selectItem.style.marginLeft ? selectItem.style.marginLeft.replace('px', '') : 0}
-                                marginTop={selectItem.style.marginTop ? selectItem.style.marginTop.replace('px', '') : 0}
-                                marginRight={selectItem.style.marginRight ? selectItem.style.marginRight.replace('px', '') : 0}
-                                marginBottom={selectItem.style.marginBottom ? selectItem.style.marginBottom.replace('px', '') : 0}
-                                paddingLeft={selectItem.style.paddingLeft ? selectItem.style.paddingLeft.replace('px', '') : 0}
-                                paddingTop={selectItem.style.paddingTop ? selectItem.style.paddingTop.replace('px', '') : 0}
-                                paddingRight={selectItem.style.paddingRight ? selectItem.style.paddingRight.replace('px', '') : 0}
-                                paddingBottom={selectItem.style.paddingBottom ? selectItem.style.paddingBottom.replace('px', '') : 0}
-                                onChange={(site, val) => {
-                                    setTreeItemDataValue({
-                                        ...selectItem,
-                                        style: {
-                                            ...selectItem.style,
-                                            [site]: `${val}px`
-                                        }
-                                    })
-                                }}
-                                onFinalChange={() => 0}
-                            />
-                            <div className="flex flex-space-x flex-center-y slider-text-box">
-                                <span onDoubleClick={() => {
-                                    setTreeItemDataValue({
-                                        ...selectItem,
-                                        style: {
-                                            ...selectItem.style,
-                                            'width': `auto`
-                                        }
-                                    })
-                                    this.inputWidth.current.value = 'auto'
-                                }} className="name">width</span>
-                                <Slider max={550} min={1} className="slider" defaultValue={selectItem.style.width ? +(selectItem.style.width.replace('px', '')) : 0} disabled={false} onChange={(e) => {
-                                    setTreeItemDataValue({
-                                        ...selectItem,
-                                        style: {
-                                            ...selectItem.style,
-                                            'width': `${e}px`
-                                        }
-                                    })
-                                    this.inputWidth.current.value = e
-                                }} />
-                                <input ref={this.inputWidth} defaultValue={selectItem.style.width ? (selectItem.style.width.replace('px', '')) : '0'} onChange={(e: any) => {
-                                    let v = e.target.value
-                                    setTreeItemDataValue({
-                                        ...selectItem,
-                                        style: {
-                                            ...selectItem.style,
-                                            'width': `${v}px`
-                                        }
-                                    })
-                                }} />
-                            </div>
-                            <div className="flex flex-space-x flex-center-y slider-text-box">
-                                <span onDoubleClick={() => {
-                                    setTreeItemDataValue({
-                                        ...selectItem,
-                                        style: {
-                                            ...selectItem.style,
-                                            'height': `auto`
-                                        }
-                                    })
-                                    this.inputHeight.current.value = 'auto'
-                                }} className="name ">height</span>
-                                <Slider max={600} min={1} className="slider" defaultValue={selectItem.style.height ? +(selectItem.style.height.replace('px', '')) : 0} disabled={false} onChange={(e) => {
-                                    setTreeItemDataValue({
-                                        ...selectItem,
-                                        style: {
-                                            ...selectItem.style,
-                                            'height': `${e}px`
-                                        }
-                                    })
-                                    this.inputHeight.current.value = e
-                                }} />
-                                <input ref={this.inputHeight} defaultValue={selectItem.style.height ? selectItem.style.height.replace('px', '') : ''} onChange={(e: any) => {
-                                    let v = e.target.value
-                                    inputOldTime = +new Date()
-                                    inputKey = 'inputHeight'
-                                    setTreeItemDataValue({
-                                        ...selectItem,
-                                        style: {
-                                            ...selectItem.style,
-                                            'height': `${v}px`
-                                        }
-                                    })
-                                }} />
-                            </div>
-                            <div className="flex flex-space-x flex-center-y slider-text-box">
-                                <span className="name">redius</span>
-                                <Slider max={300} min={0} className="slider" defaultValue={parseFloat(selectItem.style.borderRadius) ? parseFloat(selectItem.style.borderRadius) : 0} disabled={false} onChange={(e) => {
-                                    setTreeItemDataValue({
-                                        ...selectItem,
-                                        style: {
-                                            ...selectItem.style,
-                                            'borderRadius': new Array(4).fill(e + 'px').join(' ')
-                                        }
-                                    })
-                                    this.inputBackRadius.current.value = e
-                                }} />
-                                <input ref={this.inputBackRadius} defaultValue={parseFloat(selectItem.style.borderRadius) ? (parseFloat(selectItem.style.borderRadius)) + '' : '0'} onChange={(e: any) => {
-                                    let v = e.target.value
-                                    if (isNaN(v)) {
-                                        e.target.value = v.replace(/[^\d]/, '')
-                                    }
-                                    setTreeItemDataValue({
-                                        ...selectItem,
-                                        style: {
-                                            ...selectItem.style,
-                                            'borderRadius': new Array(4).fill(v + 'px').join(' ')
-                                        }
-                                    })
-                                }} />
-                            </div>
-                            <div className="flex flex-space-x flex-center-y slider-text-box">
-                                <span className="name">LH</span>
-                                <Slider max={300} min={0} className="slider" defaultValue={selectItem.style.lineHeight ? +(selectItem.style.lineHeight.replace('px', '')) : 0} disabled={false} onChange={(e) => {
-                                    setTreeItemDataValue({
-                                        ...selectItem,
-                                        style: {
-                                            ...selectItem.style,
-                                            'lineHeight': `${e}px`
-                                        }
-                                    })
-                                    this.inputLineHeight.current.value = e
-                                }} />
-                                <input ref={this.inputLineHeight} defaultValue={selectItem.style.lineHeight ? selectItem.style.lineHeight.replace('px', '') : ''} onChange={(e: any) => {
-                                    let v = e.target.value
-                                    inputOldTime = +new Date()
-                                    inputKey = 'inputLineHeight'
-                                    setTreeItemDataValue({
-                                        ...selectItem,
-                                        style: {
-                                            ...selectItem.style,
-                                            'lineHeight': `${v}px`
-                                        }
-                                    })
-                                }} />
-                            </div>
-                            <div>
-                                <textarea className="input-textarea" placeholder="文字内容" defaultValue={selectItem.innerText} onChange={(e: any) => {
-                                    let textValue = e.target.value
-                                    setTreeItemDataValue({
-                                        ...selectItem,
-                                        innerText: textValue
-                                    })
-                                    e.target.focus()
-                                }} />
-                            </div>
-                            {/* <div>
-                                <div className="flex">边框:
-                                        <input style={{ width: '100px' }} defaultValue={selectItem.style.border || ''} onChange={(e: any) => {
-                                        let v = e.target.value
-                                        setTreeItemDataValue({
-                                            ...selectItem,
-                                            style: {
-                                                ...selectItem.style,
-                                                'border': v
-                                            }
-                                        })
-                                    }} />
-                                </div>
-                                <div className="otherInfo">
-                                    <p>数值px 线条 #颜色</p>
-                                    <p>如： 1px solid red</p>
-                                </div>
-                            </div> */}
-                            <div className="color-set-box">
-                                <span>背景颜色</span>
-                                <span onClick={setColor(selectItem.style.backgroundColor || '', 'backgroundColor', !this.state.isColorPick)} className="showCurrentColor" style={{ backgroundColor: selectItem.style.backgroundColor || '' }}></span>
-                                <input defaultValue={selectItem.style.backgroundColor || ''} onChange={(e: any) => {
-                                    let v = e.target.value
-                                    setTreeItemDataValue({
-                                        ...selectItem,
-                                        style: {
-                                            ...selectItem.style,
-                                            'backgroundColor': v
-                                        }
-                                    })
-                                }} />
-                            </div>
-                            <div className="color-set-box">
-                                <span className="name">字体颜色</span>
-                                <span onClick={setColor(selectItem.style.color || '', 'color', !this.state.isColorPick)} className="showCurrentColor" style={{ backgroundColor: selectItem.style.color || '' }}></span>
-                                <input defaultValue={selectItem.style.color || ''} onChange={(e: any) => {
-                                    let v = e.target.value
-                                    setTreeItemDataValue({
-                                        ...selectItem,
-                                        style: {
-                                            ...selectItem.style,
-                                            'color': v
-                                        }
-                                    })
-                                }} />
-                            </div>
-                        </div>
-                    }
-                    if (selectItem.children.length === 0) {
-                        return <div className="inner">
-                            <EditAttribute />
-                            <div className="group-title-name">插入布局</div>
-                            {/* <div>class <input defaultValue={className} onInput={classNameChange} placeholder="请输入class" /></div> */}
-                            <div>column number <input className="cloumn" defaultValue={layoutColumn} type="number" onInput={layoutColumnChange} placeholder="请输入列数" /></div>
-                            <div className="flex">
-                                <Select activeIndex={0} list={layoutTypeList} change={SelectChange} />
-                            </div>
-                            <div className="button inert-layout-button" onClick={() => {
-                                let itemAst: TRowAST = {
-                                    ...getRowInfo(),
-                                    style: {...selectItem.style}
-                                }
-                                console.log(itemAst)
-                                setTreeItemDataValue(itemAst)
-                            }}>~插入~</div>
-                        </div>
-                    } else {
-                        let className: string = selectItem.css[2]
-                        let layoutTypeSelected: selectListItem = layoutTypeList[0]
-                        let editRow = () => {
-                            let data: TRowAST[] = setTreeData(props.previewAST, {
-                                path: props.selectRowPath,
-                                childrenName: 'children',
-                                value: {
-                                    ...selectItem,
-                                    css: [selectItem.css[0], layoutTypeSelected.className, className],
-                                }
-                            })
-                            props.dispatch({
-                                type: 'previewHTML',
-                                html: createHtml(data).view,
-                                ast: data
-                            })
-                        }
-                        return <div className="inner">
-                            <EditAttribute />
-                            <div className="group-title-name">修改布局</div>
-                            <div>class： <input defaultValue={className} onInput={(e: any) => {
-                                className = e.target.value
-                            }} placeholder="请输入class" /></div>
-                            <div className="flex">
-                                <Select
-                                    activeIndex={layoutTypeList.findIndex(e => e.className === selectItem.css[1])}
-                                    list={layoutTypeList} change={(index: number) => {
-                                        layoutTypeSelected = layoutTypeList[index]
-                                        editRow()
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    }
-                }
-                case 'add': {
-                    return <div className="inner">
-                        <div>class： <input defaultValue={className} onInput={classNameChange} placeholder="请输入class" /></div>
-                        <div>column： <input defaultValue={layoutColumn} type="number" onInput={layoutColumnChange} placeholder="请输入列数" /></div>
-                        <div className="flex">
-                            <Select activeIndex={0} list={layoutTypeList} change={SelectChange} />
-                        </div>
-                        <div className="button" onClick={addRow}>~添加~</div>
+                })
+            }
+            let EditAttribute = () => {
+                return <div className="edit-attribute">
+                    {this.state.isColorPick && <div className="color-box  sketch-color-price-box" style={this.state.colorPickStyle}>
+                        <SketchPicker color={this.state.colorPickProps.color} onChange={this.state.colorPickProps.onChange} />
                     </div>
+                    }
+                    <div className="group-title-name">Edit</div>
+                    <div>
+                        <div className="select-button select-text-align">
+                            <img onClick={textAlignSelect('left')} src={require(`../svg/text-left.svg`)} />
+                            <img onClick={textAlignSelect('center')} src={require(`../svg/text-center.svg`)} />
+                            <img onClick={textAlignSelect('right')} src={require(`../svg/text-right.svg`)} />
+                        </div>
+                    </div>
+                    <BoxEditor
+                        onStart={() => 0}
+                        marginLeft={selectItem.style.marginLeft ? selectItem.style.marginLeft.replace('px', '') : 0}
+                        marginTop={selectItem.style.marginTop ? selectItem.style.marginTop.replace('px', '') : 0}
+                        marginRight={selectItem.style.marginRight ? selectItem.style.marginRight.replace('px', '') : 0}
+                        marginBottom={selectItem.style.marginBottom ? selectItem.style.marginBottom.replace('px', '') : 0}
+                        paddingLeft={selectItem.style.paddingLeft ? selectItem.style.paddingLeft.replace('px', '') : 0}
+                        paddingTop={selectItem.style.paddingTop ? selectItem.style.paddingTop.replace('px', '') : 0}
+                        paddingRight={selectItem.style.paddingRight ? selectItem.style.paddingRight.replace('px', '') : 0}
+                        paddingBottom={selectItem.style.paddingBottom ? selectItem.style.paddingBottom.replace('px', '') : 0}
+                        onChange={(site, val) => {
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                style: {
+                                    ...selectItem.style,
+                                    [site]: `${val}px`
+                                }
+                            })
+                        }}
+                        onFinalChange={() => 0}
+                    />
+                    <div className="flex flex-space-x flex-center-y slider-text-box">
+                        <span onDoubleClick={() => {
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                style: {
+                                    ...selectItem.style,
+                                    'width': `auto`
+                                }
+                            })
+                            this.inputWidth.current.value = 'auto'
+                        }} className="name">width</span>
+                        <Slider max={550} min={1} className="slider" defaultValue={selectItem.style.width ? +(selectItem.style.width.replace('px', '')) : 0} disabled={false} onChange={(e) => {
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                style: {
+                                    ...selectItem.style,
+                                    'width': `${e}px`
+                                }
+                            })
+                            this.inputWidth.current.value = e
+                        }} />
+                        <input ref={this.inputWidth} defaultValue={selectItem.style.width ? (selectItem.style.width.replace('px', '')) : '0'} onChange={(e: any) => {
+                            let v = e.target.value
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                style: {
+                                    ...selectItem.style,
+                                    'width': `${v}px`
+                                }
+                            })
+                        }} />
+                    </div>
+                    <div className="flex flex-space-x flex-center-y slider-text-box">
+                        <span onDoubleClick={() => {
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                style: {
+                                    ...selectItem.style,
+                                    'height': `auto`
+                                }
+                            })
+                            this.inputHeight.current.value = 'auto'
+                        }} className="name ">height</span>
+                        <Slider max={600} min={1} className="slider" defaultValue={selectItem.style.height ? +(selectItem.style.height.replace('px', '')) : 0} disabled={false} onChange={(e) => {
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                style: {
+                                    ...selectItem.style,
+                                    'height': `${e}px`
+                                }
+                            })
+                            this.inputHeight.current.value = e
+                        }} />
+                        <input ref={this.inputHeight} defaultValue={selectItem.style.height ? selectItem.style.height.replace('px', '') : ''} onChange={(e: any) => {
+                            let v = e.target.value
+                            inputOldTime = +new Date()
+                            inputKey = 'inputHeight'
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                style: {
+                                    ...selectItem.style,
+                                    'height': `${v}px`
+                                }
+                            })
+                        }} />
+                    </div>
+                    <div className="flex flex-space-x flex-center-y slider-text-box">
+                        <span className="name">redius</span>
+                        <Slider max={300} min={0} className="slider" defaultValue={parseFloat(selectItem.style.borderRadius) ? parseFloat(selectItem.style.borderRadius) : 0} disabled={false} onChange={(e) => {
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                style: {
+                                    ...selectItem.style,
+                                    'borderRadius': new Array(4).fill(e + 'px').join(' ')
+                                }
+                            })
+                            this.inputBackRadius.current.value = e
+                        }} />
+                        <input ref={this.inputBackRadius} defaultValue={parseFloat(selectItem.style.borderRadius) ? (parseFloat(selectItem.style.borderRadius)) + '' : '0'} onChange={(e: any) => {
+                            let v = e.target.value
+                            if (isNaN(v)) {
+                                e.target.value = v.replace(/[^\d]/, '')
+                            }
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                style: {
+                                    ...selectItem.style,
+                                    'borderRadius': new Array(4).fill(v + 'px').join(' ')
+                                }
+                            })
+                        }} />
+                    </div>
+                    <div className="flex flex-space-x flex-center-y slider-text-box">
+                        <span className="name">LH</span>
+                        <Slider max={300} min={0} className="slider" defaultValue={selectItem.style.lineHeight ? +(selectItem.style.lineHeight.replace('px', '')) : 0} disabled={false} onChange={(e) => {
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                style: {
+                                    ...selectItem.style,
+                                    'lineHeight': `${e}px`
+                                }
+                            })
+                            this.inputLineHeight.current.value = e
+                        }} />
+                        <input ref={this.inputLineHeight} defaultValue={selectItem.style.lineHeight ? selectItem.style.lineHeight.replace('px', '') : ''} onChange={(e: any) => {
+                            let v = e.target.value
+                            inputOldTime = +new Date()
+                            inputKey = 'inputLineHeight'
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                style: {
+                                    ...selectItem.style,
+                                    'lineHeight': `${v}px`
+                                }
+                            })
+                        }} />
+                    </div>
+                    <div>
+                        <textarea className="input-textarea" placeholder="文字内容" defaultValue={selectItem.innerText} onChange={(e: any) => {
+                            let textValue = e.target.value
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                innerText: textValue
+                            })
+                            e.target.focus()
+                        }} />
+                    </div>
+                    {/* <div>
+                        <div className="flex">边框:
+                                <input style={{ width: '100px' }} defaultValue={selectItem.style.border || ''} onChange={(e: any) => {
+                                let v = e.target.value
+                                setTreeItemDataValue({
+                                    ...selectItem,
+                                    style: {
+                                        ...selectItem.style,
+                                        'border': v
+                                    }
+                                })
+                            }} />
+                        </div>
+                        <div className="otherInfo">
+                            <p>数值px 线条 #颜色</p>
+                            <p>如： 1px solid red</p>
+                        </div>
+                    </div> */}
+                    <div className="color-set-box">
+                        <span>背景颜色</span>
+                        <span onClick={setColor(selectItem.style.backgroundColor || '', 'backgroundColor', !this.state.isColorPick)} className="showCurrentColor" style={{ backgroundColor: selectItem.style.backgroundColor || '' }}></span>
+                        <input defaultValue={selectItem.style.backgroundColor || ''} onChange={(e: any) => {
+                            let v = e.target.value
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                style: {
+                                    ...selectItem.style,
+                                    'backgroundColor': v
+                                }
+                            })
+                        }} />
+                    </div>
+                    <div className="color-set-box">
+                        <span className="name">字体颜色</span>
+                        <span onClick={setColor(selectItem.style.color || '', 'color', !this.state.isColorPick)} className="showCurrentColor" style={{ backgroundColor: selectItem.style.color || '' }}></span>
+                        <input defaultValue={selectItem.style.color || ''} onChange={(e: any) => {
+                            let v = e.target.value
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                style: {
+                                    ...selectItem.style,
+                                    'color': v
+                                }
+                            })
+                        }} />
+                    </div>
+                </div>
+            }
+            if (selectItem.children.length === 0) {
+                return <div className="inner">
+                    <EditAttribute />
+                </div>
+            } else {
+                let className: string = selectItem.css[2]
+                let layoutTypeSelected: selectListItem = layoutTypeList[0]
+                let editRow = () => {
+                    let data: TRowAST[] = setTreeData(props.previewAST, {
+                        path: props.selectRowPath,
+                        childrenName: 'children',
+                        value: {
+                            ...selectItem,
+                            css: [selectItem.css[0], layoutTypeSelected.className, className],
+                        }
+                    })
+                    props.dispatch({
+                        type: 'previewHTML',
+                        html: createHtml(data).view,
+                        ast: data
+                    })
                 }
-                default: {
-                    return <div></div>
-                }
+                return <div className="inner">
+                    <EditAttribute />
+                    <div className="group-title-name">修改布局</div>
+                    <div>class： <input defaultValue={className} onInput={(e: any) => {
+                        className = e.target.value
+                    }} placeholder="请输入class" /></div>
+                    <div className="flex">
+                        <Select
+                            activeIndex={layoutTypeList.findIndex(e => e.className === selectItem.css[1])}
+                            list={layoutTypeList} change={(index: number) => {
+                                layoutTypeSelected = layoutTypeList[index]
+                                editRow()
+                            }}
+                        />
+                    </div>
+                </div>
+            
             }
         }
         return <div className="HandleColumn" onClick={() => {
@@ -470,12 +424,12 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
             <div>
                 {selectItem && <div>
                     {/* <div className="title-name">Edit Element Layout</div> */}
-                    <LayoutWrite type="edit" />
+                    <LayoutWrite />
                 </div>}
                 {!selectItem && <div className="no-tree">
                     <div>
                         <div className="tip-text">QAQ</div>
-                        <div className="tip-button">未选择组件</div>
+                        <div className="tip-button">未点击选择组件</div>
                     </div>
                 </div>}
             </div>

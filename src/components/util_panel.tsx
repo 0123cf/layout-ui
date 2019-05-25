@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { TRowAST, Tstore } from '../types/index'
 import { layoutTypeList, rowASTItemDefault } from '../model/constant'
-import { createHtml } from './utils'
+import { createHtml, setTreeData, getTreeVal } from './utils'
 import { Preview } from './preview'
 const SyntaxHighlighter = lazy(() => import('react-syntax-highlighter'))
 // import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs'
@@ -16,6 +16,7 @@ interface Tstate {
 interface Tprops extends Tstate {
     dispatch: Dispatch,
     previewAST: TRowAST[],
+    selectRowPath: number[],
     html: string,
 }
 const View = (props: Tprops) => {
@@ -31,19 +32,49 @@ const View = (props: Tprops) => {
         }
         return {
             tag: 'div',
-            css: ['flex', layoutType, ''],
+            css: [''],
             style: {},
-            children: rowAst
+            children: [
+                {
+                    tag: 'div',
+                    css: ['flex', layoutType, ''],
+                    style: {},
+                    children: rowAst
+                }
+            ]
         }
     }
-    let addRow = (index: number) => () => {        
-        let ast: TRowAST[] = [...props.previewAST, getRowInfo(index)]
-        let htmlObject = createHtml(ast)
-        props.dispatch({
-            type: 'previewHTML',
-            html: htmlObject.view,
-            ast
-        })
+    let addRow = (index: number) => () => {
+        if(props.selectRowPath.length === 0){
+            let ast: TRowAST[] = [...props.previewAST, getRowInfo(index)]
+            let htmlObject = createHtml(ast)
+            let html =  htmlObject.view
+
+            props.dispatch({
+                type: 'previewHTML',
+                html,
+                ast
+            })
+        }else{
+            let selectItem = getTreeVal(props.previewAST, props.selectRowPath.join('.children.'))
+            let dataAst: TRowAST[] = setTreeData(props.previewAST, {
+                path: props.selectRowPath,
+                childrenName: 'children',
+                value: {
+                    ...getRowInfo(index),
+                    style: {...selectItem.style},
+                    children: [
+                        ...selectItem.children,
+                        ...getRowInfo(index).children
+                    ]
+                }
+            })
+            props.dispatch({
+                type: 'previewHTML',
+                html: createHtml(dataAst).view,
+                ast: dataAst
+            })
+        }
     }
     return <div className="util_panel">
         <div className="add-layout">
@@ -91,6 +122,7 @@ const View = (props: Tprops) => {
 const stateMapToProps = (state: Tstore) => {
     return {
         previewAST: state.previewAST,
+        selectRowPath: state.selectRowPath,
         html: state.previewHTML
     }
 }
