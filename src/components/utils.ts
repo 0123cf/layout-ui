@@ -69,7 +69,8 @@ export const setTreeData = <T>(_data: any, { path, childrenName, value }: TsetTr
     let deepSearch = (tree: any, path: any) => {
         tree[childrenName][path[0]] && path.length > 1
             ? tree[childrenName][path[0]] = deepSearch(tree[childrenName][path[0]], path.slice(1))
-            : tree[childrenName][path[0]] = value
+            : value ? tree[childrenName][path[0]] = value 
+            : tree[childrenName] = tree[childrenName].filter((_: any, i: number) => i !== path[0])
         return tree
     }
     data[path[0]] = path.length > 1 ? deepSearch(data[path[0]], path.slice(1)) : value
@@ -94,13 +95,9 @@ export const addTreeData = <T>(_data: any, { path, childrenName, value }: TsetTr
     return data
 }
 export const delectTreeData = <T>(data: any, { path, childrenName }: TdelectTreeData): T => {
-    return filterTree(
-        setTreeData(data, {
-            path,
-            childrenName,
-            value: null
-        }),
+    return setTreeData(data, {
+        path,
         childrenName,
-        id
-    )
+        value: null
+    })
 }

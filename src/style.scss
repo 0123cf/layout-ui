@@ -129,7 +129,7 @@ input{
     }
     .HandleColumn{    
         width: $utilsWidth;
-        height: 100vh;
+        height: calc(100vh - 50px);
         overflow: auto;
         background-color: #fff;
         transition: width 2s;

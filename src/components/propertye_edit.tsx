@@ -169,7 +169,6 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                         <SketchPicker color={this.state.colorPickProps.color} onChange={this.state.colorPickProps.onChange} />
                     </div>
                     }
-                    <div className="group-title-name">Edit</div>
                     <div>
                         <div className="select-button select-text-align">
                             <img onClick={textAlignSelect('left')} src={require(`../svg/text-left.svg`)} />
