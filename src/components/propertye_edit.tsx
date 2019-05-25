@@ -401,7 +401,11 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                                 <Select activeIndex={0} list={layoutTypeList} change={SelectChange} />
                             </div>
                             <div className="button inert-layout-button" onClick={() => {
-                                let itemAst: TRowAST = getRowInfo()
+                                let itemAst: TRowAST = {
+                                    ...getRowInfo(),
+                                    style: {...selectItem.style}
+                                }
+                                console.log(itemAst)
                                 setTreeItemDataValue(itemAst)
                             }}>~插入~</div>
                         </div>

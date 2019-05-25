@@ -28,7 +28,7 @@ let getStars = (githubName: string, cb: (star: number) => 0) => {
 }
 export default (): ReactElement => {
     let [star, setstar] = useState(0)
-    let githubName = '0123cf/auto-layout'
+    let githubName = '0123cf/layout-ui'
 
     star || getStars(githubName, (star) => {
         setstar(star)
@@ -38,10 +38,10 @@ export default (): ReactElement => {
     return <div className="homeIndex" style={styles.box}>
         <div className="head">
             <div className="logo">
-                <img className="logo-ipc" src="https://github.com/0123cf/auto-layout/blob/master/logo.png?raw=true" />
+                <img className="logo-ipc" src="https://github.com/0123cf/layout-ui/blob/master/logo.png?raw=true" />
             </div>
         </div>
-        <h1 className="title">Auto-Layout</h1>
+        <h1 className="title">Layout-UI</h1>
         <div className="text-wrapper">
             <span>在线可视化布局工具, 支持相对布局\ 绝对布局\ 弹性布局, 自适应可视化布局. 适用于专业人员开发专业界面, 适用于经过简单培训设计师使用.</span>
         </div>
