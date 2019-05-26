@@ -43,7 +43,7 @@ export const Select = (props: SelectPro) => {
     }
     return <div style={{ position: 'relative' }}>
         <div style={style.title} onClick={tapShow}>
-            <img style={styles.img} src={require(`../${selectName}`)} />
+            <img style={styles.img} src={require(`../../${selectName}`)} />
         </div>
         {isShow && <div style={styles.lists}>
             {props.list.map((e, index) =>

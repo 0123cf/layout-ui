@@ -1,11 +1,11 @@
 import React, {ReactElement} from 'react'
-import * as ReactDOM from 'react-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 
 import UtilPanel from './components/util_panel'
 import DrawingPanel from './components/drawing_panel'
 import PropertyeEdit from './components/propertye_edit'
+import Previre from './components/preview'
 import { rootReducer } from './reducer/index'
 import ProjectList from './projectList'
 import Index from './homeIndex'
@@ -38,6 +38,7 @@ export const route = () => {
                     <UtilPanel />
                     <DrawingPanel />
                     <PropertyeEdit />
+                    <Previre />
                 </div>
             </Provider>
             },

@@ -1,5 +1,5 @@
 import {TRowAST, Tstore} from '../types/index'
-import {TEST_ast} from '../test/model/ast'
+// import {TEST_ast} from '../test/model/ast'
 
 interface TpreviewActive {
     type: string,
@@ -8,7 +8,7 @@ interface TpreviewActive {
 }
 interface TbaseActive {
     type: string,
-    value: string,
+    value: any,
 }
 interface TselectRowPath {
     type: string,
@@ -18,10 +18,9 @@ interface Tactive extends TbaseActive, TselectRowPath, TpreviewActive{}
 
 const defaultState: Tstore = {
     previewHTML: '',
-    // previewAST: TEST_ast,
-    // selectRowPath: [2,0,0],
     previewAST: [],
-    selectRowPath: []
+    selectRowPath: [],
+    showPreview: false
 }
 
 export const rootReducer = (state = defaultState, action: Tactive): Tstore  =>{
@@ -36,6 +35,11 @@ export const rootReducer = (state = defaultState, action: Tactive): Tstore  =>{
         case 'selectRowPath': {
             return {...state,
                 selectRowPath: action.path,
+            }
+        }
+        case 'showPreview': {
+            return {...state,
+                showPreview: action.value,
             }
         }
         default :{

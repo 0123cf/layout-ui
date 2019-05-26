@@ -1,12 +1,14 @@
 import * as React from 'react'
 import { Modal, Input, message } from 'antd'
 import { projectAstListData } from '../model/constant'
+import { getUrlParams } from '../utils/url'
 
 const confirm = Modal.confirm
 declare var window: any
 
 export const showSaveConfirm = (cb?: any) => {
     let projectName = ''
+    let projectNameParam = getUrlParams('projectname')
     let tipStyle = {
         color: '#959595',
         marginTop: '20px'
@@ -45,6 +47,9 @@ export const showSaveConfirm = (cb?: any) => {
                 astStr = JSON.stringify(window.Store.getState().previewAST)
                 localStorage.setItem(saveName, astStr)
                 message.success('保存成功')
+                // if(!projectNameParam){
+                //     location.href = '/#/al?projectname=' + name
+                // }
                 cb && cb()
                 resolve()
             }).catch(() => 0)

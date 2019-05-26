@@ -100,32 +100,6 @@ input{
                 padding: 5px 20px;
             }
         }
-        .cat-ast{
-            position: fixed;
-            top: 0px;
-            left: 0xp;
-            height: 100vh;
-            width: 100vw;
-            background-color: #fff;
-            z-index: 5;
-            .ast-show{
-                width: 800px;
-                max-height: 90vh;
-                overflow: auto;
-                border: 1px solid rgba(0, 0, 0, .1);
-                margin-top: 20px;
-            }
-            .ast-copy-box{
-                margin-top: 20px;
-                margin-left: 20px;
-                .ast-copy{
-                    width: 100px;
-                    height: 100px;
-                    overflow: auto;
-                    border: 1px solid rgba(0, 0, 0, .1);
-                }
-            }
-        }
     }
     .HandleColumn{    
         width: $utilsWidth;
@@ -284,6 +258,33 @@ input{
                 border-color: rgb(221, 221, 221);
                 border-image: initial;
                 border-radius: 3px;
+            }
+        }
+    }
+
+    .cat-ast{
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        height: 100vh;
+        width: 100vw;
+        background-color: #fff;
+        z-index: 5;
+        .ast-show{
+            width: 800px;
+            max-height: 90vh;
+            overflow: auto;
+            border: 1px solid rgba(0, 0, 0, .1);
+            margin-top: 20px;
+        }
+        .ast-copy-box{
+            margin-top: 20px;
+            margin-left: 20px;
+            .ast-copy{
+                width: 100px;
+                height: 100px;
+                overflow: auto;
+                border: 1px solid rgba(0, 0, 0, .1);
             }
         }
     }

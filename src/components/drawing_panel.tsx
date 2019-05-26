@@ -154,28 +154,40 @@ const _DebugLayout = (props: Tprops) => {
                 }
                 return style
             }
-            return <div
-                className={`${e.css.join(' ')}${props.selectRowPath.join(',') === itemPath.join(',') && ' item-selected-status'}`}
-                onClick={(e: MouseEvent) => selectRowDiv(e, itemPath)}
-                key={index}
-                ref={(node: any) => {
-                    if(props.selectRowPath.join(',') === itemPath.join(',') && node && (+new Date() - oldTime) / 100 > 3){
-                        oldTime = +new Date()
-                        let rect: Trect = node.getBoundingClientRect()
-                        seteditorStyle({
-                            top: rect.top + 'px',
-                            left: rect.left + 'px',
-                            width: rect.width + 'px',
-                            height: rect.height + 'px'
-                        })
-                        seteditorVisible(true)
-                    }
-                }}
-                style={getStyle(e.style)}
-                onContextMenu={handleContextMenu.bind(null, itemPath, e)}
-            >{
-                    e.children.length > 0 ? randerTree(e.children, itemPath) : (e.innerText || '')
-                }</div>
+            let bindRef = (node: any) => {
+                if(props.selectRowPath.join(',') === itemPath.join(',') && node && (+new Date() - oldTime) / 100 > 3){
+                    oldTime = +new Date()
+                    let rect: Trect = node.getBoundingClientRect()
+                    seteditorStyle({
+                        top: rect.top + 'px',
+                        left: rect.left + 'px',
+                        width: rect.width + 'px',
+                        height: rect.height + 'px'
+                    })
+                    seteditorVisible(true)
+                }
+            }
+            switch(e.tag){
+                case 'img': {
+                    return <img 
+                        style={getStyle(e.style)} 
+                        key={index}
+                        onClick={(e: MouseEvent) => selectRowDiv(e, itemPath)}
+                        src={e.src} 
+                        ref={bindRef}
+                        /> 
+                }
+                default: {
+                    return <div
+                        className={`${e.css.join(' ')}`}
+                        onClick={(e: MouseEvent) => selectRowDiv(e, itemPath)}
+                        key={index}
+                        ref={bindRef}
+                        style={getStyle(e.style)}
+                        onContextMenu={handleContextMenu.bind(null, itemPath, e)}
+                    >{ e.children.length > 0 ? randerTree(e.children, itemPath) : (e.innerText || '') }</div>
+                }
+            }
         })
     }
     let gotoProjectList = () => {
@@ -240,7 +252,15 @@ const _DebugLayout = (props: Tprops) => {
     }}>
         <div className="header-handle flex flex-center-y flex-space-x">
             <Icon type="arrow-left" onClick={goProjectList} />
-            <Button onClick={onSave} className="save-button">保存</Button>
+            <div>
+                <Button style={{marginRight: '10px'}} onClick={() => {
+                    props.dispatch({
+                        type: 'showPreview',
+                        value: true
+                    })
+                }} className="save-button">预览</Button>
+                <Button onClick={onSave} className="save-button">保存</Button>
+            </div>
         </div>
         <div className="view-box" style={{
             width: '550px',

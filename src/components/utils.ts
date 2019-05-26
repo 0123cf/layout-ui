@@ -34,7 +34,14 @@ let createTag = (item: TRowAST, inner?: string): string => {
     } else {
         childrenHtml = inner || ''
     }
-    return `<${item.tag}${cssStr} style="${styleStr}">${childrenHtml}</${item.tag}>`
+    switch(item.tag){
+        case 'img': {
+            return `<${item.tag}${cssStr} style="${styleStr}" src="${item.src}" />`
+        }
+        default: {
+            return `<${item.tag}${cssStr} style="${styleStr}">${childrenHtml}</${item.tag}>`
+        }
+    }
 }
 export const Copy = <T>(o: T): T => JSON.parse(JSON.stringify(o))
 export const createHtml = (rowInfo: TRowAST[]): TcreaterHtml => {
@@ -95,9 +102,13 @@ export const addTreeData = <T>(_data: any, { path, childrenName, value }: TsetTr
     return data
 }
 export const delectTreeData = <T>(data: any, { path, childrenName }: TdelectTreeData): T => {
-    return setTreeData(data, {
-        path,
+    return filterTree(
+        setTreeData(data, {
+            path,
+            childrenName,
+            value: null
+        }),
         childrenName,
-        value: null
-    })
+        id
+    )
 }

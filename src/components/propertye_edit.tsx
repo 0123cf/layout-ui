@@ -5,7 +5,7 @@ import { TRowAST, Tstore } from '../types/index'
 
 import { createHtml, getTreeVal, setTreeData } from './utils'
 import { layoutTypeList, rowASTItemDefault } from '../model/constant'
-import { Select } from './Select'
+import { Select } from './components/Select'
 import { SketchPicker } from 'react-color'
 import { Slider } from 'antd'
 import { string } from 'prop-types'
@@ -153,23 +153,23 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                         <SketchPicker color={this.state.colorPickProps.color} onChange={this.state.colorPickProps.onChange} />
                     </div>
                     }
-                    <div>
+                    {selectItem.tag === 'div' && <div>
                         <div className="select-button select-text-align">
                             <img onClick={textAlignSelect('left')} src={require(`../svg/text-left.svg`)} />
                             <img onClick={textAlignSelect('center')} src={require(`../svg/text-center.svg`)} />
                             <img onClick={textAlignSelect('right')} src={require(`../svg/text-right.svg`)} />
                         </div>
-                    </div>
+                    </div>}
                     <BoxEditor
                         onStart={() => 0}
-                        marginLeft={selectItem.style.marginLeft ? selectItem.style.marginLeft.replace('px', '') : 0}
-                        marginTop={selectItem.style.marginTop ? selectItem.style.marginTop.replace('px', '') : 0}
-                        marginRight={selectItem.style.marginRight ? selectItem.style.marginRight.replace('px', '') : 0}
-                        marginBottom={selectItem.style.marginBottom ? selectItem.style.marginBottom.replace('px', '') : 0}
-                        paddingLeft={selectItem.style.paddingLeft ? selectItem.style.paddingLeft.replace('px', '') : 0}
-                        paddingTop={selectItem.style.paddingTop ? selectItem.style.paddingTop.replace('px', '') : 0}
-                        paddingRight={selectItem.style.paddingRight ? selectItem.style.paddingRight.replace('px', '') : 0}
-                        paddingBottom={selectItem.style.paddingBottom ? selectItem.style.paddingBottom.replace('px', '') : 0}
+                        marginLeft={selectItem.style.marginLeft ? +selectItem.style.marginLeft.replace('px', '') : 0}
+                        marginTop={selectItem.style.marginTop ? +selectItem.style.marginTop.replace('px', '') : 0}
+                        marginRight={selectItem.style.marginRight ? +selectItem.style.marginRight.replace('px', '') : 0}
+                        marginBottom={selectItem.style.marginBottom ? +selectItem.style.marginBottom.replace('px', '') : 0}
+                        paddingLeft={selectItem.style.paddingLeft ? +selectItem.style.paddingLeft.replace('px', '') : 0}
+                        paddingTop={selectItem.style.paddingTop ? +selectItem.style.paddingTop.replace('px', '') : 0}
+                        paddingRight={selectItem.style.paddingRight ? +selectItem.style.paddingRight.replace('px', '') : 0}
+                        paddingBottom={selectItem.style.paddingBottom ? +selectItem.style.paddingBottom.replace('px', '') : 0}
                         onChange={(site, val) => {
                             setTreeItemDataValue({
                                 ...selectItem,
@@ -273,7 +273,7 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                             })
                         }} />
                     </div>
-                    <div className="flex flex-space-x flex-center-y slider-text-box">
+                    {selectItem.tag === 'div' && <div className="flex flex-space-x flex-center-y slider-text-box">
                         <span className="name">LH</span>
                         <Slider max={300} min={0} className="slider" defaultValue={selectItem.style.lineHeight ? +(selectItem.style.lineHeight.replace('px', '')) : 0} disabled={false} onChange={(e) => {
                             setTreeItemDataValue({
@@ -297,8 +297,8 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                                 }
                             })
                         }} />
-                    </div>
-                    <div>
+                    </div>}
+                    {selectItem.tag === 'div' && <div>
                         <textarea className="input-textarea" placeholder="文字内容" defaultValue={selectItem.innerText} onChange={(e: any) => {
                             let textValue = e.target.value
                             setTreeItemDataValue({
@@ -307,7 +307,17 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                             })
                             e.target.focus()
                         }} />
-                    </div>
+                    </div>}
+                    {selectItem.tag === 'img' && <div>
+                        <textarea className="input-textarea" placeholder="输入URL" defaultValue={selectItem.src} onChange={(e: any) => {
+                            let textValue = e.target.value
+                            setTreeItemDataValue({
+                                ...selectItem,
+                                src: textValue
+                            })
+                            e.target.focus()
+                        }} />
+                    </div>}
                     {/* <div>
                         <div className="flex">边框:
                                 <input style={{ width: '100px' }} defaultValue={selectItem.style.border || ''} onChange={(e: any) => {
@@ -326,7 +336,7 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                             <p>如： 1px solid red</p>
                         </div>
                     </div> */}
-                    <div className="color-set-box">
+                    {selectItem.tag === 'div' && <div className="color-set-box">
                         <span>背景颜色</span>
                         <span onClick={setColor(selectItem.style.backgroundColor || '', 'backgroundColor', !this.state.isColorPick)} className="showCurrentColor" style={{ backgroundColor: selectItem.style.backgroundColor || '' }}></span>
                         <input defaultValue={selectItem.style.backgroundColor || ''} onChange={(e: any) => {
@@ -339,8 +349,8 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                                 }
                             })
                         }} />
-                    </div>
-                    <div className="color-set-box">
+                    </div>}
+                    {selectItem.tag === 'div' && <div className="color-set-box">
                         <span className="name">字体颜色</span>
                         <span onClick={setColor(selectItem.style.color || '', 'color', !this.state.isColorPick)} className="showCurrentColor" style={{ backgroundColor: selectItem.style.color || '' }}></span>
                         <input defaultValue={selectItem.style.color || ''} onChange={(e: any) => {
@@ -353,7 +363,7 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                                 }
                             })
                         }} />
-                    </div>
+                    </div>}
                 </div>
             }
             if (selectItem.children.length === 0) {

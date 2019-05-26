@@ -1,14 +1,12 @@
 import React from 'React'
-const {useState, lazy, Suspense } = React
+const { useState } = React
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { TRowAST, Tstore } from '../types/index'
 import { layoutTypeList, rowASTItemDefault } from '../model/constant'
 import { createHtml, setTreeData, getTreeVal } from './utils'
-import { Preview } from './preview'
-const SyntaxHighlighter = lazy(() => import('react-syntax-highlighter'))
-// import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import { docco, defaultRowNumber } from '../model/constant'
+import { message } from 'antd'
 
 interface Tstate {
     previewAST: TRowAST[],
@@ -30,10 +28,9 @@ document.onkeyup = (e: any) => {
     var realkey = String.fromCharCode(e.which)
     tapingKey = tapingKey.filter(e => e !== realkey)
 }  
+let imageUrl = ''
 const View = (props: Tprops) => {
     let rowAst  
-    let [isShowAst, setisShowAst] = useState(false)
-    let [html, sethtml] = useState('')
     let getRowInfo = (typeIndex: number, rowNumber: number): TRowAST => {
         let layoutType = layoutTypeList[typeIndex].className
 
@@ -55,6 +52,22 @@ const View = (props: Tprops) => {
             ]
         }
     }
+    let getImageAst = (url: string): TRowAST => {
+        return {
+            tag: 'div',
+            css: [''],
+            style: {},
+            children: [
+                {
+                    tag: 'img',
+                    css: [''],
+                    style: {},
+                    src: url,
+                    children: []
+                }
+            ]
+        }
+    }
     let addRow = (index: number) => () => {
         let downNumber: number = parseInt(tapingKey.filter((item, index, arr) => 
                 arr.indexOf(item, 0) === index
@@ -72,59 +85,78 @@ const View = (props: Tprops) => {
             })
         }else{
             let selectItem = getTreeVal(props.previewAST, props.selectRowPath.join('.children.'))
-            let dataAst: TRowAST[] = setTreeData(props.previewAST, {
-                path: props.selectRowPath,
-                childrenName: 'children',
-                value: {
-                    ...getRowInfo(index, downNumber),
-                    style: {...selectItem.style},
-                    children: [
-                        ...selectItem.children,
-                        ...getRowInfo(index, downNumber).children
-                    ]
-                }
-            })
+            if(selectItem.tag === 'div'){
+                let dataAst: TRowAST[] = setTreeData(props.previewAST, {
+                    path: props.selectRowPath,
+                    childrenName: 'children',
+                    value: {
+                        ...getRowInfo(index, downNumber),
+                        style: {...selectItem.style},
+                        children: [
+                            ...selectItem.children,
+                            ...getRowInfo(index, downNumber).children
+                        ]
+                    }
+                })
+                props.dispatch({
+                    type: 'previewHTML',
+                    html: createHtml(dataAst).view,
+                    ast: dataAst
+                })
+            }else{
+                message.error('此类型不允许插入子节点')
+            }
+        }
+    }
+    let addImage  = () => {
+        if(props.selectRowPath.length === 0){
+            let ast: TRowAST[] = [...props.previewAST, getImageAst(imageUrl)]
+            let htmlObject = createHtml(ast)
+            let html =  htmlObject.view
             props.dispatch({
                 type: 'previewHTML',
-                html: createHtml(dataAst).view,
-                ast: dataAst
+                html,
+                ast
             })
+        }else{
+            let selectItem = getTreeVal(props.previewAST, props.selectRowPath.join('.children.'))
+            if(selectItem.tag === 'div'){
+                let dataAst: TRowAST[] = setTreeData(props.previewAST, {
+                    path: props.selectRowPath,
+                    childrenName: 'children',
+                    value: {
+                        ...selectItem,
+                        children: [
+                            getImageAst(imageUrl)
+                        ]
+                    }
+                })
+                props.dispatch({
+                    type: 'previewHTML',
+                    html: createHtml(dataAst).view,
+                    ast: dataAst
+                })
+            }else{
+                message.error('此类型不允许插入子节点')
+            }
         }
     }
     return <div className="util_panel">
         <div className="add-layout">
-            <div>插入布局</div>
+            <div>Layout</div>
             <p><img className="layout-svg" onClick={addRow(0)} src={require(`../svg/flex-row-x.svg`)} /></p>
             <p><img className="layout-svg" onClick={addRow(3)} src={require(`../svg/flex-space-x.svg`)} /></p>
             <p><img className="layout-svg" onClick={addRow(2)} src={require(`../svg/flex-center-x.svg`)} /></p>
             <p><img className="layout-svg" onClick={addRow(1)} src={require(`../svg/flex-row-x-r.svg`)} /></p>
         </div>
-        <div className="footer-bar flex al-flex-end-x">
-            <i className="icon-icon-arrow-down iconfont" onClick={async () => {
-                setisShowAst(!isShowAst)
-                if(isShowAst === false){
-                    let jsbeautify = await import('js-beautify')
-                    sethtml(jsbeautify.html_beautify(props.html))
-                }
-            }}></i>
+        <div>
+            <div>interactive</div>
+            <div>image</div>
+            <textarea className="input-textarea"  placeholder="url" onChange={(e: any) => {
+                imageUrl = e.target.value
+            }} />
+            <button onClick={addImage}>insert</button>
         </div>
-        {isShowAst && 
-            <div className="cat-ast">
-                <div className="flex">
-                    <Preview />
-                    <div>
-                        <p>
-                            <i className="iconfont icon-daima"></i>
-                        </p>
-                        <div className="ast-show">
-                            <Suspense fallback={<div>Loading...</div>}>
-                                <SyntaxHighlighter language='html' style={docco}>{html}</SyntaxHighlighter>
-                            </Suspense>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
         {/* <div className="add">
             <div>绘制</div>
             <p><i className="iconfont icon-kuangjiaframe23"></i>框</p>
