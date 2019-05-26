@@ -103,22 +103,6 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
         selectItem = props.selectRowPath.length > 0
             ? getTreeVal(props.previewAST, props.selectRowPath.join('.children.'))
             : void 0
-        let getRowInfo = (): TRowAST => {
-            // TODO className 不能是内置的class
-            let columnNumber = +layoutColumn
-            let layoutType = layoutTypeSelected.className
-
-            rowAst = []
-            for (let i = 0; i < columnNumber; i++) {
-                rowAst.push(rowASTItemDefault)
-            }
-            return {
-                tag: 'div',
-                css: ['flex', layoutType, className],
-                style: {},
-                children: rowAst
-            }
-        }
         let setTreeItemDataValue = (value: any) => {
             let dataAst: TRowAST[] = setTreeData(props.previewAST, {
                 path: props.selectRowPath,

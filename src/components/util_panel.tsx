@@ -8,7 +8,7 @@ import { createHtml, setTreeData, getTreeVal } from './utils'
 import { Preview } from './preview'
 const SyntaxHighlighter = lazy(() => import('react-syntax-highlighter'))
 // import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs'
-import { docco } from '../model/constant'
+import { docco, defaultRowNumber } from '../model/constant'
 
 interface Tstate {
     previewAST: TRowAST[],
@@ -19,15 +19,26 @@ interface Tprops extends Tstate {
     selectRowPath: number[],
     html: string,
 }
+
+var tapingKey: string[] = []
+
+document.onkeydown = (e: any) => {  
+    var realkey = String.fromCharCode(e.which)
+    tapingKey.push(realkey)
+}  
+document.onkeyup = (e: any) => {  
+    var realkey = String.fromCharCode(e.which)
+    tapingKey = tapingKey.filter(e => e !== realkey)
+}  
 const View = (props: Tprops) => {
     let rowAst  
     let [isShowAst, setisShowAst] = useState(false)
     let [html, sethtml] = useState('')
-    let getRowInfo = (typeIndex: number): TRowAST => {
+    let getRowInfo = (typeIndex: number, rowNumber: number): TRowAST => {
         let layoutType = layoutTypeList[typeIndex].className
 
         rowAst = []
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < rowNumber; i++) {
             rowAst.push(rowASTItemDefault)
         }
         return {
@@ -45,8 +56,12 @@ const View = (props: Tprops) => {
         }
     }
     let addRow = (index: number) => () => {
+        let downNumber: number = parseInt(tapingKey.filter((item, index, arr) => 
+                arr.indexOf(item, 0) === index
+            ).join('')
+        ) || defaultRowNumber
         if(props.selectRowPath.length === 0){
-            let ast: TRowAST[] = [...props.previewAST, getRowInfo(index)]
+            let ast: TRowAST[] = [...props.previewAST, getRowInfo(index, downNumber)]
             let htmlObject = createHtml(ast)
             let html =  htmlObject.view
 
@@ -61,11 +76,11 @@ const View = (props: Tprops) => {
                 path: props.selectRowPath,
                 childrenName: 'children',
                 value: {
-                    ...getRowInfo(index),
+                    ...getRowInfo(index, downNumber),
                     style: {...selectItem.style},
                     children: [
                         ...selectItem.children,
-                        ...getRowInfo(index).children
+                        ...getRowInfo(index, downNumber).children
                     ]
                 }
             })
