@@ -54,6 +54,5 @@ export default (): ReactElement => {
             </a>
             <a className="gh-count" target="_blank" href={`//github.com/${githubName}/stargazers/`}>{star}</a>
         </div>
-        <div className="question">?</div>
     </div>
 }

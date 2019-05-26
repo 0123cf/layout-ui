@@ -9,10 +9,17 @@ let toAL = (path: string) => () => {
     location.href = '/#/al' + path
     location.reload()
 }
+let toIndex = () => {
+    location.href = '/#/index'
+    location.reload()
+}
 let styles: any = {
     box: {
         padding: '20px',
         boxSizing:'border-box',
+    },
+    layoutName: {
+        color: '#1890ff',
     },
     list: {
         border: '1px solid #dadce0',
@@ -64,6 +71,7 @@ export default (): ReactElement => {
         .map(e => ({name: e.substr(projectAstListData.length + 1, e.length)}))
     let [projectList, setprojectList] = useState(defaultProjectList)
     return <div style={styles.box}>
+        <h1 style={styles.layoutName} onClick={toIndex}>Layout UI</h1>
         <h1>project list</h1>
         <ul>
             {

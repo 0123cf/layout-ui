@@ -30,6 +30,7 @@ interface Trect{
 }
 
 let oneRun = true 
+let oldTime: number = +new Date()
 
 const _DebugLayout = (props: Tprops) => {
     let defaultCurrentPath: number[] = []
@@ -51,15 +52,18 @@ const _DebugLayout = (props: Tprops) => {
             ast
         })
     }
-    Mousetrap.bind(["del", "backspace"], function(e: any) { 
-        console.log(props.selectRowPath)
+    Mousetrap.bind(["del", "backspace"], () => { 
         if(props.selectRowPath.length !== 0){
             delectRow(props.selectRowPath)
         }
     })
+    Mousetrap.bind('up', () => {
+        if(props.selectRowPath.length <= 1){
+            return
+        }
+        props.dispatch({ type: 'selectRowPath', path: props.selectRowPath.filter((_, i) => i !== props.selectRowPath.length - 1) })
+    })
     let selectRowDiv = (event: MouseEvent, path: number[]) => {
-        const clickX: number = event.clientX
-        const clickY: number = event.clientY
         event.stopPropagation()
         props.dispatch({
             type: 'selectRowPath',
@@ -154,6 +158,19 @@ const _DebugLayout = (props: Tprops) => {
                 className={`${e.css.join(' ')}${props.selectRowPath.join(',') === itemPath.join(',') && ' item-selected-status'}`}
                 onClick={(e: MouseEvent) => selectRowDiv(e, itemPath)}
                 key={index}
+                ref={(node: any) => {
+                    if(props.selectRowPath.join(',') === itemPath.join(',') && node && (+new Date() - oldTime) / 100 > 3){
+                        oldTime = +new Date()
+                        let rect: Trect = node.getBoundingClientRect()
+                        seteditorStyle({
+                            top: rect.top + 'px',
+                            left: rect.left + 'px',
+                            width: rect.width + 'px',
+                            height: rect.height + 'px'
+                        })
+                        seteditorVisible(true)
+                    }
+                }}
                 style={getStyle(e.style)}
                 onContextMenu={handleContextMenu.bind(null, itemPath, e)}
             >{
