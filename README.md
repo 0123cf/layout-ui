@@ -5,8 +5,10 @@
         <img alt="996icu" src="https://img.shields.io/badge/license-NPL%20(The%20996%20Prohibited%20License)-blue.svg">
     </a>
 </p>
-可视化、自动化css布局</br>
-布局共享, 提高生产力</br>
+可视化布局工具、数据本地操作可视化布局</br>
+在线可视化布局工具, 支持相对布局\ 绝对布局\ 弹性布局, 自适应可视化布局. 适用于专业人员开发专业界面, 适用于经过简单培训设计师使用.</br>
+纯css可视化布局，生产可阅读二次修改的代码</br>
+
 
 ![image.png](https://github.com/0123cf/layout-ui/blob/master/imgs/demo_preview.png?raw=true)
 
