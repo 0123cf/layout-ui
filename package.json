@@ -13,6 +13,7 @@
   "dependencies": {
     "antd": "^3.18.1",
     "js-beautify": "^1.10.0",
+    "mousetrap": "^1.6.3",
     "react": "^16.8.6",
     "react-color": "^2.17.3",
     "react-dom": "^16.8.6",

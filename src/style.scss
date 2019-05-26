@@ -326,6 +326,7 @@ input{
         .view-box{
             background: #fff;
             margin: auto;
+            overflow: auto;
             .flex{
                 position: relative;
                 // background-color: rgb(153, 93, 181)!important;
@@ -373,6 +374,69 @@ input{
               background: #b5b7be;
               margin: 2px 0;
             }
+        }
+        .editor-transform {
+            box-sizing: border-box;
+            border: 1px solid #fff;
+            position: fixed;
+            z-index: 5;
+            cursor: move;
+            pointer-events: none;
+            .editor-grip {
+                padding: 11px;
+                position: absolute;
+                left: 0;
+                top: 0;
+                z-index: 5;
+                b {
+                    box-sizing: border-box;
+                    display: block;
+                    background: #fff;
+                    border: 1px solid #666;
+                    width: 7px;
+                    height: 7px;
+                }
+            }
+            .editor-grip-nw {
+                cursor: nwse-resize;
+                padding: 11px; 
+                margin-top: -14.5px; 
+                margin-left: -14.5px;
+            }
+            .editor-grip-sw {
+                cursor: nesw-resize;
+                margin-top: -14.5px; 
+                margin-left: -14.5px;
+                top: 100%;
+            }
+            .editor-grip-ne {
+                cursor: nesw-resize;
+                left: 100%;
+                top: 0%;
+                padding: 11px;
+                margin-top: -14.5px;
+                margin-left: -14.5px;
+            }
+            .editor-grip-se {
+                cursor: nwse-resize;
+                left: 100%;
+                top: 100%;
+                padding: 11px;
+                margin-top: -14.5px;
+                margin-left: -14.5px;
+            }
+        }
+        .editor-transform:before {
+            content: "";
+            box-sizing: content-box;
+            border: 1px dashed #666;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 1;
+            margin: -1px 0 0 -1px;
         }
     }
 }

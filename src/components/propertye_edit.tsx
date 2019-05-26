@@ -396,19 +396,21 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                 }
                 return <div className="inner">
                     <EditAttribute />
-                    <div className="group-title-name">修改布局</div>
-                    <div>class： <input defaultValue={className} onInput={(e: any) => {
-                        className = e.target.value
-                    }} placeholder="请输入class" /></div>
-                    <div className="flex">
-                        <Select
-                            activeIndex={layoutTypeList.findIndex(e => e.className === selectItem.css[1])}
-                            list={layoutTypeList} change={(index: number) => {
-                                layoutTypeSelected = layoutTypeList[index]
-                                editRow()
-                            }}
-                        />
-                    </div>
+                    {selectItem.css[1] && <div>
+                        <div className="group-title-name">修改布局</div>
+                        <div>class： <input defaultValue={className} onInput={(e: any) => {
+                            className = e.target.value
+                        }} placeholder="请输入class" /></div>
+                        <div className="flex">
+                            <Select
+                                activeIndex={layoutTypeList.findIndex(e => e.className === selectItem.css[1])}
+                                list={layoutTypeList} change={(index: number) => {
+                                    layoutTypeSelected = layoutTypeList[index]
+                                    editRow()
+                                }}
+                            />
+                        </div>
+                    </div>}
                 </div>
             
             }

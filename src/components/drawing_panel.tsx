@@ -9,6 +9,8 @@ import { Button, Icon, Modal, message } from 'antd'
 import { showSaveConfirm } from '../utils/saveData'
 import { getUrlParams } from '../utils/url'
 
+var Mousetrap = require('mousetrap')
+
 interface Tprops {
     html: string,
     tree: TRowAST[],
@@ -16,13 +18,27 @@ interface Tprops {
     selectRowPath: number[],
 }
 
+interface Trect{
+    bottom: number,
+    height: number,
+    left: number,
+    right: number,
+    top: number,
+    width: number,
+    x: number,
+    y: number
+}
+
 let oneRun = true 
 
 const _DebugLayout = (props: Tprops) => {
+    let defaultCurrentPath: number[] = []
     let [visible, setvisible] = useState(false)
     let [itemLastChild, setitemLastChild] = useState(false)
     let [contextMenuStyle, setcontextMenuStyle] = useState({})
-    let [currentSelectedPath, setcurrentSelectedPath]: any = useState([])
+    let [editorVisible, seteditorVisible] = useState(false)
+    let [editorStyle, seteditorStyle] = useState({})
+    let [currentSelectedPath, setcurrentSelectedPath] = useState(defaultCurrentPath)
     let projectNameParam = getUrlParams('projectname')
     let projectName = `${projectAstListData}_${projectNameParam}`
 
@@ -35,23 +51,41 @@ const _DebugLayout = (props: Tprops) => {
             ast
         })
     }
-
+    Mousetrap.bind(["del", "backspace"], function(e: any) { 
+        console.log(props.selectRowPath)
+        if(props.selectRowPath.length !== 0){
+            delectRow(props.selectRowPath)
+        }
+    })
     let selectRowDiv = (event: MouseEvent, path: number[]) => {
+        const clickX: number = event.clientX
+        const clickY: number = event.clientY
         event.stopPropagation()
         props.dispatch({
             type: 'selectRowPath',
             path
         })
+        let rect: Trect = event.target.getBoundingClientRect()
         setvisible(false)
+
+        seteditorStyle({
+            top: rect.top + 'px',
+            left: rect.left + 'px',
+            width: rect.width + 'px',
+            height: rect.height + 'px'
+        })
+        seteditorVisible(true)
     }
-    let delectRow = (event: MouseEvent) => {
-        let data: TRowAST[] = delectTreeData(props.tree, { path: currentSelectedPath, childrenName: 'children' })
+    let delectRow = (path: number[]) => {
+        let data: TRowAST[] = delectTreeData(props.tree, { path, childrenName: 'children' })
         props.dispatch({
             type: 'previewHTML',
             html: createHtml(data).view,
             ast: data
         })
         props.dispatch({ type: 'selectRowPath', path: [] })
+        setvisible(false)
+        seteditorVisible(false)
     }
     let addbrotherRow = (site: string): void => {
         let path = Copy(currentSelectedPath)
@@ -184,6 +218,8 @@ const _DebugLayout = (props: Tprops) => {
     oneRun = false
     return <div className="DebugLayout" onClick={() => {
         setvisible(false)
+        seteditorVisible(false)
+        props.dispatch({ type: 'selectRowPath', path: [] })
     }}>
         <div className="header-handle flex flex-center-y flex-space-x">
             <Icon type="arrow-left" onClick={goProjectList} />
@@ -197,14 +233,22 @@ const _DebugLayout = (props: Tprops) => {
             visible &&
             <div style={contextMenuStyle} className="contextMenu-wrap">
                 {itemLastChild ? <div>
-                    <div className="contextMenu-option" onClick={delectRow}>删除布局</div>
+                    <div className="contextMenu-option" onClick={delectRow.bind(null, currentSelectedPath)}>删除布局</div>
                     <div className="contextMenu-option" onClick={addbrotherRow.bind(null, 'front')}>前面添加一个元素</div>
                     <div className="contextMenu-option" onClick={addbrotherRow.bind(null, 'back')}>后面添加一个元素</div>
                 </div> :
                     <div>
-                        <div className="contextMenu-option" onClick={delectRow}>删除布局</div>
+                        <div className="contextMenu-option" onClick={delectRow.bind(null, currentSelectedPath)}>删除布局</div>
                     </div>
                 }
+            </div>
+        }
+        {
+            editorVisible && <div style={editorStyle} className="editor-transform">
+                <i data-dir="nw" className="editor-grip editor-grip-nw"><b></b></i>
+                <i data-dir="sw" className="editor-grip editor-grip-sw"><b></b></i>
+                <i data-dir="ne" className="editor-grip editor-grip-ne"><b></b></i>
+                <i data-dir="se" className="editor-grip editor-grip-se"><b></b></i>
             </div>
         }
     </div>
