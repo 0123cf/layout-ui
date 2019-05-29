@@ -6,7 +6,6 @@ interface Tproject {
 }
 let toProjectList = (path: string) => () => {
     location.href = '/#/' + path
-    location.reload()
 }
 let styles: any = {
     box: {
@@ -46,7 +45,7 @@ export default (): ReactElement => {
             <span>在线可视化布局工具, 支持相对布局\ 绝对布局\ 弹性布局, 自适应可视化布局. 适用于专业人员开发专业界面, 适用于经过简单培训设计师使用.</span>
         </div>
         <div className="github-btn github-btn-large">
-            <button type="button" onClick={toProjectList('')} className="ant-btn banner-btn components ant-btn-primary"><span>开始使用</span></button>
+            <button type="button" onClick={toProjectList('index')} className="ant-btn banner-btn components ant-btn-primary"><span>开始使用</span></button>
             <button type="button" className="ant-btn banner-btn language"><span>教程(暂未编写)</span></button>
             <a style={styles.ghBth} href={`//github.com/${githubName}/`} target="_blank">
                 <span style={styles.ghIcon} aria-hidden="true"></span>

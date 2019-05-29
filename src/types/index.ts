@@ -18,7 +18,7 @@ export interface Tstore {
 
 export interface Troute {
     path: string,
-    page: ReactElement
+    page: () => ReactElement
 }
 
 export type Troutes = Troute[]

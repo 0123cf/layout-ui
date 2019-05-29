@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { TRowAST, Tstore } from '../types/index'
 import { layoutTypeList, rowASTItemDefault } from '../model/constant'
-import { createHtml, setTreeData, getTreeVal } from './utils'
+import { createHtml, setTreeData, getTreeVal } from '../utils/utils'
 import { docco, defaultRowNumber } from '../model/constant'
 import { message } from 'antd'
 

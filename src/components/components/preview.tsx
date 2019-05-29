@@ -1,9 +1,9 @@
 import React, { lazy, Suspense, useState } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { Tstore } from '../types/index'
+import { Tstore } from '../../types/index'
 const SyntaxHighlighter = lazy(() => import('react-syntax-highlighter'))
-import { docco } from '../model/constant'
+import { docco } from '../../model/constant'
 import { Button } from 'antd'
 
 interface Tprops {

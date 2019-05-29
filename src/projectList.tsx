@@ -7,11 +7,9 @@ interface Tproject {
 }
 let toAL = (path: string) => () => {
     location.href = '/#/al' + path
-    location.reload()
 }
 let toIndex = () => {
-    location.href = '/#/index'
-    location.reload()
+    location.href = '/#/'
 }
 let styles: any = {
     box: {

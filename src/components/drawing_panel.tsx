@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 const { useState } = React
 import { TRowAST, Tstore } from '../types/index'
-import { createHtml, delectTreeData, addTreeData, Copy } from './utils'
+import { createHtml, delectTreeData, addTreeData, Copy } from '../utils/utils'
 import { layoutTypeList, rowASTItemDefault, projectAstListData } from '../model/constant'
 import { Button, Icon, Modal, message } from 'antd'
 import { showSaveConfirm } from '../utils/saveData'
@@ -29,7 +29,6 @@ interface Trect{
     y: number
 }
 
-let oneRun = true 
 let oldTime: number = +new Date()
 
 const _DebugLayout = (props: Tprops) => {
@@ -43,15 +42,6 @@ const _DebugLayout = (props: Tprops) => {
     let projectNameParam = getUrlParams('projectname')
     let projectName = `${projectAstListData}_${projectNameParam}`
 
-    if(projectNameParam && oneRun){
-        let ast = JSON.parse(localStorage[projectName])
-        // TODO Verify ast
-        props.dispatch({
-            type: 'previewHTML',
-            html: createHtml(ast).view,
-            ast
-        })
-    }
     Mousetrap.bind(["del", "backspace"], () => { 
         if(props.selectRowPath.length !== 0){
             delectRow(props.selectRowPath)
@@ -191,8 +181,7 @@ const _DebugLayout = (props: Tprops) => {
         })
     }
     let gotoProjectList = () => {
-        location.href = '/#/'
-        location.reload()
+        location.href = '/#/index'
     }
     let goProjectList = () => {
         // new project
@@ -244,7 +233,6 @@ const _DebugLayout = (props: Tprops) => {
             gotoProjectList()
         })
     }
-    oneRun = false
     return <div className="DebugLayout" onClick={() => {
         setvisible(false)
         seteditorVisible(false)

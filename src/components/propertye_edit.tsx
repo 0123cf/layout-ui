@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { TRowAST, Tstore } from '../types/index'
 
-import { createHtml, getTreeVal, setTreeData } from './utils'
+import { createHtml, getTreeVal, setTreeData } from '../utils/utils'
 import { layoutTypeList, rowASTItemDefault } from '../model/constant'
 import { Select } from './components/Select'
 import { SketchPicker } from 'react-color'

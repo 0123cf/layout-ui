@@ -26,7 +26,6 @@ const defaultState: Tstore = {
 export const rootReducer = (state = defaultState, action: Tactive): Tstore  =>{
     switch(action.type){
         case 'previewHTML': {
-            // console.log(JSON.stringify(action.ast))
             return {...state,
                 previewHTML: action.html,
                 previewAST: action.ast
@@ -41,6 +40,9 @@ export const rootReducer = (state = defaultState, action: Tactive): Tstore  =>{
             return {...state,
                 showPreview: action.value,
             }
+        }
+        case 'clear': {
+            return {...defaultState}
         }
         default :{
             return state

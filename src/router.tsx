@@ -1,39 +1,48 @@
-import React, {ReactElement} from 'react'
+import React, {ReactElement, useState} from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 
 import UtilPanel from './components/util_panel'
 import DrawingPanel from './components/drawing_panel'
 import PropertyeEdit from './components/propertye_edit'
-import Previre from './components/preview'
+import Previre from './components/components/preview'
 import { rootReducer } from './reducer/index'
 import ProjectList from './projectList'
 import Index from './homeIndex'
-import { Troutes, Troute } from './types/index'
+import { getUrlParams } from './utils/url'
+import { createHtml } from './utils/utils'
+import { projectAstListData } from './model/constant'
 
 const store = createStore(rootReducer)
 
 declare var window: any
 window.Store = store
 
-const router = (routes: Troutes): ReactElement => {
-    let href = location.href.split('#')[1]
-    let routePath = href ? href.split('?')[0] : '/'
-    let page = routes.find((route: Troute) => route.path === routePath)
-    if(page){
-        return page.page
-    }else{
-        return <div>找不到页面哦QAQ</div>
-    }
-}
-
-export const route = () => {
-    return router(
-        [
-            { path: '/index', page: <Index /> },
-            { path: '/', page: <ProjectList /> },
-            {
-            path: '/al', page: <Provider store={store}>
+export const routes = [
+    { path: '/index', page: () => <ProjectList /> },
+    { 
+        path: '/',
+        page: () => {
+            return <Index />
+        }
+    },
+    {
+        path: '/al',
+        page: () => {
+            let projectNameParam = getUrlParams('projectname')            
+            let projectName = `${projectAstListData}_${projectNameParam}`
+            if(projectNameParam){
+                let ast = JSON.parse(localStorage[projectName])
+                // TODO Verify ast
+                store.dispatch({
+                    type: 'previewHTML',
+                    html: createHtml(ast).view,
+                    ast
+                })
+            }else{
+                store.dispatch({ type: 'clear' })
+            }
+            return <Provider store={store}>
                 <div className="div_layout flex">
                     <UtilPanel />
                     <DrawingPanel />
@@ -41,7 +50,6 @@ export const route = () => {
                     <Previre />
                 </div>
             </Provider>
-            },
-        ]
-    )
-}
+        }
+    },
+]
