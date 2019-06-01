@@ -1,4 +1,4 @@
-import React from 'React'
+import React, { ReactElement, MouseEvent } from 'React'
 const { useState } = React
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
@@ -141,22 +141,67 @@ const View = (props: Tprops) => {
             }
         }
     }
-    return <div className="util_panel">
-        <div className="add-layout">
-            <div>Layout</div>
-            <p><img className="layout-svg" onClick={addRow(0)} src={require(`../svg/flex-row-x.svg`)} /></p>
-            <p><img className="layout-svg" onClick={addRow(3)} src={require(`../svg/flex-space-x.svg`)} /></p>
-            <p><img className="layout-svg" onClick={addRow(2)} src={require(`../svg/flex-center-x.svg`)} /></p>
-            <p><img className="layout-svg" onClick={addRow(1)} src={require(`../svg/flex-row-x-r.svg`)} /></p>
+    let [ tabIndex, settabindex ] = useState(0)
+    let switchTab = (index: number) => () => {
+        settabindex(index)
+    }
+    let getActiveClass = (index: number) => (tabIndex === index ? 'active': '')
+    let selectRowDiv = (event: MouseEvent, path: number[]) => {
+        event.stopPropagation()
+        props.dispatch({
+            type: 'selectRowPath',
+            path
+        })
+    }
+    let renderWorkDirectory = (tree: TRowAST[], path: number[]) => {
+        let styles: any = {
+            spaceStyle: {
+                textAlign: 'right',
+                overflow: 'auto',
+                // textOverflow: 'ellipsis'
+            }
+        }
+        return tree.map((row, index) => {
+            let itemPath = [...path, index]
+            return <div
+                        key={index}
+                        onClick={(e: MouseEvent) => selectRowDiv(e, itemPath)}
+                        style={{
+                            background: props.selectRowPath.join(',') === itemPath.join(',') && 'rgb(197, 222, 245)'
+                        }}
+                    >{row.children.length > 0
+                ? renderWorkDirectory(row.children, itemPath)
+                : <div style={{...styles.spaceStyle,
+                    width: itemPath.length * 8 + 5 + 'px',
+                }}>{row.tag}</div>
+            }</div>
+        })
+    }
+    return <div className="util_panel flex">
+        <div className="switch">
+            <p onClick={switchTab(0)}><i className={`iconfont icon-jia ${getActiveClass(0)}`}></i></p>
+            <p onClick={switchTab(1)}><i className={`iconfont icon-tree ${getActiveClass(1)}`}></i></p>
         </div>
-        <div>
-            <div>interactive</div>
-            <div>image</div>
-            <textarea className="input-textarea"  placeholder="url" onChange={(e: any) => {
-                imageUrl = e.target.value
-            }} />
-            <button onClick={addImage}>insert</button>
-        </div>
+        {tabIndex === 0 && <div style={{width: '225px'}} className="panel">
+            <div className="add-layout">
+                <div>Layout</div>
+                <p><img className="layout-svg" onClick={addRow(0)} src={require(`../svg/flex-row-x.svg`)} /></p>
+                <p><img className="layout-svg" onClick={addRow(3)} src={require(`../svg/flex-space-x.svg`)} /></p>
+                <p><img className="layout-svg" onClick={addRow(2)} src={require(`../svg/flex-center-x.svg`)} /></p>
+                <p><img className="layout-svg" onClick={addRow(1)} src={require(`../svg/flex-row-x-r.svg`)} /></p>
+            </div>
+            <div>
+                <div>interactive</div>
+                <div>image</div>
+                <textarea className="input-textarea"  placeholder="url" onChange={(e: any) => {
+                    imageUrl = e.target.value
+                }} />
+                <button onClick={addImage}>insert</button>
+            </div>
+        </div>}
+        {tabIndex === 1 && <div style={{width: '225px', overflowX: 'auto', whiteSpace: 'nowrap'}} className="panel">
+            {renderWorkDirectory(props.previewAST, [])}
+        </div>}
         {/* <div className="add">
             <div>绘制</div>
             <p><i className="iconfont icon-kuangjiaframe23"></i>框</p>

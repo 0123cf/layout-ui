@@ -132,7 +132,7 @@ const _DebugLayout = (props: Tprops) => {
         setcurrentSelectedPath(path)
     }
 
-    let randerTree = (tree: TRowAST[], path: number[]) => {
+    let renderTree = (tree: TRowAST[], path: number[]) => {
         return tree.map((e, index) => {
             let itemPath = [...path, index]
             let getStyle = (style: any) => {
@@ -175,7 +175,7 @@ const _DebugLayout = (props: Tprops) => {
                         ref={bindRef}
                         style={getStyle(e.style)}
                         onContextMenu={handleContextMenu.bind(null, itemPath, e)}
-                    >{ e.children.length > 0 ? randerTree(e.children, itemPath) : (e.innerText || '') }</div>
+                    >{ e.children.length > 0 ? renderTree(e.children, itemPath) : (e.innerText || '') }</div>
                 }
             }
         })
@@ -253,7 +253,7 @@ const _DebugLayout = (props: Tprops) => {
         <div className="view-box" style={{
             width: '550px',
             height: '90vh'
-        }}>{randerTree(props.tree, [])}</div>
+        }}>{renderTree(props.tree, [])}</div>
         {
             visible &&
             <div style={contextMenuStyle} className="contextMenu-wrap">

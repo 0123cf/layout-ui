@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
 import * as ReactDOM from 'react-dom'
-import {routes} from './router'
+import { routes } from './router'
 import { Troute } from './types/index'
 
 const Main = (root: HTMLElement | null) => {
@@ -15,21 +15,20 @@ const Main = (root: HTMLElement | null) => {
          {
             routes.map(e => {
                let view: ReactElement | Boolean
-               if(e.path === pagePath){
+               if (e.path === pagePath) {
                   view = e.page()
-               }else{
+               } else {
                   view = false
                }
                return view
-            })
-            .filter(e => e)
+            }).filter(e => e)
          }
       </div>
    }
    window.onhashchange = (e: HashChangeEvent) => {
-      ReactDOM.render(getView(getPath(e.newURL)), root)  
+      ReactDOM.render(getView(getPath(e.newURL)), root)
    }
-   ReactDOM.render(getView(getPath(location.href)), root)  
+   ReactDOM.render(getView(getPath(location.href)), root)
 }
 
 Main(

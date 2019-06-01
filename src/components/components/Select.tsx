@@ -52,7 +52,7 @@ export const Select = (props: SelectPro) => {
                         <span>{e.name}</span>
                     }
                     {e.src &&
-                        <img style={styles.img} src={require(`../${e.src}`)} />
+                        <img style={styles.img} src={require(`../../${e.src}`)} />
                     }
                 </div>
             )}

@@ -66,8 +66,23 @@ input{
 .div_layout{
     .util_panel{
         background-color: #fbfbfb;
-        padding: calc(20px + #{$headerHandleHeight}) 15px;
+        padding-top: calc(#{$headerHandleHeight});
+        .switch{    
+            // background: rgb(230, 230, 230);
+            padding: 10px;
+            border-right: 1px solid rgb(230, 230, 230);
+            .iconfont{
+                color: #000;
+            }
+            .active{
+                color: $color-main
+            }
+        }
+        .panel{
+            // padding: 10px;
+        }
         .add-layout{
+            padding: 10px;
             .layout-svg{
                 width: 200px;
                 display: inline-block;
