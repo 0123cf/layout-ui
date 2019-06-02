@@ -4,6 +4,7 @@ import { Dispatch } from 'redux'
 import { TRowAST, Tstore } from '../types/index'
 
 import { createHtml, getTreeVal, setTreeData } from '../utils/utils'
+import { getUnit } from '../utils/edit'
 import { layoutTypeList, rowASTItemDefault } from '../model/constant'
 import { Select } from './components/Select'
 import { SketchPicker } from 'react-color'
@@ -78,28 +79,9 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
     }
     render() {
         props = this.props
-        this.setState({
-            selectRowPath: props.selectRowPath
-        })
-        let layoutTypeSelected: selectListItem = layoutTypeList[0]
-        let layoutColumn = '2'
-        let className = ''
-        // 储存row布局AST
-        let rowAst: TRowAST[] = []
-        let rowInfo: TRowAST
-        let htmlObject
-
-        let layoutColumnChange = (e: any) => {
-            let value = e.target.value.replace(/[^\d]/, '')
-            e.target.value = value
-            layoutColumn = value
-        }
-        let classNameChange = (e: any) => {
-            className = e.target.value
-        }
-        let SelectChange = (selectIndex: number) => {
-            layoutTypeSelected = layoutTypeList[selectIndex]
-        }
+        // this.setState({
+        //     selectRowPath: props.selectRowPath
+        // })
         selectItem = props.selectRowPath.length > 0
             ? getTreeVal(props.previewAST, props.selectRowPath.join('.children.'))
             : void 0
@@ -208,7 +190,7 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                                 ...selectItem,
                                 style: {
                                     ...selectItem.style,
-                                    'width': `${v}px`
+                                    'width': getUnit(v)
                                 }
                             })
                         }} />
@@ -242,7 +224,7 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
                                 ...selectItem,
                                 style: {
                                     ...selectItem.style,
-                                    'height': `${v}px`
+                                    'height': getUnit(v)
                                 }
                             })
                         }} />
@@ -418,7 +400,6 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
         }}>
             <div>
                 {selectItem && <div>
-                    {/* <div className="title-name">Edit Element Layout</div> */}
                     <LayoutWrite />
                 </div>}
                 {!selectItem && <div className="no-tree">

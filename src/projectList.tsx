@@ -68,23 +68,24 @@ export default (): ReactElement => {
         )
         .map(e => ({name: e.substr(projectAstListData.length + 1, e.length)}))
     let [projectList, setprojectList] = useState(defaultProjectList)
-    return <div style={styles.box}>
+    return <div style={styles.box} className="flex">
         <h1 style={styles.layoutName} onClick={toIndex}>Layout UI</h1>
-        <h1>project list</h1>
-        <ul>
-            {
-                projectList.length > 0 ? projectList.map((project: Tproject): ReactElement => {
-                    return <li 
-                        style={styles.list} 
-                        onClick={toAL(`?projectname=${project.name}`)} 
-                        key={project.name}>{project.name}</li>
-                })
-                : <div>暂无项目</div>
-            }
-        </ul>
-        <div style={styles.button} onClick={toAL('')} className="flex flex-center-y">
-            <img style={style.addIcon} src='data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"><path fill="%2334A853" d="M16 16v14h4V20z"/><path fill="%234285F4" d="M30 16H20l-4 4h14z"/><path fill="%23FBBC05" d="M6 16v4h10l4-4z"/><path fill="%23EA4335" d="M20 16V6h-4v14z"/><path fill="none" d="M0 0h36v36H0z"/></svg>' />
-            <span>新建项目</span>
+        <div>
+            <ul>
+                {
+                    projectList.length > 0 ? projectList.map((project: Tproject): ReactElement => {
+                        return <li 
+                            style={styles.list} 
+                            onClick={toAL(`?projectname=${project.name}`)} 
+                            key={project.name}>{project.name}</li>
+                    })
+                    : <div>暂无项目</div>
+                }
+            </ul>
+            <div style={styles.button} onClick={toAL('')} className="flex flex-center-y">
+                <img style={style.addIcon} src='data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"><path fill="%2334A853" d="M16 16v14h4V20z"/><path fill="%234285F4" d="M30 16H20l-4 4h14z"/><path fill="%23FBBC05" d="M6 16v4h10l4-4z"/><path fill="%23EA4335" d="M20 16V6h-4v14z"/><path fill="none" d="M0 0h36v36H0z"/></svg>' />
+                <span>新建项目</span>
+            </div>
         </div>
     </div>
 }

@@ -17,18 +17,9 @@ interface Tprops {
     dispatch: Dispatch,
     selectRowPath: number[],
 }
-
-interface Trect{
-    bottom: number,
-    height: number,
-    left: number,
-    right: number,
-    top: number,
-    width: number,
-    x: number,
-    y: number
+interface Node extends MouseEvent{
+    target: any
 }
-
 let oldTime: number = +new Date()
 
 const _DebugLayout = (props: Tprops) => {
@@ -53,13 +44,13 @@ const _DebugLayout = (props: Tprops) => {
         }
         props.dispatch({ type: 'selectRowPath', path: props.selectRowPath.filter((_, i) => i !== props.selectRowPath.length - 1) })
     })
-    let selectRowDiv = (event: MouseEvent, path: number[]) => {
+    let selectRowDiv = (event: Node, path: number[]) => {
         event.stopPropagation()
         props.dispatch({
             type: 'selectRowPath',
             path
         })
-        let rect: Trect = event.target.getBoundingClientRect()
+        let rect: ClientRect = event.target.getBoundingClientRect()
         setvisible(false)
 
         seteditorStyle({
@@ -147,7 +138,7 @@ const _DebugLayout = (props: Tprops) => {
             let bindRef = (node: any) => {
                 if(props.selectRowPath.join(',') === itemPath.join(',') && node && (+new Date() - oldTime) / 100 > 3){
                     oldTime = +new Date()
-                    let rect: Trect = node.getBoundingClientRect()
+                    let rect: ClientRect = node.getBoundingClientRect()
                     seteditorStyle({
                         top: rect.top + 'px',
                         left: rect.left + 'px',

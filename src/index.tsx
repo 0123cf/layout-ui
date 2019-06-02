@@ -10,20 +10,7 @@ const Main = (root: HTMLElement | null) => {
    }
    let getView = (urlPath: string) => {
       let pageInfo = routes.find((route: Troute) => route.path === urlPath)
-      let pagePath = pageInfo ? pageInfo.path : ''
-      return <div>
-         {
-            routes.map(e => {
-               let view: ReactElement | Boolean
-               if (e.path === pagePath) {
-                  view = e.page()
-               } else {
-                  view = false
-               }
-               return view
-            }).filter(e => e)
-         }
-      </div>
+      return <div>{pageInfo && pageInfo.page()}</div>
    }
    window.onhashchange = (e: HashChangeEvent) => {
       ReactDOM.render(getView(getPath(e.newURL)), root)

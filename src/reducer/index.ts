@@ -1,20 +1,20 @@
-import {TRowAST, Tstore} from '../types/index'
-// import {TEST_ast} from '../test/model/ast'
+import { TRowAST, Tstore } from '../types/index'
+// import { TEST_ast } from '../test/model/ast'
 
 interface TpreviewActive {
     type: string,
-    html: string,
-    ast: TRowAST[]
+    html?: string,
+    ast?: TRowAST[]
 }
 interface TbaseActive {
     type: string,
-    value: any,
+    value?: any,
 }
 interface TselectRowPath {
     type: string,
-    path: number[],
+    path?: number[],
 }
-interface Tactive extends TbaseActive, TselectRowPath, TpreviewActive{}
+interface Tactive extends TbaseActive, TselectRowPath, TpreviewActive { }
 
 const defaultState: Tstore = {
     previewHTML: '',
@@ -23,28 +23,31 @@ const defaultState: Tstore = {
     showPreview: false
 }
 
-export const rootReducer = (state = defaultState, action: Tactive): Tstore  =>{
-    switch(action.type){
+export const rootReducer = (state = defaultState, action: Tactive): Tstore => {
+    switch (action.type) {
         case 'previewHTML': {
-            return {...state,
-                previewHTML: action.html,
-                previewAST: action.ast
+            return {
+                ...state,
+                previewHTML: action.html ? action.html : '',
+                previewAST: action.ast ? action.ast : []
             }
         }
         case 'selectRowPath': {
-            return {...state,
-                selectRowPath: action.path,
+            return {
+                ...state,
+                selectRowPath: action.path ? action.path : [],
             }
         }
         case 'showPreview': {
-            return {...state,
+            return {
+                ...state,
                 showPreview: action.value,
             }
         }
         case 'clear': {
-            return {...defaultState}
+            return { ...defaultState }
         }
-        default :{
+        default: {
             return state
         }
     }
