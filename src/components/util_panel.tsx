@@ -167,7 +167,7 @@ const View = (props: Tprops) => {
                         key={index}
                         onClick={(e: MouseEvent) => selectRowDiv(e, itemPath)}
                         style={{
-                            background: props.selectRowPath.join(',') === itemPath.join(',') && 'rgb(197, 222, 245)'
+                            background: props.selectRowPath.join(',') === itemPath.join(',') ? 'rgb(197, 222, 245)' : ''
                         }}
                     >{row.children.length > 0
                 ? renderWorkDirectory(row.children, itemPath)
