@@ -12,7 +12,8 @@ interface TdelectTreeData {
     path: number[],
     childrenName: string
 }
-var getSTyleStr = (o: any): string => {
+
+export const getSTyleStr = (o: any): string => {
     var str = ""
     for (let e of Object.keys(o)) {
         let key = e
@@ -63,7 +64,7 @@ export const getTreeVal = <T>(_object: T, key: string): any => {
     }
     return objecChildren
 }
-const id = <T>(_: T): T => _
+export const id = <T>(_: T): T => _
 export const filterTree = (data: any[], childrenName: string, id: any): any => {
     var loop = (e: any): any => {
         return e.children ? { ...e, [childrenName]: loop(e[childrenName].filter(id)) } : e
