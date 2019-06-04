@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 const { useState } = React
 import { TRowAST, Tstore } from '../types/index'
-import { createHtml, delectTreeData, addTreeData, Copy } from '../utils/utils'
+import { createHtml, delectTreeData, addTreeData, setTreeData, getTreeVal, Copy } from '../utils/utils'
 import { layoutTypeList, rowASTItemDefault, projectAstListData } from '../model/constant'
 import { Button, Icon, Modal, message } from 'antd'
 import { showSaveConfirm } from '../utils/saveData'
@@ -17,29 +17,41 @@ interface Tprops {
     dispatch: Dispatch,
     selectRowPath: number[],
 }
-interface Node extends MouseEvent{
+interface Node extends MouseEvent {
     target: any
 }
 let oldTime: number = +new Date()
 
 const _DebugLayout = (props: Tprops) => {
     let defaultCurrentPath: number[] = []
+    interface TeditorStyle {
+        top: string,
+        left: string,
+        width: string,
+        height: string
+    }
+    let defaultEditorStyle: TeditorStyle = {
+        top: '0px',
+        left: '0px',
+        width: '0px',
+        height: '0px',
+    }
     let [visible, setvisible] = useState(false)
     let [itemLastChild, setitemLastChild] = useState(false)
     let [contextMenuStyle, setcontextMenuStyle] = useState({})
     let [editorVisible, seteditorVisible] = useState(false)
-    let [editorStyle, seteditorStyle] = useState({})
+    let [editorStyle, seteditorStyle] = useState(defaultEditorStyle)
     let [currentSelectedPath, setcurrentSelectedPath] = useState(defaultCurrentPath)
     let projectNameParam = getUrlParams('projectname')
     let projectName = `${projectAstListData}_${projectNameParam}`
 
-    Mousetrap.bind(["del", "backspace"], () => { 
-        if(props.selectRowPath.length !== 0){
+    Mousetrap.bind(["del", "backspace"], () => {
+        if (props.selectRowPath.length !== 0) {
             delectRow(props.selectRowPath)
         }
     })
     Mousetrap.bind('up', () => {
-        if(props.selectRowPath.length <= 1){
+        if (props.selectRowPath.length <= 1) {
             return
         }
         props.dispatch({ type: 'selectRowPath', path: props.selectRowPath.filter((_, i) => i !== props.selectRowPath.length - 1) })
@@ -136,7 +148,7 @@ const _DebugLayout = (props: Tprops) => {
                 return style
             }
             let bindRef = (node: any) => {
-                if(props.selectRowPath.join(',') === itemPath.join(',') && node && (+new Date() - oldTime) / 100 > 3){
+                if (props.selectRowPath.join(',') === itemPath.join(',') && node && (+new Date() - oldTime) / 100 > 3) {
                     oldTime = +new Date()
                     let rect: ClientRect = node.getBoundingClientRect()
                     seteditorStyle({
@@ -148,15 +160,15 @@ const _DebugLayout = (props: Tprops) => {
                     seteditorVisible(true)
                 }
             }
-            switch(e.tag){
+            switch (e.tag) {
                 case 'img': {
-                    return <img 
-                        style={getStyle(e.style)} 
+                    return <img
+                        style={getStyle(e.style)}
                         key={index}
                         onClick={(e: MouseEvent) => selectRowDiv(e, itemPath)}
-                        src={e.src} 
+                        src={e.src}
                         ref={bindRef}
-                        /> 
+                    />
                 }
                 default: {
                     return <div
@@ -166,7 +178,7 @@ const _DebugLayout = (props: Tprops) => {
                         ref={bindRef}
                         style={getStyle(e.style)}
                         onContextMenu={handleContextMenu.bind(null, itemPath, e)}
-                    >{ e.children.length > 0 ? renderTree(e.children, itemPath) : (e.innerText || '') }</div>
+                    >{e.children.length > 0 ? renderTree(e.children, itemPath) : (e.innerText || '')}</div>
                 }
             }
         })
@@ -176,8 +188,8 @@ const _DebugLayout = (props: Tprops) => {
     }
     let goProjectList = () => {
         // new project
-        if(!projectNameParam){
-            if(JSON.stringify(props.tree).length > 2){
+        if (!projectNameParam) {
+            if (JSON.stringify(props.tree).length > 2) {
                 // save project
                 showSaveConfirm()
                 return
@@ -187,7 +199,7 @@ const _DebugLayout = (props: Tprops) => {
             return
         }
         // edit project no modify
-        if(localStorage[projectName] === JSON.stringify(props.tree)){
+        if (localStorage[projectName] === JSON.stringify(props.tree)) {
             gotoProjectList()
             return
         }
@@ -214,7 +226,7 @@ const _DebugLayout = (props: Tprops) => {
         })
     }
     let onSave = () => {
-        if(projectNameParam){
+        if (projectNameParam) {
             localStorage.setItem(projectName || '', JSON.stringify(props.tree))
             message.success('保存成功')
             return
@@ -224,6 +236,22 @@ const _DebugLayout = (props: Tprops) => {
             gotoProjectList()
         })
     }
+    let setTreeItemDataValue = (value: any) => {
+        console.log(value)
+        let dataAst: TRowAST[] = setTreeData(props.tree, {
+            path: props.selectRowPath,
+            childrenName: 'children',
+            value
+        })
+        props.dispatch({
+            type: 'previewHTML',
+            html: createHtml(dataAst).view,
+            ast: dataAst
+        })
+    }
+    let selectItem = props.selectRowPath.length > 0
+        ? getTreeVal(props.tree, props.selectRowPath.join('.children.'))
+        : void 0
     return <div className="DebugLayout" onClick={() => {
         setvisible(false)
         seteditorVisible(false)
@@ -232,7 +260,7 @@ const _DebugLayout = (props: Tprops) => {
         <div className="header-handle flex flex-center-y flex-space-x">
             <Icon type="arrow-left" onClick={goProjectList} />
             <div>
-                <Button style={{marginRight: '10px'}} onClick={() => {
+                <Button style={{ marginRight: '10px' }} onClick={() => {
                     props.dispatch({
                         type: 'showPreview',
                         value: true
@@ -261,10 +289,37 @@ const _DebugLayout = (props: Tprops) => {
         }
         {
             editorVisible && <div style={editorStyle} className="editor-transform">
-                <i data-dir="nw" className="editor-grip editor-grip-nw"><b></b></i>
+                {/* <i data-dir="nw" className="editor-grip editor-grip-nw"><b></b></i>
                 <i data-dir="sw" className="editor-grip editor-grip-sw"><b></b></i>
-                <i data-dir="ne" className="editor-grip editor-grip-ne"><b></b></i>
-                <i data-dir="se" className="editor-grip editor-grip-se"><b></b></i>
+                <i data-dir="ne" className="editor-grip editor-grip-ne"><b></b></i> */}
+                <i data-dir="se" onMouseDown={(e: any) => {
+                    e.preventDefault()
+                    e = e || event
+                    let { clientX, clientY } = e
+                    let width = parseFloat(editorStyle.width)
+                    let height = parseFloat(editorStyle.height)
+                    document.body.onmousemove = (e: any) => {
+                        e = e || event
+                        let newWidth = width + (e.clientX - clientX)
+                        let newHeight = height + (e.clientY - clientY)
+                        seteditorStyle({
+                            ...editorStyle,
+                            width: newWidth + 'px',
+                            height: newHeight + 'px'
+                        })
+                        setTreeItemDataValue({
+                            ...selectItem,
+                            style: {
+                                ...selectItem.style,
+                                'width': `${newWidth}px`,
+                                'height': `${newHeight}px`
+                            }
+                        })
+                    }
+                    document.body.onmouseup = function () {
+                        document.body.onmousemove = null
+                    }
+                }} className="editor-grip editor-grip-se"><b></b></i>
             </div>
         }
     </div>
