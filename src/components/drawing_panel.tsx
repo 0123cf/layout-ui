@@ -177,6 +177,17 @@ const _DebugLayout = (props: Tprops) => {
                         key={index}
                         ref={bindRef}
                         style={getStyle(e.style)}
+                        onDragOver={(e: any) => {
+                            console.log('enter1')
+                            e.preventDefault()
+                            // TODO
+                        }}
+                        onDrop={(e: any) => {
+                            e.preventDefault()
+                            console.log('111')
+                            let data = e.dataTransfer && e.dataTransfer.getData('add')
+                            console.log(data)
+                        }}
                         onContextMenu={handleContextMenu.bind(null, itemPath, e)}
                     >{e.children.length > 0 ? renderTree(e.children, itemPath) : (e.innerText || '')}</div>
                 }
@@ -237,7 +248,6 @@ const _DebugLayout = (props: Tprops) => {
         })
     }
     let setTreeItemDataValue = (value: any) => {
-        console.log(value)
         let dataAst: TRowAST[] = setTreeData(props.tree, {
             path: props.selectRowPath,
             childrenName: 'children',
@@ -298,15 +308,15 @@ const _DebugLayout = (props: Tprops) => {
                     let { clientX, clientY } = e
                     let width = parseFloat(editorStyle.width)
                     let height = parseFloat(editorStyle.height)
-                    document.body.onmousemove = (e: any) => {
+                    let handleDrag = (e: any) => {
                         e = e || event
                         let newWidth = width + (e.clientX - clientX)
                         let newHeight = height + (e.clientY - clientY)
-                        seteditorStyle({
-                            ...editorStyle,
-                            width: newWidth + 'px',
-                            height: newHeight + 'px'
-                        })
+                        // seteditorStyle({
+                        //     ...editorStyle,
+                        //     width: newWidth + 'px',
+                        //     height: newHeight + 'px'
+                        // })
                         setTreeItemDataValue({
                             ...selectItem,
                             style: {
@@ -316,8 +326,9 @@ const _DebugLayout = (props: Tprops) => {
                             }
                         })
                     }
+                    document.body.addEventListener('mousemove', handleDrag)
                     document.body.onmouseup = function () {
-                        document.body.onmousemove = null
+                        document.body.removeEventListener('mousemove', handleDrag)
                     }
                 }} className="editor-grip editor-grip-se"><b></b></i>
             </div>

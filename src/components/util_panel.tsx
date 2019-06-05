@@ -6,7 +6,7 @@ import { TRowAST, Tstore } from '../types/index'
 import { layoutTypeList, rowASTItemDefault } from '../model/constant'
 import { createHtml, setTreeData, getTreeVal } from '../utils/utils'
 import { docco, defaultRowNumber } from '../model/constant'
-import { message } from 'antd'
+import { message, Tooltip } from 'antd'
 
 interface Tstate {
     previewAST: TRowAST[],
@@ -108,6 +108,11 @@ const View = (props: Tprops) => {
             }
         }
     }
+    let bindDrag = (index: number) => {
+        return (e:  DragEventInit) => {
+            e.dataTransfer && e.dataTransfer.setData('add', index + '')
+        }
+    }
     let addImage  = () => {
         if(props.selectRowPath.length === 0){
             let ast: TRowAST[] = [...props.previewAST, getImageAst(imageUrl)]
@@ -179,16 +184,28 @@ const View = (props: Tprops) => {
     }
     return <div className="util_panel flex">
         <div className="switch">
-            <p onClick={switchTab(0)}><i className={`iconfont icon-jia ${getActiveClass(0)}`}></i></p>
-            <p onClick={switchTab(1)}><i className={`iconfont icon-tree ${getActiveClass(1)}`}></i></p>
+            <Tooltip placement="right" title={'添加组件'}>
+                <p onClick={switchTab(0)}><i className={`iconfont icon-jia ${getActiveClass(0)}`}></i></p>                
+            </Tooltip>
+            <Tooltip placement="right" title={'图层'}>
+                <p onClick={switchTab(1)}><i className={`iconfont icon-tree ${getActiveClass(1)}`}></i></p>
+            </Tooltip>
         </div>
         {tabIndex === 0 && <div style={{width: '225px'}} className="panel">
             <div className="add-layout">
                 <div>Layout</div>
-                <p><img className="layout-svg" onClick={addRow(0)} src={require(`../svg/flex-row-x.svg`)} /></p>
-                <p><img className="layout-svg" onClick={addRow(3)} src={require(`../svg/flex-space-x.svg`)} /></p>
-                <p><img className="layout-svg" onClick={addRow(2)} src={require(`../svg/flex-center-x.svg`)} /></p>
-                <p><img className="layout-svg" onClick={addRow(1)} src={require(`../svg/flex-row-x-r.svg`)} /></p>
+                <p draggable={true} onDragStart={bindDrag(0)}>
+                    <img style={{pointerEvents: 'none'}} className="layout-svg" onClick={addRow(0)} src={require(`../svg/flex-row-x.svg`)} />
+                </p>
+                <p draggable={true} onDragStart={bindDrag(3)}>
+                    <img style={{pointerEvents: 'none'}} className="layout-svg" onClick={addRow(3)} src={require(`../svg/flex-space-x.svg`)} />
+                </p>
+                <p draggable={true} onDragStart={bindDrag(2)}>
+                    <img style={{pointerEvents: 'none'}} className="layout-svg" onClick={addRow(2)} src={require(`../svg/flex-center-x.svg`)} />
+                </p>
+                <p draggable={true} onDragStart={bindDrag(1)}>
+                    <img style={{pointerEvents: 'none'}} className="layout-svg" onClick={addRow(1)} src={require(`../svg/flex-row-x-r.svg`)} />
+                </p>
             </div>
             <div>
                 <div>interactive</div>

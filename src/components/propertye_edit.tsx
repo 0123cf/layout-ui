@@ -79,9 +79,9 @@ class HandleColumn extends React.Component<Tprops, TSlassState>{
     }
     render() {
         props = this.props
-        // this.setState({
-        //     selectRowPath: props.selectRowPath
-        // })
+        this.setState({
+            selectRowPath: props.selectRowPath
+        })
         selectItem = props.selectRowPath.length > 0
             ? getTreeVal(props.previewAST, props.selectRowPath.join('.children.'))
             : void 0
