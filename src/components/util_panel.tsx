@@ -195,16 +195,16 @@ const View = (props: Tprops) => {
             <div className="add-layout">
                 <div>Layout</div>
                 <p draggable={true} onDragStart={bindDrag(0)}>
-                    <img style={{pointerEvents: 'none'}} className="layout-svg" onClick={addRow(0)} src={require(`../svg/flex-row-x.svg`)} />
+                    <img className="layout-svg" onClick={addRow(0)} src={require(`../svg/flex-row-x.svg`)} />
                 </p>
                 <p draggable={true} onDragStart={bindDrag(3)}>
-                    <img style={{pointerEvents: 'none'}} className="layout-svg" onClick={addRow(3)} src={require(`../svg/flex-space-x.svg`)} />
+                    <img className="layout-svg" onClick={addRow(3)} src={require(`../svg/flex-space-x.svg`)} />
                 </p>
                 <p draggable={true} onDragStart={bindDrag(2)}>
-                    <img style={{pointerEvents: 'none'}} className="layout-svg" onClick={addRow(2)} src={require(`../svg/flex-center-x.svg`)} />
+                    <img className="layout-svg" onClick={addRow(2)} src={require(`../svg/flex-center-x.svg`)} />
                 </p>
                 <p draggable={true} onDragStart={bindDrag(1)}>
-                    <img style={{pointerEvents: 'none'}} className="layout-svg" onClick={addRow(1)} src={require(`../svg/flex-row-x-r.svg`)} />
+                    <img className="layout-svg" onClick={addRow(1)} src={require(`../svg/flex-row-x-r.svg`)} />
                 </p>
             </div>
             <div>

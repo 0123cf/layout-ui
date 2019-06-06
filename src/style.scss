@@ -83,6 +83,9 @@ input{
         }
         .add-layout{
             padding: 10px;
+            >P{
+                background-color: #fff;
+            }
             .layout-svg{
                 width: 200px;
                 display: inline-block;
@@ -453,6 +456,18 @@ input{
             left: 0;
             top: 0;
             z-index: 1;
+            margin: -1px 0 0 -1px;
+        }
+        .dragEnter-transform:before {
+            content: "";
+            box-sizing: content-box;
+            border: 1px dashed rgb(250, 200, 230);
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 2;
             margin: -1px 0 0 -1px;
         }
     }

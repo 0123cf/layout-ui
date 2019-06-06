@@ -24,23 +24,20 @@ let oldTime: number = +new Date()
 
 const _DebugLayout = (props: Tprops) => {
     let defaultCurrentPath: number[] = []
-    interface TeditorStyle {
+    interface TDivAbsoluteStyle {
         top: string,
         left: string,
         width: string,
         height: string
     }
-    let defaultEditorStyle: TeditorStyle = {
-        top: '0px',
-        left: '0px',
-        width: '0px',
-        height: '0px',
-    }
+    let divAbsoluteStyle: TDivAbsoluteStyle = { top: '0px', left: '0px', width: '0px', height: '0px' }
     let [visible, setvisible] = useState(false)
     let [itemLastChild, setitemLastChild] = useState(false)
     let [contextMenuStyle, setcontextMenuStyle] = useState({})
     let [editorVisible, seteditorVisible] = useState(false)
-    let [editorStyle, seteditorStyle] = useState(defaultEditorStyle)
+    let [editorStyle, seteditorStyle] = useState(divAbsoluteStyle)
+    let [dragEnterVisible, setdragEnterVisible] = useState(false)
+    let [dragEnterStyle, setdragEnterStyle] = useState(divAbsoluteStyle)
     let [currentSelectedPath, setcurrentSelectedPath] = useState(defaultCurrentPath)
     let projectNameParam = getUrlParams('projectname')
     let projectName = `${projectAstListData}_${projectNameParam}`
@@ -72,6 +69,16 @@ const _DebugLayout = (props: Tprops) => {
             height: rect.height + 'px'
         })
         seteditorVisible(true)
+    }
+    let drageEnterHandle = (event: Node) => {
+        let rect: ClientRect = event.target.getBoundingClientRect()
+        setdragEnterStyle({
+            top: rect.top + 'px',
+            left: rect.left + 'px',
+            width: rect.width + 'px',
+            height: rect.height + 'px'
+        })
+        setdragEnterVisible(true)
     }
     let delectRow = (path: number[]) => {
         let data: TRowAST[] = delectTreeData(props.tree, { path, childrenName: 'children' })
@@ -177,14 +184,13 @@ const _DebugLayout = (props: Tprops) => {
                         key={index}
                         ref={bindRef}
                         style={getStyle(e.style)}
+                        onDragEnter={(e: any) => drageEnterHandle(e)}
                         onDragOver={(e: any) => {
-                            console.log('enter1')
                             e.preventDefault()
-                            // TODO
                         }}
                         onDrop={(e: any) => {
                             e.preventDefault()
-                            console.log('111')
+                            setdragEnterVisible(false)
                             let data = e.dataTransfer && e.dataTransfer.getData('add')
                             console.log(data)
                         }}
@@ -312,11 +318,6 @@ const _DebugLayout = (props: Tprops) => {
                         e = e || event
                         let newWidth = width + (e.clientX - clientX)
                         let newHeight = height + (e.clientY - clientY)
-                        // seteditorStyle({
-                        //     ...editorStyle,
-                        //     width: newWidth + 'px',
-                        //     height: newHeight + 'px'
-                        // })
                         setTreeItemDataValue({
                             ...selectItem,
                             style: {
@@ -332,6 +333,9 @@ const _DebugLayout = (props: Tprops) => {
                     }
                 }} className="editor-grip editor-grip-se"><b></b></i>
             </div>
+        }
+        {
+            dragEnterVisible && <div style={dragEnterStyle} className="editor-transform dragEnter-transform"></div>
         }
     </div>
 }
